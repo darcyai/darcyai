@@ -49,6 +49,7 @@ class DarcyAI:
             self.__custom_model_inference_shape = (input_shape[2], input_shape[1])
 
         self.__custom_engine = None
+        self.__custom_engine_inference_size = None
 
         self.__persons_history = OrderedDict()
 
@@ -738,11 +739,15 @@ class DarcyAI:
 
         self.__custom_engine = BasicEngine(model_path)
 
+        input_shape = self.__custom_engine.get_input_tensor_shape()
+        self.__custom_engine_inference_size = (input_shape[2], input_shape[1])
+
     
     def RunCustomModel(self, frame):
         if self.__custom_engine is None:
             raise Exception("No custom model is loaded")
 
+        for_custom_engine = cv2.resize(frame, self.__custom_engine_inference_size)
         return self.__custom_engine.run_inference(frame.flatten())
 
 

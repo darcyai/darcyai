@@ -22,8 +22,7 @@ setuptools.setup(
     packages=setuptools.find_packages(where='src'),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
-        'Intended Audience :: Developers',
-        'Operating System :: Linux',
+        'Intended Audience :: Developers'
     ],
     python_requires='>=3.6',
     install_requires=[
@@ -31,7 +30,6 @@ setuptools.setup(
       "flask",
       "numpy",
       "imutils",
-      "https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl",
       "opencv-python"
     ]
 )
