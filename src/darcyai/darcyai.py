@@ -1,4 +1,3 @@
-import concurrent.futures
 import cv2
 import math
 import numpy as np
@@ -7,12 +6,12 @@ import threading
 import time
 import traceback
 import uuid
+import pathlib
 from collections import OrderedDict
 from edgetpu.basic import edgetpu_utils
 from edgetpu.basic.basic_engine import BasicEngine
 from flask import Flask, request, Response
 from imutils.video import VideoStream
-from pyzbar import pyzbar
 from darcyai.pose_engine import PoseEngine
 from darcyai.config import DarcyAIConfig
 from darcyai.object import DetectedObject
@@ -71,7 +70,8 @@ class DarcyAI:
 
         self.__api = Flask(__name__)
 
-        model_path = "src/darcyai/models/posenet.tflite"
+        script_dir = pathlib.Path(__file__).parent.absolute()
+        model_path = os.path.join(script_dir, 'models', 'posenet.tflite')
         (self.__pose_engine, self.__object_detection_inference_size) = self.__get_engine(model_path)
 
 
@@ -721,7 +721,7 @@ class DarcyAI:
                     detected_objects = self.__people_perception(frame)
                 else:
                     for_custom_engine = cv2.resize(frame, self.__custom_model_inference_shape)
-                    detected_objects = self.__custom_perception_engine.run_inference(for_custom_engine.flatten())
+                    latency, detected_objects = self.__custom_perception_engine.run_inference(for_custom_engine.flatten())
 
                 self.__data_processor(self.__frame_number, detected_objects)
             else:

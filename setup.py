@@ -18,6 +18,10 @@ setuptools.setup(
         'https://github.com/Edgeworx/darcyai/issues',
         'Source Code': 'https://github.com/Edgeworx/darcyai'
     },
+    include_package_data=True,
+    package_data={
+        'models': ['src/darcyai/models'],
+    },
     package_dir={'': 'src'},
     packages=setuptools.find_packages(where='src'),
     classifiers=[
@@ -30,6 +34,7 @@ setuptools.setup(
       "flask",
       "numpy",
       "imutils",
-      "opencv-python"
+    #   "opencv-python",
+      "picamera",
     ]
 )

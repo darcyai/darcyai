@@ -9,10 +9,10 @@ if __name__ == "__main__":
 
     threading.Thread(target=ai.Start).start()
 
-    ai.LoadCustomModel('src/qrcode_detection.tflite')
+    ai.LoadCustomModel('src/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite')
 
     while True:
         time.sleep(1)
 
         _, latest_frame = ai.GetLatestFrame()
-        result = ai.RunCustomModel(latest_frame)
+        latency, result = ai.RunCustomModel(latest_frame)
