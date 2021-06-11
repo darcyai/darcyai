@@ -5,7 +5,7 @@ pool:
   vmImage: 'ubuntu-latest'
 strategy:
   matrix:
-    Python36:
+    Build:
       python.version: '3.6'
 
 steps:
@@ -15,16 +15,11 @@ steps:
   displayName: 'Use Python $(python.version)'
 
 - script: |
-    python -m pip install --upgrade pip
+    python -m pip install --upgrade pip build
   displayName: 'Install dependencies'
 
 - script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
-
-- script: |
-    python setup.py sdist
+    python3 -m build
   displayName: 'Artifact creation'
 
 - task: CopyFiles@2
@@ -33,6 +28,6 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'
     ArtifactName: 'dist'
     publishLocation: 'Container'
