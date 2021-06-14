@@ -24,6 +24,7 @@ class DarcyAI:
                  frame_processor=None,
                  do_perception=True,
                  custom_perception_model=None,
+                 flask_app=None,
                  config=DarcyAIConfig()):
         """
         Initializes DarcyAI Module
@@ -68,7 +69,7 @@ class DarcyAI:
         self.__object_seen = OrderedDict()
         self.__object_data = OrderedDict()
 
-        self.__api = Flask(__name__)
+        self.__flask_app = flask_app
 
         script_dir = pathlib.Path(__file__).parent.absolute()
         model_path = os.path.join(script_dir, 'models', 'posenet.tflite')
@@ -431,14 +432,17 @@ class DarcyAI:
 
 
     def __start_api_server(self):
-        ssl_context = None
-        self.__api.add_url_rule("/live-feed", "__live_feed", self.__live_feed)
-        self.__api.run(
-            host="0.0.0.0",
-            port=self.__config.GetLiveStreamPort(),
-            ssl_context=ssl_context,
-            debug=False)
-
+        if self.__flask_app is None:
+            self.__flask_app = Flask(__name__)
+            ssl_context = None
+            self.__flask_app.add_url_rule("/live-feed", "__live_feed", self.__live_feed)
+            self.__flask_app.run(
+                host="0.0.0.0",
+                port=self.__config.GetLiveStreamPort(),
+                ssl_context=ssl_context,
+                debug=False)
+        else:
+            self.__flask_app.add_url_rule("/live-feed", "__live_feed", self.__live_feed)
 
     def __get_qualified_body_detections(self, poses):
         #Loop through all raw detected poses and return an array of qualified body dictionaries
