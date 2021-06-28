@@ -13,7 +13,7 @@ def analyze(frame_number, objects):
 def draw_object_rectangle_on_frame(frame, object):
     box = object.bounding_box
     cv2.rectangle(frame, box[0], box[1], (0, 0, 255), 1)
-    cv2.putText(frame, "{}: {}".format(object.object_id, object.body["face_position"]), (box[0][0] + 2, box[0][1] + 40), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
+    cv2.putText(frame, "{}: {}".format(object.uuid, object.body["face_position"]), (box[0][0] + 2, box[0][1] + 40), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
 
     return frame
 

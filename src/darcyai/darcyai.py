@@ -297,6 +297,7 @@ class DarcyAI:
                 if has_object:
                     #Add the person ID to the object
                     objects[obj_best_object_iterator].object_id = existing_object_id
+                    objects[obj_best_object_iterator].uuid = self.__object_data[existing_object_id]["uuid"]
                 else:
                     #See if we can create one based on our appearance history
                     object_ready = self.__determine_if_object_seen_enough_to_create_person(current_frame_number, existing_object_id)
