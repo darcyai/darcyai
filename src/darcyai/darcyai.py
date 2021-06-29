@@ -704,39 +704,41 @@ class DarcyAI:
         threading.Thread(target=self.__start_api_server).start()
 
         while True:
-            frame = self.__vs.read()
-            counter = 0
-            while frame is None:
-                if counter == 10:
-                    os._exit(1)
+            try:
+                frame = self.__vs.read()
+                counter = 0
+                while frame is None:
+                    if counter == 10:
+                        os._exit(1)
 
-                counter += 1
-                time.sleep(1)
-                frame = vs.read()
+                    counter += 1
+                    time.sleep(1)
+                    frame = vs.read()
 
-            if self.__config.GetFlipVideoFrame():
-                frame = cv2.flip(frame, 1)
+                if self.__config.GetFlipVideoFrame():
+                    frame = cv2.flip(frame, 1)
 
-            self.__frame_number += 1
+                self.__frame_number += 1
 
-            self.__add_current_frame_to_rolling_history(frame)
+                self.__add_current_frame_to_rolling_history(frame)
 
-            if self.__do_perception:
-                if self.__custom_perception_model is None:
-                    detected_objects = self.__people_perception(frame)
+                if self.__do_perception:
+                    if self.__custom_perception_model is None:
+                        detected_objects = self.__people_perception(frame)
+                    else:
+                        for_custom_engine = cv2.resize(frame, self.__custom_model_inference_shape)
+                        latency, detected_objects = self.__custom_perception_engine.run_inference(for_custom_engine.flatten())
+
+                    self.__data_processor(self.__frame_number, detected_objects)
                 else:
-                    for_custom_engine = cv2.resize(frame, self.__custom_model_inference_shape)
-                    latency, detected_objects = self.__custom_perception_engine.run_inference(for_custom_engine.flatten())
+                    detected_objects = None
 
-                self.__data_processor(self.__frame_number, detected_objects)
-            else:
-                detected_objects = None
-
-            if not self.__frame_processor is None:
-                self.__latest_frame = self.__frame_processor(self.__frame_number, frame, detected_objects)
-            else:
-                self.__latest_frame = frame
-
+                if not self.__frame_processor is None:
+                    self.__latest_frame = self.__frame_processor(self.__frame_number, frame, detected_objects)
+                else:
+                    self.__latest_frame = frame
+            except:
+                pass
 
     def LoadCustomModel(self, model_path):
         if not self.__custom_engine is None:
