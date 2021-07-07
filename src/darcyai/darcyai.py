@@ -25,6 +25,7 @@ class DarcyAI:
                  do_perception=True,
                  custom_perception_model=None,
                  flask_app=None,
+                 video_file=None,
                  config=DarcyAIConfig()):
         """
         Initializes DarcyAI Module
@@ -54,9 +55,13 @@ class DarcyAI:
         self.__persons_history = OrderedDict()
 
         # initialize video camera
-        self.__frame_width = 640
-        self.__frame_height = 480
-        self.__vs = self.__initialize_video_stream()
+        self.__video_file = video_file
+        if self.__video_file is None:
+            self.__frame_width = 640
+            self.__frame_height = 480
+            self.__vs = self.__initialize_video_camera_stream()
+        else:
+            self.__vs = self.__initialize_video_file_stream(video_file)
 
         self.__frame_history = OrderedDict()
         self.__frame_number = 0
@@ -89,7 +94,21 @@ class DarcyAI:
         return (engine, inference_size)
 
 
-    def __initialize_video_stream(self):
+    def __initialize_video_file_stream(self, video_file):
+        """Initialize and return video file stream
+        """
+
+        cap = cv2.VideoCapture(video_file)
+        if not cap.isOpened():
+            raise Exception("Cannot open {}".format(video_file))
+
+        self.__frame_width = int(cap.get(3))
+        self.__frame_height = int(cap.get(4))
+
+        return cap
+
+
+    def __initialize_video_camera_stream(self):
         """Initialize and return VideoStream
         """
 
@@ -705,15 +724,24 @@ class DarcyAI:
 
         while True:
             try:
-                frame = self.__vs.read()
-                counter = 0
-                while frame is None:
-                    if counter == 10:
-                        os._exit(1)
+                if self.__video_file is None:
+                    frame = self.__vs.read()
 
-                    counter += 1
-                    time.sleep(1)
-                    frame = vs.read()
+                    counter = 0
+                    while frame is None:
+                        if counter == 10:
+                            os._exit(1)
+
+                        counter += 1
+                        time.sleep(1)
+                        frame = self.__vs.read()
+                else:
+                    if not self.__vs.isOpened():
+                        break
+
+                    success, frame = self.__vs.read()
+                    if not success:
+                        break
 
                 if self.__config.GetFlipVideoFrame():
                     frame = cv2.flip(frame, 1)

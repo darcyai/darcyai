@@ -3,3 +3,4 @@ __pycache__
 /build
 /dist
 darcyai.egg-info
+*.mp4
