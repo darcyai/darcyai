@@ -34,5 +34,5 @@ if __name__ == "__main__":
         data_processor=analyze,
         frame_processor=frame_processor,
         config=config,
-        video_file="src/examples/video_file.mp4")
+        video_file="/home/pi/walking_crowd.mp4")
     ai.Start()

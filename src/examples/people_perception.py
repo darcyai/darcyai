@@ -1,8 +1,12 @@
 import cv2
+import os
+import threading
 from darcyai import DarcyAI
+from flask import Flask, request, Response
 
 
 def analyze(frame_number, objects):
+    return
     for object in objects:
         if object.body["has_face"]:
             print("{}: {}".format(object.object_id, object.body["face_position"]))
@@ -26,6 +30,19 @@ def frame_processor(frame_number, frame, detected_objects):
     return frame_clone
 
 
+def root():
+    return flask_app.send_static_file('index.html')
+
+
 if __name__ == "__main__":
-    ai = DarcyAI(data_processor=analyze, frame_processor=frame_processor)
-    ai.Start()
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    flask_app = Flask(__name__, static_url_path=script_dir)
+    flask_app.add_url_rule("/", "root", root)
+    
+    ai = DarcyAI(data_processor=analyze, frame_processor=frame_processor, flask_app=flask_app)
+    threading.Thread(target=ai.Start).start()
+
+    flask_app.run(
+        host="0.0.0.0",
+        port=3456,
+        debug=False)
