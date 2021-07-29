@@ -34,7 +34,6 @@ setuptools.setup(
       "flask",
       "numpy",
       "imutils",
-      "opencv-contrib-python",
-      "picamera",
+      "opencv-python",
     ]
 )
