@@ -42,7 +42,13 @@ if __name__ == "__main__":
     flask_app = Flask(__name__, static_url_path=script_dir)
     flask_app.add_url_rule("/", "root", root)
     
-    ai = DarcyAI(data_processor=analyze, frame_processor=frame_processor, flask_app=flask_app, arch="armv7l", use_pi_camera=False, video_device=VIDEO_DEVICE)
+    ai = DarcyAI(
+        data_processor=analyze,
+        frame_processor=frame_processor,
+        flask_app=flask_app,
+        arch="armv7l",
+        use_pi_camera=False,
+        video_device=VIDEO_DEVICE)
     threading.Thread(target=ai.Start).start()
 
     flask_app.run(

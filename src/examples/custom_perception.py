@@ -1,6 +1,8 @@
 import cv2
 import os
+import threading
 from darcyai import DarcyAI
+from flask import Flask, request, Response
 
 
 VIDEO_DEVICE = os.getenv("VIDEO_DEVICE", "/dev/video0")
@@ -28,13 +30,27 @@ def frame_processor(frame_number, frame, detected_objects, labels):
     return frame_clone
 
 
+def root():
+    return flask_app.send_static_file('index.html')
+
+
 if __name__ == "__main__":
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    flask_app = Flask(__name__, static_url_path=script_dir)
+    flask_app.add_url_rule("/", "root", root)
+    
     ai = DarcyAI(
         data_processor=analyze,
         frame_processor=frame_processor,
+        flask_app=flask_app,
         detect_perception_model="ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite",
         detect_perception_threshold=THRESHOLD,
         detect_perception_labels_file="coco_labels.txt",
         use_pi_camera=False,
         video_device=VIDEO_DEVICE)
-    ai.Start()
+    threading.Thread(target=ai.Start).start()
+
+    flask_app.run(
+        host="0.0.0.0",
+        port=3456,
+        debug=False)
