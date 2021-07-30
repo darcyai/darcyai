@@ -27,7 +27,9 @@ if __name__ == "__main__":
     ai = DarcyAI(
         data_processor=analyze,
         frame_processor=frame_processor,
-        detect_perception_model="src/examples/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite",
-        detect_perception_threshold=0.8,
-        detect_perception_labels_file="src/examples/coco_labels.txt")
+        detect_perception_model="ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite",
+        detect_perception_threshold=0.7,
+        detect_perception_labels_file="coco_labels.txt",
+        use_pi_camera=False,
+        video_device="/dev/video0")
     ai.Start()

@@ -45,7 +45,8 @@ class DarcyAI:
                  video_file=None,
                  video_width=640,
                  video_height=480,
-                 config=DarcyAIConfig()):
+                 config=DarcyAIConfig(),
+                 arch=os.uname().machine):
         """
         Initializes DarcyAI Module
 
@@ -112,7 +113,7 @@ class DarcyAI:
             else:
                 script_dir = pathlib.Path(__file__).parent.absolute()
                 model_path = os.path.join(script_dir, 'models', 'posenet.tflite')
-                self.__pose_engine = self.__get_engine(model_path)
+                self.__pose_engine = self.__get_engine(model_path, arch)
 
         self.__custom_engine = None
         self.__custom_engine_inference_shape = None
@@ -143,13 +144,13 @@ class DarcyAI:
         self.__flask_app = flask_app
 
 
-    def __get_engine(self, path):
+    def __get_engine(self, path, arch):
         """Initializes object detection engine.
 
         path: Path to TFLite model
         """
 
-        engine = PoseEngine(model_path=path)
+        engine = PoseEngine(model_path=path, arch=arch)
         input_shape = engine.get_input_tensor_shape()
         inference_size = (input_shape[2], input_shape[1])
 

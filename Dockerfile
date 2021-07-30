@@ -1,8 +1,8 @@
-FROM edgeworx/thermal-edge-base:1.0.6
+FROM edgeworx/darcy-ai-sdk-base:1.0.0
 
-RUN python3 -m pip install darcyai
+RUN python3 -m pip install darcyai==0.1.16
 
-COPY src/examples/people_perception.py /src/
-COPY src/examples/static/index.html /src/static/
+COPY src/examples/static /src/
+COPY src/examples/people_perception.py /src/demo.py
 
-ENTRYPOINT ["/bin/bash", "-c", "cd /src/ && python3 ./people_perception.py"]
+ENTRYPOINT ["/bin/bash", "-c", "cd /src/ && python3 ./demo.py"]

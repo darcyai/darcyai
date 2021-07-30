@@ -27,12 +27,6 @@ import sys
 import time
 
 
-script_dir = os.path.dirname(os.path.realpath(__file__))
-EDGETPU_SHARED_LIB = 'libedgetpu.so.1'
-POSENET_SHARED_LIB = os.path.join(
-    script_dir, 'posenet_lib', os.uname().machine, 'posenet_decoder.so')
-
-
 class KeypointType(enum.IntEnum):
     """Pose kepoints."""
     NOSE = 0
@@ -65,7 +59,7 @@ Pose = collections.namedtuple('Pose', ['keypoints', 'score'])
 class PoseEngine():
     """Engine used for pose tasks."""
 
-    def __init__(self, model_path, mirror=False):
+    def __init__(self, model_path, mirror=False, arch=os.uname().machine):
         """Creates a PoseEngine with given model.
 
         Args:
@@ -75,8 +69,13 @@ class PoseEngine():
         Raises:
           ValueError: An error occurred when model output is invalid.
         """
-        edgetpu_delegate = load_delegate(EDGETPU_SHARED_LIB)
-        posenet_decoder_delegate = load_delegate(POSENET_SHARED_LIB)
+        script_dir = os.path.dirname(os.path.realpath(__file__))
+        edgetpu_shared_lib = 'libedgetpu.so.1'
+        posenet_shared_lib = os.path.join(
+            script_dir, 'posenet_lib', arch, 'posenet_decoder.so')
+
+        edgetpu_delegate = load_delegate(edgetpu_shared_lib)
+        posenet_decoder_delegate = load_delegate(posenet_shared_lib)
         self._interpreter = Interpreter(
             model_path, experimental_delegates=[edgetpu_delegate, posenet_decoder_delegate])
         self._interpreter.allocate_tensors()
