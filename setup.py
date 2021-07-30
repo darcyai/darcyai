@@ -20,8 +20,13 @@ setuptools.setup(
     },
     include_package_data=True,
     package_data={
-        "models": ["src/darcyai/models"],
-        "posenet_lib": ["src/darcyai/posenet_lib"],
+        "darcyai": [
+            "src/darcyai/models/*",
+            "src/darcyai/posenet_lib/aarch64/*",
+            "src/darcyai/posenet_lib/armv7a/*",
+            "src/darcyai/posenet_lib/armv7l/*",
+            "src/darcyai/posenet_lib/x86_64/*"
+        ]
     },
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),

@@ -1,2 +1,5 @@
 include src/darcyai/models/*
-include src/darcyai/posenet_lib/*
+include src/darcyai/posenet_lib/aarch64/*
+include src/darcyai/posenet_lib/armv7a/*
+include src/darcyai/posenet_lib/armv7l/*
+include src/darcyai/posenet_lib/x86_64/*
