@@ -21,6 +21,7 @@ setuptools.setup(
     include_package_data=True,
     package_data={
         "models": ["src/darcyai/models"],
+        "posenet_lib": ["src/darcyai/posenet_lib"],
     },
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
