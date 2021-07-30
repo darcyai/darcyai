@@ -1,5 +1,10 @@
 import cv2
+import os
 from darcyai import DarcyAI
+
+
+VIDEO_DEVICE = os.getenv("VIDEO_DEVICE", "/dev/video0")
+THRESHOLD = float(os.getenv("THRESHOLD", "0.7"))
 
 
 def analyze(frame_number, objects, labels):
@@ -28,8 +33,8 @@ if __name__ == "__main__":
         data_processor=analyze,
         frame_processor=frame_processor,
         detect_perception_model="ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite",
-        detect_perception_threshold=0.7,
+        detect_perception_threshold=THRESHOLD,
         detect_perception_labels_file="coco_labels.txt",
         use_pi_camera=False,
-        video_device="/dev/video0")
+        video_device=VIDEO_DEVICE)
     ai.Start()
