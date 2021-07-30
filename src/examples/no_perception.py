@@ -1,4 +1,3 @@
-import cv2
 import threading
 import time
 from darcyai import DarcyAI
@@ -9,7 +8,7 @@ if __name__ == "__main__":
 
     threading.Thread(target=ai.Start).start()
 
-    ai.LoadCustomModel('src/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite')
+    ai.LoadCustomModel('src/examples/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite')
 
     while True:
         time.sleep(1)

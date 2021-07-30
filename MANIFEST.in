@@ -1,1 +1,2 @@
 include src/darcyai/models/*
+include src/darcyai/posenet_lib/*

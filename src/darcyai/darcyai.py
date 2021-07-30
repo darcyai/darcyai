@@ -8,11 +8,18 @@ import traceback
 import uuid
 import pathlib
 from collections import OrderedDict
-from edgetpu.basic import edgetpu_utils
-from edgetpu.basic.basic_engine import BasicEngine
+from pkg_resources import parse_version
+
+from pycoral import __version__ as pycoral_version
+assert parse_version(pycoral_version) >= parse_version('1.0.1'), \
+        'darcyai requires PyCoral version >= 1.0.1'
+from pycoral.utils import edgetpu, dataset
+from pycoral.adapters import common
+from pycoral.adapters import detect, classify
+
 from flask import Flask, request, Response
 from imutils.video import VideoStream
-from darcyai.pose_engine import PoseEngine
+from darcyai.pose_engine import PoseEngine, KeypointType
 from darcyai.config import DarcyAIConfig
 from darcyai.object import DetectedObject
 
@@ -23,42 +30,101 @@ class DarcyAI:
                  data_processor=None,
                  frame_processor=None,
                  do_perception=True,
-                 custom_perception_model=None,
+                 use_pi_camera=True,
+                 video_device=None,
+                 detect_perception_model=None,
+                 detect_perception_threshold=None,
+                 detect_perception_labels_file=None,
+                 classify_perception_model=None,
+                 classify_perception_mean=None,
+                 classify_perception_std=None,
+                 classify_perception_top_k=None,
+                 classify_perception_threshold=None,
+                 classify_perception_labels_file=None,
                  flask_app=None,
                  video_file=None,
+                 video_width=640,
+                 video_height=480,
                  config=DarcyAIConfig()):
         """
         Initializes DarcyAI Module
 
         :param data_processor: Callback method to call with detected bodies and PoseNet raw data 
-        :param custom_perception_model: User's model to deploy on EdgeTPU
+        :param classify_perception_model: User's model to deploy on EdgeTPU
         :param config: Instance of DarcyAIConfig
         """
 
         if do_perception and data_processor is None:
             raise Exception("data_processor callback is required")
 
+        self.__use_pi_camera = use_pi_camera
+
+        if not use_pi_camera and video_file is None and video_device is None:
+            raise Exception("video_device is required")
+        self.__video_device = video_device
+
         self.__data_processor = data_processor
         self.__frame_processor = frame_processor
-        self.__custom_perception_model = custom_perception_model
+        self.__classify_perception_model = classify_perception_model
+        self.__detect_perception_model = detect_perception_model
         self.__config = config
         self.__do_perception = do_perception
 
-        if not custom_perception_model is None:
-            self.__custom_perception_engine = BasicEngine(custom_perception_model)
-            input_shape = self.__custom_perception_engine.get_input_tensor_shape()
-            self.__custom_model_inference_shape = (input_shape[2], input_shape[1])
+        if do_perception:
+            if not classify_perception_model is None:
+                if classify_perception_mean is None:
+                    raise Exception("classify_perception_mean must be set")
+
+                if classify_perception_std is None:
+                    raise Exception("classify_perception_std must be set")
+
+                if classify_perception_top_k is None:
+                    raise Exception("classify_perception_threshold must be set")
+
+                if classify_perception_threshold is None:
+                    raise Exception("classify_perception_threshold must be set")
+
+                self.__classify_perception_mean = classify_perception_mean
+                self.__classify_perception_std  = classify_perception_std
+                self.__classify_perception_engine = edgetpu.make_interpreter(classify_perception_model)
+                self.__classify_perception_engine.allocate_tensors()
+                input_shape = self.__classify_perception_engine.get_input_details()[0]['shape']
+                self.__classify_model_inference_shape = (input_shape[2], input_shape[1])
+
+                if not classify_perception_labels_file is None:
+                    self.__classify_perception_labels = dataset.read_label_file(classify_perception_labels_file)
+                else:
+                    self.__classify_perception_labels = None
+            elif not detect_perception_model is None:
+                if detect_perception_threshold is None:
+                    raise Exception("detect_perception_threshold must be set")
+
+                self.__detect_perception_threshold = detect_perception_threshold
+                self.__detect_perception_engine = edgetpu.make_interpreter(detect_perception_model)
+                self.__detect_perception_engine.allocate_tensors()
+                input_shape = self.__detect_perception_engine.get_input_details()[0]['shape']
+                self.__detect_model_inference_shape = (input_shape[2], input_shape[1])
+
+                if not detect_perception_labels_file is None:
+                    self.__detect_perception_labels = dataset.read_label_file(detect_perception_labels_file)
+                else:
+                    self.__detect_perception_labels = None
+            else:
+                script_dir = pathlib.Path(__file__).parent.absolute()
+                model_path = os.path.join(script_dir, 'models', 'posenet.tflite')
+                self.__pose_engine = self.__get_engine(model_path)
 
         self.__custom_engine = None
-        self.__custom_engine_inference_size = None
+        self.__custom_engine_inference_shape = None
+        self.__custom_engine_output_offsets = [0]
 
         self.__persons_history = OrderedDict()
 
         # initialize video camera
         self.__video_file = video_file
         if self.__video_file is None:
-            self.__frame_width = 640
-            self.__frame_height = 480
+            self.__frame_width = video_width
+            self.__frame_height = video_height
             self.__vs = self.__initialize_video_camera_stream()
         else:
             self.__vs = self.__initialize_video_file_stream(video_file)
@@ -76,10 +142,6 @@ class DarcyAI:
 
         self.__flask_app = flask_app
 
-        script_dir = pathlib.Path(__file__).parent.absolute()
-        model_path = os.path.join(script_dir, 'models', 'posenet.tflite')
-        (self.__pose_engine, self.__object_detection_inference_size) = self.__get_engine(model_path)
-
 
     def __get_engine(self, path):
         """Initializes object detection engine.
@@ -91,7 +153,7 @@ class DarcyAI:
         input_shape = engine.get_input_tensor_shape()
         inference_size = (input_shape[2], input_shape[1])
 
-        return (engine, inference_size)
+        return engine
 
 
     def __initialize_video_file_stream(self, video_file):
@@ -112,7 +174,10 @@ class DarcyAI:
         """Initialize and return VideoStream
         """
 
-        vs = VideoStream(usePiCamera=True, resolution=(self.__frame_width, self.__frame_height), framerate=20).start()
+        if not self.__use_pi_camera:
+            vs = VideoStream(src=self.__video_device, resolution=(self.__frame_width, self.__frame_height), framerate=20).start()
+        else:
+            vs = VideoStream(usePiCamera=True, resolution=(self.__frame_width, self.__frame_height), framerate=20).start()
         test_frame = vs.read()
         counter = 0
         while test_frame is None:
@@ -483,8 +548,8 @@ class DarcyAI:
             curBody["body_id"] = 0
 
             #Compute the confidence scores for face and body separately
-            faceScore = (pose.keypoints['nose'].score + pose.keypoints['left eye'].score + pose.keypoints['right eye'].score + pose.keypoints['left ear'].score + pose.keypoints['right ear'].score) / 5
-            bodyScore = (pose.keypoints['left shoulder'].score + pose.keypoints['right shoulder'].score + pose.keypoints['left elbow'].score + pose.keypoints['right elbow'].score + pose.keypoints['left wrist'].score + pose.keypoints['right wrist'].score + pose.keypoints['left hip'].score + pose.keypoints['right hip'].score + pose.keypoints['left knee'].score + pose.keypoints['right knee'].score + pose.keypoints['left ankle'].score + pose.keypoints['right ankle'].score) / 12
+            faceScore = (pose.keypoints[KeypointType.NOSE].score + pose.keypoints[KeypointType.LEFT_EYE].score + pose.keypoints[KeypointType.RIGHT_EYE].score + pose.keypoints[KeypointType.LEFT_EAR].score + pose.keypoints[KeypointType.RIGHT_EAR].score) / 5
+            bodyScore = (pose.keypoints[KeypointType.LEFT_SHOULDER].score + pose.keypoints[KeypointType.RIGHT_SHOULDER].score + pose.keypoints[KeypointType.LEFT_ELBOW].score + pose.keypoints[KeypointType.RIGHT_ELBOW].score + pose.keypoints[KeypointType.LEFT_WRIST].score + pose.keypoints[KeypointType.RIGHT_WRIST].score + pose.keypoints[KeypointType.LEFT_HIP].score + pose.keypoints[KeypointType.RIGHT_HIP].score + pose.keypoints[KeypointType.LEFT_KNEE].score + pose.keypoints[KeypointType.RIGHT_KNEE].score + pose.keypoints[KeypointType.LEFT_ANKLE].score + pose.keypoints[KeypointType.RIGHT_ANKLE].score) / 12
 
             #Evaluate confidence levels first
             if faceScore >= self.__config.GetPoseMinimumFaceThreshold():
@@ -500,8 +565,8 @@ class DarcyAI:
             #Now check for size requirements
             if meetsConfidence:
                 #Get face and body sizes from keypoint coordinates in rough estimate style
-                faceHeight = ((pose.keypoints['left shoulder'].yx[0] + pose.keypoints['right shoulder'].yx[0]) / 2) - ((pose.keypoints['left eye'].yx[0] + pose.keypoints['right eye'].yx[0]) / 2)
-                bodyHeight = ((pose.keypoints['left ankle'].yx[0] + pose.keypoints['right ankle'].yx[0]) / 2) - pose.keypoints['nose'].yx[0]
+                faceHeight = ((pose.keypoints[KeypointType.LEFT_SHOULDER].point[1] + pose.keypoints[KeypointType.RIGHT_SHOULDER].point[1]) / 2) - ((pose.keypoints[KeypointType.LEFT_EYE].point[1] + pose.keypoints[KeypointType.RIGHT_EYE].point[1]) / 2)
+                bodyHeight = ((pose.keypoints[KeypointType.LEFT_ANKLE].point[1] + pose.keypoints[KeypointType.RIGHT_ANKLE].point[1]) / 2) - pose.keypoints[KeypointType.NOSE].point[1]
 
                 if faceHeight >= self.__config.GetPoseMinimumFaceHeight():
                     meetsSize = True
@@ -522,9 +587,9 @@ class DarcyAI:
     def __determine_face_position(self, body):
         #Calculate combo scores of different sets
         pose = body["pose"]
-        leftEyeLeftEarScore = (pose.keypoints['left eye'].score + pose.keypoints['left ear'].score) / 2
-        rightEyeRightEarScore = (pose.keypoints['right eye'].score + pose.keypoints['right ear'].score) / 2
-        eyeAndNoseScore = (pose.keypoints['nose'].score + pose.keypoints['right eye'].score + pose.keypoints['left eye'].score) / 3
+        leftEyeLeftEarScore = (pose.keypoints[KeypointType.LEFT_EYE].score + pose.keypoints[KeypointType.LEFT_EAR].score) / 2
+        rightEyeRightEarScore = (pose.keypoints[KeypointType.RIGHT_EYE].score + pose.keypoints[KeypointType.RIGHT_EAR].score) / 2
+        eyeAndNoseScore = (pose.keypoints[KeypointType.NOSE].score + pose.keypoints[KeypointType.RIGHT_EYE].score + pose.keypoints[KeypointType.LEFT_EYE].score) / 3
         rightness = leftEyeLeftEarScore - rightEyeRightEarScore
         leftness = rightEyeRightEarScore - leftEyeLeftEarScore
 
@@ -559,10 +624,10 @@ class DarcyAI:
 
         if body["has_forehead"]:
             #Get eye locations
-            leftEyeX = int(body["pose"].keypoints["left eye"].yx[1])
-            leftEyeY = int(body["pose"].keypoints["left eye"].yx[0])
-            rightEyeX = int(body["pose"].keypoints["right eye"].yx[1])
-            rightEyeY = int(body["pose"].keypoints["right eye"].yx[0])
+            leftEyeX = int(body["pose"].keypoints[KeypointType.LEFT_EYE].point[0])
+            leftEyeY = int(body["pose"].keypoints[KeypointType.LEFT_EYE].point[1])
+            rightEyeX = int(body["pose"].keypoints[KeypointType.RIGHT_EYE].point[0])
+            rightEyeY = int(body["pose"].keypoints[KeypointType.RIGHT_EYE].point[1])
             
             #Adjust the eye vertical position by 1 pixel if they are exactly equal so we don't have 0 slope
             dY = rightEyeY - leftEyeY
@@ -608,14 +673,14 @@ class DarcyAI:
             highestX = 0
 
             for label, keypoint in body["pose"].keypoints.items():
-                faceLabels = {'nose', 'left eye', 'right eye', 'left ear', 'right ear'}
+                faceLabels = {KeypointType.NOSE, KeypointType.LEFT_EYE, KeypointType.RIGHT_EYE, KeypointType.LEFT_EAR, KeypointType.RIGHT_EAR}
                 if label in faceLabels:
                     continue
                 else:
-                    if keypoint.yx[1] < lowestX: lowestX = keypoint.yx[1]
-                    if keypoint.yx[0] < lowestY: lowestY = keypoint.yx[0]
-                    if keypoint.yx[1] > highestX: highestX = keypoint.yx[1]
-                    if keypoint.yx[0] > highestY: highestY = keypoint.yx[0]
+                    if keypoint.point[0] < lowestX: lowestX = keypoint.point[0]
+                    if keypoint.point[1] < lowestY: lowestY = keypoint.point[1]
+                    if keypoint.point[0] > highestX: highestX = keypoint.point[0]
+                    if keypoint.point[1] > highestY: highestY = keypoint.point[1]
 
             bodyRectangle = ((int(lowestX - 2), int(lowestY - 2)),(int(highestX + 2), int(highestY + 2)))
 
@@ -636,12 +701,12 @@ class DarcyAI:
         highestX = 0
 
         for label, keypoint in body["pose"].keypoints.items():
-            faceLabels = {'nose', 'left eye', 'right eye', 'left ear', 'right ear'}
+            faceLabels = {KeypointType.NOSE, KeypointType.LEFT_EYE, KeypointType.RIGHT_EYE, KeypointType.LEFT_EAR, KeypointType.RIGHT_EAR}
             if label in faceLabels:
-                if keypoint.yx[1] < lowestX: lowestX = keypoint.yx[1]
-                if keypoint.yx[0] < lowestY: lowestY = keypoint.yx[0]
-                if keypoint.yx[1] > highestX: highestX = keypoint.yx[1]
-                if keypoint.yx[0] > highestY: highestY = keypoint.yx[0]
+                if keypoint.point[0] < lowestX: lowestX = keypoint.point[0]
+                if keypoint.point[1] < lowestY: lowestY = keypoint.point[1]
+                if keypoint.point[0] > highestX: highestX = keypoint.point[0]
+                if keypoint.point[1] > highestY: highestY = keypoint.point[1]
             else:
                 continue
 
@@ -691,8 +756,6 @@ class DarcyAI:
     def __people_perception(self, frame):
         poses, _ = self.__pose_engine.DetectPosesInImage(frame)
         bodies = self.__get_qualified_body_detections(poses)
-        # for_object_engine = cv2.resize(frame, self.__object_detection_inference_size)
-        # objects = self.__pose_engine.detect_with_input_tensor(for_object_engine.flatten())
 
         detected_objects = []
         for body in bodies:
@@ -751,43 +814,92 @@ class DarcyAI:
                 self.__add_current_frame_to_rolling_history(frame)
 
                 if self.__do_perception:
-                    if self.__custom_perception_model is None:
-                        detected_objects = self.__people_perception(frame)
-                    else:
-                        for_custom_engine = cv2.resize(frame, self.__custom_model_inference_shape)
-                        latency, detected_objects = self.__custom_perception_engine.run_inference(for_custom_engine.flatten())
+                    labels = None
+                    if not self.__detect_perception_model is None:
+                        labels = []
+                        _, scale = common.set_resized_input(
+                            self.__detect_perception_engine,
+                            (frame.shape[1], frame.shape[0]),
+                            lambda size: cv2.resize(frame, size))
+                        start = time.perf_counter()
+                        self.__detect_perception_engine.invoke()
+                        inference_time = time.perf_counter() - start
+                        detected_objects = detect.get_objects(self.__detect_perception_engine, self.__detect_perception_threshold, scale)
+                        if not self.__detect_perception_labels is None:
+                            for object in detected_objects:
+                                labels.append(self.__detect_perception_labels.get(object.id, object.id))
+                    elif not self.__classify_perception_model is None:
+                        labels = []
+                        params = common.input_details(self.__classify_perception_engine, 'quantization_parameters')
+                        scale = params['scales']
+                        zero_point = params['zero_points']
+                        mean = self.__classify_perception_mean
+                        std = self.__classify_perception_std
+                        if abs(scale * std - 1) < 1e-5 and abs(mean - zero_point) < 1e-5:
+                            # Input data does not require preprocessing.
+                            common.set_input(self.__classify_perception_engine, frame)
+                        else:
+                            # Input data requires preprocessing
+                            normalized_input = (np.asarray(frame) - mean) / (std * scale) + zero_point
+                            np.clip(normalized_input, 0, 255, out=normalized_input)
+                            common.set_input(self.__classify_perception_engine, normalized_input.astype(np.uint8))
 
-                    self.__data_processor(self.__frame_number, detected_objects)
+                        start = time.perf_counter()
+                        self.__classify_perception_engine.invoke()
+                        inference_time = time.perf_counter() - start
+                        detected_objects = classify.get_classes(self.__classify_perception_engine, 0, 0)
+                        if not self.__classify_perception_labels is None:
+                            for object in detected_objects:
+                                labels.append(self.__classify_perception_labels.get(object.id, object.id))
+                    else:
+                        detected_objects = self.__people_perception(frame)
+
+                    if labels is None:
+                        self.__data_processor(self.__frame_number, detected_objects)
+                    else:
+                        self.__data_processor(self.__frame_number, detected_objects, labels)
                 else:
                     detected_objects = None
 
                 if not self.__frame_processor is None:
-                    self.__latest_frame = self.__frame_processor(self.__frame_number, frame, detected_objects)
+                    if labels is None:
+                        self.__latest_frame = self.__frame_processor(self.__frame_number, frame, detected_objects)
+                    else:
+                        self.__latest_frame = self.__frame_processor(self.__frame_number, frame, detected_objects, labels)
                 else:
                     self.__latest_frame = frame
-            except:
+            except Exception as e:
+                tb = traceback.format_exc()
+                print("Error at generating stream {}".format(tb))
                 pass
 
     def LoadCustomModel(self, model_path):
         if not self.__custom_engine is None:
             raise Exception("A custom model is already loaded")
 
-        self.__custom_engine = BasicEngine(model_path)
-
-        input_shape = self.__custom_engine.get_input_tensor_shape()
-        self.__custom_engine_inference_size = (input_shape[2], input_shape[1])
+        self.__custom_engine = edgetpu.make_interpreter(model_path)
+        self.__custom_engine.allocate_tensors()
+        input_shape = self.__custom_engine.get_input_details()[0]['shape']
+        self.__custom_engine_inference_shape = (input_shape[2], input_shape[1])
 
     
     def RunCustomModel(self, frame):
         if self.__custom_engine is None:
             raise Exception("No custom model is loaded")
 
-        for_custom_engine = cv2.resize(frame, self.__custom_engine_inference_size)
-        return self.__custom_engine.run_inference(frame.flatten())
+        for_custom_engine = cv2.resize(frame, self.__custom_engine_inference_shape)
+        common.set_input(self.__custom_engine, for_custom_engine)
+
+        start = time.perf_counter()
+        self.__custom_engine.invoke()
+        inference_time = time.perf_counter() - start
+        outputs = common.output_tensor(self.__custom_engine, 0)
+
+        return inference_time * 1000, outputs
 
 
     def GetPersonHistory(self, person_id):
-        if not self.__do_perception or not self.__custom_perception_model is None:
+        if not self.__do_perception or not self.__classify_perception_model is None:
             raise Exception("People perception is disabled")
             
         if not person_id in self.__persons_history:
