@@ -1,0 +1,431 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "",
+    "version": "0.3.6",
+    "title": "Darcy AI",
+    "contact": {
+      "email": "info@edgeworx.io"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "basePath": "{{ base_path }}",
+  "paths": {
+    "/perceptors": {
+      "get": {
+        "tags": [
+          "perceptor"
+        ],
+        "summary": "returns list of perceptors",
+        "description": "",
+        "operationId": "getPerceptors",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetResponse"
+            }
+          }
+        }
+      }
+    },
+    "/perceptors/config": {
+      "get": {
+        "tags": [
+          "perceptor"
+        ],
+        "summary": "returns configuration for all perceptors",
+        "description": "",
+        "operationId": "getPerceptorsConfig",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetConfigsResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "perceptor"
+        ],
+        "summary": "returns configuration for all perceptors",
+        "description": "",
+        "operationId": "setPerceptorsConfig",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetConfigsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetConfigsResponse"
+            }
+          }
+        }
+      }
+    },
+    "/perceptors/{perceptor}/config": {
+      "get": {
+        "tags": [
+          "perceptor"
+        ],
+        "summary": "returns configuration for a perceptor",
+        "description": "",
+        "operationId": "getPerceptorConfig",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "perceptor",
+            "in": "path",
+            "description": "name of the perceptor",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetConfigResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "perceptor"
+        ],
+        "summary": "returns configuration for a perceptor",
+        "description": "",
+        "operationId": "setPerceptorConfig",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "perceptor",
+            "in": "path",
+            "description": "name of the perceptor",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetConfigResponse"
+            }
+          }
+        }
+      }
+    },
+    "/outputs": {
+      "get": {
+        "tags": [
+          "output streams"
+        ],
+        "summary": "returns list of output streams",
+        "description": "",
+        "operationId": "getOutputStreams",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetResponse"
+            }
+          }
+        }
+      }
+    },
+    "/outputs/config": {
+      "get": {
+        "tags": [
+          "output streams"
+        ],
+        "summary": "returns configuration for all output streams",
+        "description": "",
+        "operationId": "getOutputStreamsConfig",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetConfigsResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "output streams"
+        ],
+        "summary": "returns configuration for all output streams",
+        "description": "",
+        "operationId": "setOutputStreamsConfig",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetConfigsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetConfigsResponse"
+            }
+          }
+        }
+      }
+    },
+    "/outputs/{output}/config": {
+      "get": {
+        "tags": [
+          "output streams"
+        ],
+        "summary": "returns configuration for an output stream",
+        "description": "",
+        "operationId": "getOutputStreamConfig",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "output",
+            "in": "path",
+            "description": "name of the output stream",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetConfigResponse"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "output streams"
+        ],
+        "summary": "returns configuration for an output stream",
+        "description": "",
+        "operationId": "setOutputStreamConfig",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "output",
+            "in": "path",
+            "description": "name of the output stream",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetConfigRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/GetConfigResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AnyValue": {
+      "description": "Can be one of string, number (integer and float), and boolean"
+    },
+    "GetResponse": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "GetConfigsResponse": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/Config"
+        }
+      },
+      "example": {
+        "test1": [
+          {
+            "default_value": 1,
+            "description": "Config 1",
+            "name": "config_1",
+            "type": "int",
+            "value": 12
+          },
+          {
+            "default_value": false,
+            "description": "Config 2",
+            "name": "config_2",
+            "type": "bool",
+            "value": true
+          }
+        ],
+        "test2": [
+          {
+            "default_value": 1,
+            "description": "Config 1",
+            "name": "config_1",
+            "type": "int",
+            "value": 12
+          },
+          {
+            "default_value": false,
+            "description": "Config 2",
+            "name": "config_2",
+            "type": "bool",
+            "value": true
+          }
+        ]
+      }
+    },
+    "GetConfigResponse": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Config"
+      },
+      "example": [
+        {
+          "default_value": 1,
+          "description": "Config 1",
+          "name": "config_1",
+          "type": "int",
+          "value": 12
+        },
+        {
+          "default_value": false,
+          "description": "Config 2",
+          "name": "config_2",
+          "type": "bool",
+          "value": true
+        }
+      ]
+    },
+    "Config": {
+      "type": "object",
+      "properties": {
+        "default_value": {
+          "$ref": "#/definitions/AnyValue"
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/AnyValue"
+        }
+      }
+    },
+    "SetConfigsRequest": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "description": "Value of the config"
+        }
+      },
+      "example": {
+        "test": {
+          "config_1": 12,
+          "config_2": true
+        },
+        "people": {
+          "config_1": "Test",
+          "config_2": 12.34
+        }
+      }
+    },
+    "SetConfigRequest": {
+      "type": "object",
+      "additionalProperties": {
+        "description": "Value of the config"
+      },
+      "example": {
+        "config_1": 12,
+        "config_2": true
+      }
+    }
+  }
+}

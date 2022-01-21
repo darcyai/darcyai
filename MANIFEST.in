@@ -1,1 +1,6 @@
-include src/darcyai/models/*
+include src/darcyai/swagger/*
+include src/darcyai/swagger/static/*
+include src/darcyai/swagger/static/css/*
+include src/darcyai/swagger/static/img/*
+include src/darcyai/swagger/static/js/*
+include src/darcyai/swagger/templates/*

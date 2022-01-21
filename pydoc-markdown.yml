@@ -1,0 +1,87 @@
+loaders:
+  - type: python
+    search_path: [src]
+
+renderer:
+  type: mkdocs
+  mkdocs_config:
+    site_name: Darcy AI
+    theme: readthedocs
+    repo_url: https://github.com/Edgeworx/darcyai
+  output_directory: pydocs
+  markdown:
+    source_linker:
+      type: github
+      repo: Edgeworx/darcyai
+  pages:
+    - title: Home
+      name: index
+      source: README.md
+    - title: Pipeline
+      contents:
+        - darcyai.pipeline.Pipeline
+        - darcyai.pipeline.Pipeline.*
+    - title: Perceptor
+      contents:
+        - darcyai.perceptor.perceptor.Perceptor
+        - darcyai.perceptor.perceptor.Perceptor.*
+    - title: StreamData
+      contents:
+        - darcyai.stream_data.StreamData
+        - darcyai.stream_data.StreamData.*
+    - title: Config
+      contents:
+        - darcyai.config.Config
+        - darcyai.config.Config.*
+    - title: PerceptionObjectModel
+      contents:
+        - darcyai.perception_object_model.PerceptionObjectModel
+        - darcyai.perception_object_model.PerceptionObjectModel.*
+    - title: Serializable
+      contents:
+        - darcyai.serializable.Serializable
+        - darcyai.serializable.Serializable.*
+    - title: Input Streams
+      children:
+        - title: InputStream
+          contents:
+            - darcyai.input.input_stream.InputStream
+            - darcyai.input.input_stream.InputStream.*
+        - title: InputMultiStream
+          contents:
+            - darcyai.input.input_multi_stream.InputMultiStream
+            - darcyai.input.input_multi_stream.*
+        - title: CameraStream
+          contents:
+            - darcyai.input.camera_stream.CameraStream
+            - darcyai.input.camera_stream.CameraStream.*
+        - title: VideoFileStream
+          contents:
+            - darcyai.input.video_file_stream.VideoFileStream
+            - darcyai.input.video_file_stream.VideoFileStream.*
+        - title: VideoStreamData
+          contents:
+            - darcyai.input.video_stream_data.VideoStreamData
+            - darcyai.input.video_stream_data.VideoStreamData.*
+    - title: Output Streams
+      children:
+        - title: OutputStream
+          contents:
+            - darcyai.output.output_stream.OutputStream
+            - darcyai.output.output_stream.OutputStream.*
+        - title: LiveFeedStream
+          contents:
+            - darcyai.output.live_feed_stream.LiveFeedStream
+            - darcyai.output.live_feed_stream.LiveFeedStream.*
+        - title: RestApiStream
+          contents:
+            - darcyai.output.rest_api_stream.RestApiStream
+            - darcyai.output.rest_api_stream.RestApiStream.*
+        - title: CSVOutputStream
+          contents:
+            - darcyai.output.csv_output_stream.CSVOutputStream
+            - darcyai.output.csv_output_stream.CSVOutputStream.*
+        - title: JSONOutputStream
+          contents:
+            - darcyai.output.json_output_stream.JSONOutputStream
+            - darcyai.output.json_output_stream.JSONOutputStream.*

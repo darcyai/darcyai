@@ -1,5 +1,11 @@
-flask
-numpy
-imutils
-https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl
-opencv-python
+mock==4.0.3
+imutils==0.5.4
+pillow==8.3.2
+opencv-python==4.5.3.56
+pytest==6.2.5
+flask==2.0.2
+requests==2.26.0
+pylint==2.11.1
+bump2version==1.0.1
+pydoc-markdown>=4.0.0,<5.0.0
+mkdocs

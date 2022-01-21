@@ -2,5 +2,14 @@
 __pycache__
 /build
 /dist
-darcyai.egg-info
+/html
+/pydocs
+*.egg-info
 *.mp4
+
+
+.idea/*
+venv/*
+pyvenv.cfg
+.pytest_cache
+.DS_Store
