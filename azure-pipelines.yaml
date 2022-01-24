@@ -23,6 +23,8 @@ stages:
           displayName: 'Use Python $(python.version)'
 
         - script: |
+            sudo apt-get install -y python3-pycoral
+            python -m pip install --extra-index-url https://google-coral.github.io/py-repo/ pycoral~=2.0
             python -m pip install --upgrade pip build
             python -m pip install -r ./requirements.txt
             python -m pip install pytest-azurepipelines pytest-cov
