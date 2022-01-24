@@ -1,0 +1,23 @@
+jobs:
+  - job: ${{ parameters.name }}
+    dependsOn: DarcyAI
+    workspace:
+      clean: all
+    pool: ${{ parameters.poolImageName }}
+    steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          artifact: dist
+          patterns: '**/*.whl'
+          path: $(System.DefaultWorkingDirectory)/dist
+          displayName: 'Download artifacts'
+      - script: |
+          docker run --rm \
+            -v $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests:/src \
+            -v $(System.DefaultWorkingDirectory)/dist:/whl \
+            ${{ parameters.imageName }}-base-${{ parameters.imageNameSuffix }}:${{ parameters.imageTag }} \
+            sh -c "cd /src && python3 -m pip install /whl/darcyai*.whl && python3 -u tests.py"
+        displayName: 'e2e test'
+      - script: |
+          sudo find $(Build.Repository.LocalPath) -name "__pycache__" -type d -exec /bin/rm -rf {} +
+        displayName: 'cleanup'

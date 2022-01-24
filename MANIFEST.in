@@ -1,5 +1,12 @@
-include src/darcyai/models/*
-include src/darcyai/posenet_lib/aarch64/*
-include src/darcyai/posenet_lib/armv7a/*
-include src/darcyai/posenet_lib/armv7l/*
-include src/darcyai/posenet_lib/x86_64/*
+include src/darcyai/swagger/*
+include src/darcyai/swagger/static/*
+include src/darcyai/swagger/static/css/*
+include src/darcyai/swagger/static/img/*
+include src/darcyai/swagger/static/js/*
+include src/darcyai/swagger/templates/*
+
+include src/darcyai/perceptor/coral/models/*
+include src/darcyai/perceptor/coral/posenet_lib/aarch64/*
+include src/darcyai/perceptor/coral/posenet_lib/armv7a/*
+include src/darcyai/perceptor/coral/posenet_lib/armv7l/*
+include src/darcyai/perceptor/coral/posenet_lib/x86_64/*

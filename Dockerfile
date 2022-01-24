@@ -1,8 +1,7 @@
-FROM edgeworx/darcy-ai-sdk-base:1.0.0
+FROM edgeworx/darcy-ai-base-x86:dev
 
-RUN python3 -m pip install darcyai==0.1.16
+RUN python3 -m pip install --upgrade darcyai
 
-COPY src/examples/static /src/
-COPY src/examples/people_perception.py /src/demo.py
+COPY src/test.py /src/
 
-ENTRYPOINT ["/bin/bash", "-c", "cd /src/ && python3 ./demo.py"]
+ENTRYPOINT ["/bin/bash", "-c", "cd /src/ && python3 -u ./test.py"]
