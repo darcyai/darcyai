@@ -23,7 +23,10 @@ stages:
           displayName: 'Use Python $(python.version)'
 
         - script: |
+            sudo apt-get update
             sudo apt-get install -y python3-pycoral
+            sudo apt-get clean
+            sudo rm -rf /var/lib/apt/lists/*
             python -m pip install --extra-index-url https://google-coral.github.io/py-repo/ pycoral~=2.0
             python -m pip install --upgrade pip build
             python -m pip install -r ./requirements.txt
