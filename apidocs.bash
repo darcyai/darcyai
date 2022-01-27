@@ -24,10 +24,8 @@ function generate_docs() {
     mkdocs build
     mv site ../docs
     popd > /dev/null
+    rm -R pydocs
     
-    # Open the docs folder
-    open pydocs/content
-
 }
 
 # Run the doc server on localhost:8000

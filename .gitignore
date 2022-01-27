@@ -4,6 +4,7 @@ __pycache__
 /dist
 /html
 /pydocs
+/docs
 *.egg-info
 *.mp4
 

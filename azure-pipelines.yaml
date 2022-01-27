@@ -17,6 +17,9 @@ stages:
               python.version: '3.7'
 
         steps:
+        - checkout: self
+          persistCredentials: true
+          clean: true
         - task: UsePythonVersion@0
           inputs:
             versionSpec: '$(python.version)'
@@ -56,6 +59,27 @@ stages:
             codeCoverageTool: Cobertura
             summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
           displayName: 'Publish code coverage'
+
+        - script: |
+            bash ./apidocs.bash --generate
+          displayName: 'Generate documentation'
+
+        - script: |
+            git config --global user.email "info@edgeworx.io"
+            git config --global user.name "Edgeworx"
+
+            git clone https://x-access-token:$(githubpat)@github.com/edgeworx/darcyai-sdk.git
+            rm -rf darcyai-sdk/docs/api
+            mv docs darcyai-sdk/docs/api
+            pushd darcyai-sdk > /dev/null
+            git commit -am "Update docs"
+            git push
+            popd > /dev/null
+            rm -rf darcyai-sdk
+
+            git config --global user.email ""
+            git config --global user.name ""
+          displayName: 'Publish documentation'
 
         - script: |
             python3 -m build
