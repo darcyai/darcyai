@@ -1,13 +1,13 @@
 import cv2
 import numpy as np
-from pycoral.adapters import common, classify
-from pycoral.utils import dataset
+from importlib import import_module
 from typing import Any, List
 
 from darcyai.config_registry import ConfigRegistry
 from darcyai.utils import validate_not_none, validate_type, validate
 
 from .coral_perceptor_base import CoralPerceptorBase
+
 
 class ImageClassificationPerceptor(CoralPerceptorBase):
     """
@@ -34,6 +34,10 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
                  std:float=128.0,
                  **kwargs):
         super().__init__(**kwargs)
+
+        dataset = import_module("pycoral.utils.dataset")
+        self.__classify = import_module("pycoral.adapters.classify")
+        self.__common = import_module("pycoral.adapters.common")
 
         validate_not_none(threshold, "threshold is required")
         validate_type(threshold, (float, int), "threshold must be a number")
@@ -77,22 +81,22 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
         labels = []
         resized_frame = cv2.resize(input_data, self.__inference_shape)
 
-        params = common.input_details(self.interpreter, "quantization_parameters")
+        params = self.__common.input_details(self.interpreter, "quantization_parameters")
         scales = params["scales"]
         zero_points = params["zero_points"]
 
         if abs(scales * self.__std - 1) < 1e-5 and abs(self.__mean - zero_points) < 1e-5:
             # Input data does not require preprocessing.
-            common.set_input(self.interpreter, resized_frame)
+            self.__common.set_input(self.interpreter, resized_frame)
         else:
             normalized_frame = (np.asarray(resized_frame) - self.__mean) / (self.__std * scales) \
                 + zero_points
             np.clip(normalized_frame, 0, 255, out=normalized_frame)
-            common.set_input(self.interpreter, normalized_frame.astype(np.uint8))
+            self.__common.set_input(self.interpreter, normalized_frame.astype(np.uint8))
 
         self.interpreter.invoke()
 
-        detected_classes = classify.get_classes(
+        detected_classes = self.__classify.get_classes(
             self.interpreter,
             self.__top_k,
             self.__threshold)

@@ -1,9 +1,8 @@
-from pycoral.utils import edgetpu
+from importlib import import_module
 from typing import Union
 
 from darcyai.perceptor.perceptor import Perceptor
 from darcyai.utils import validate_type, validate
-
 
 class CoralPerceptorBase(Perceptor):
     """
@@ -12,7 +11,8 @@ class CoralPerceptorBase(Perceptor):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        edge_tpus = edgetpu.list_edge_tpus()
+        self.__edgetpu = import_module("pycoral.utils.edgetpu")
+        edge_tpus = self.__edgetpu.list_edge_tpus()
         if len(edge_tpus) == 0:
             raise RuntimeError("No Coral Edge TPUs found")
 
@@ -32,9 +32,9 @@ class CoralPerceptorBase(Perceptor):
             device = f":{accelerator_idx}"
 
         if device is None:
-            self.interpreter = edgetpu.make_interpreter(self.model_path)
+            self.interpreter = self.__edgetpu.make_interpreter(self.model_path)
         else:
-            self.interpreter = edgetpu.make_interpreter(
+            self.interpreter = self.__edgetpu.make_interpreter(
                 self.model_path,
                 device=f":{accelerator_idx}")
 

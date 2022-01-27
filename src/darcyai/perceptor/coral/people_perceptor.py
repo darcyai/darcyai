@@ -10,10 +10,7 @@ import pathlib
 import uuid
 
 from collections import OrderedDict
-from pycoral.utils import edgetpu
-from tflite_runtime.interpreter import load_delegate
-from tflite_runtime.interpreter import Interpreter
-
+from importlib import import_module
 from darcyai.utils import validate_type, validate
 from darcyai.config import Config
 
@@ -59,6 +56,12 @@ class PoseEngine():
         Raises:
           ValueError: An error occurred when model output is invalid.
         """
+
+        self.__edgetpu = import_module("pycoral.utils.edgetpu")
+        tflite_runtime = load_delegate = import_module("tflite_runtime.interpreter")
+        load_delegate = tflite_runtime.load_delegate
+        Interpreter = tflite_runtime.Interpreter
+
         script_dir = os.path.dirname(os.path.realpath(__file__))
         edgetpu_shared_lib = 'libedgetpu.so.1'
         posenet_shared_lib = os.path.join(
@@ -87,7 +90,7 @@ class PoseEngine():
         """Run inference using the zero copy feature from pycoral and returns inference time in ms.
         """
         start = time.monotonic()
-        edgetpu.run_inference(self._interpreter, input_data)
+        self.__edgetpu.run_inference(self._interpreter, input_data)
         self._inf_time = time.monotonic() - start
         return (self._inf_time * 1000)
 
