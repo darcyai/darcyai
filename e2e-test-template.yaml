@@ -15,7 +15,7 @@ jobs:
           docker run --rm \
             -v $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests:/src \
             -v $(System.DefaultWorkingDirectory)/dist:/whl \
-            ${{ parameters.imageName }}-base-${{ parameters.imageNameSuffix }}:${{ parameters.imageTag }} \
+            darcyai/darcy-ai-base:${{ parameters.imageTag }} \
             sh -c "cd /src && python3 -m pip install /whl/darcyai*.whl && python3 -u tests.py"
         displayName: 'e2e test'
       - script: |

@@ -7,12 +7,8 @@ renderer:
   mkdocs_config:
     site_name: Darcy AI
     theme: readthedocs
-    repo_url: https://github.com/Edgeworx/darcyai
+    repo_url: https://github.com/darcyai/darcyai
   output_directory: pydocs
-  markdown:
-    source_linker:
-      type: github
-      repo: Edgeworx/darcyai
   pages:
     - title: Home
       name: index

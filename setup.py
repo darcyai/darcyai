@@ -5,18 +5,18 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="darcyai",
-    author="Edgeworx",
-    author_email="info@edgeworx.io",
+    author="darcy.ai",
+    author_email="info@darcy.ai",
     description="DarcyAI Library",
     keywords="darcy, darcyai",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/edgeworx/darcyai",
+    url="https://github.com/darcyai/darcyai-sdk",
     project_urls={
-        "Documentation": "https://edgeworx.github.io/darcyai/",
+        "Documentation": "https://darcyai.github.io/darcyai-sdk/",
         "Bug Reports":
-        "https://github.com/edgeworx/darcyai/issues",
-        "Source Code": "https://github.com/edgeworx/darcyai"
+        "https://github.com/darcyai/darcyai-sdk/issues",
+        "Source Code": "https://github.com/darcyai/darcyai-sdk"
     },
     include_package_data=True,
     package_data={

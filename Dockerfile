@@ -1,4 +1,4 @@
-FROM edgeworx/darcy-ai-base-x86:dev
+FROM darcyai/darcy-ai-base:dev
 
 RUN python3 -m pip install --upgrade darcyai
 

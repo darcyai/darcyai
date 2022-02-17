@@ -65,12 +65,12 @@ stages:
           displayName: 'Generate documentation'
 
         - script: |
-            git config --global user.email "info@edgeworx.io"
-            git config --global user.name "Edgeworx"
+            git config --global user.email "info@darcy.ai"
+            git config --global user.name "darcyai"
 
-            git clone https://x-access-token:$(githubpat)@github.com/edgeworx/darcyai-sdk.git
-            rm -rf darcyai-sdk/docs/api
-            mv docs darcyai-sdk/docs/api
+            git clone https://x-access-token:$(githubpat)@github.com/darcyai/darcyai-sdk.git
+            rm -rf darcyai-sdk/docs
+            mv docs darcyai-sdk/docs
             pushd darcyai-sdk > /dev/null
             git commit -am "Update docs"
             git push
@@ -101,14 +101,10 @@ stages:
         parameters:
           name: 'E2E_x86'
           poolImageName: 'Azure Pipelines'
-          imageNameSuffix: 'x86'
-          imageName: 'edgeworx/darcy-ai'
           imageTag: 'dev'
 
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_armv7l'
           poolImageName: 'RPi'
-          imageNameSuffix: 'armv7l'
-          imageName: 'edgeworx/darcy-ai'
           imageTag: 'dev'

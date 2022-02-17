@@ -31,8 +31,9 @@ class PeoplePOM(Serializable):
     def personInFront(self):
         poi = None
         for person in self.__people:
-            if person["is_poi"]:
-                poi = person
+            if self.__people[person]["is_poi"]:
+                poi = self.__people[person]
+                break
 
         return poi
 
@@ -46,8 +47,11 @@ class PeoplePOM(Serializable):
             return None
 
     def faceImage(self, person_id):
+        if not self.__people[person_id]["has_face"]:
+            return None
+
         frame_copy = self.__raw_frame.copy()
-        (x0, y0), (x1, y1) = self.__people[person_id]['face_rectangle']
+        (x0, y0), (x1, y1) = self.__people[person_id]["face_rectangle"]
         frame_width = frame_copy.shape[1]
         frame_height = frame_copy.shape[0]
 
@@ -67,8 +71,11 @@ class PeoplePOM(Serializable):
         return face
 
     def bodyImage(self, person_id):
+        if not self.__people[person_id]["has_body"]:
+            return None
+
         frame_copy = self.__raw_frame.copy()
-        (x0, y0), (x1, y1) = self.__people[person_id]['body_rectangle']
+        (x0, y0), (x1, y1) = self.__people[person_id]["body_rectangle"]
         frame_width = frame_copy.shape[1]
         frame_height = frame_copy.shape[0]
 
@@ -88,9 +95,12 @@ class PeoplePOM(Serializable):
         return body
 
     def personImage(self, person_id):
+        if not self.__people[person_id]["has_body"] or not self.__people[person_id]["has_face"]:
+            return None
+
         frame_copy = self.__raw_frame.copy()
-        (bx0, by0), (bx1, by1) = self.__people[person_id]['body_rectangle']
-        (fx0, fy0), (fx1, fy1) = self.__people[person_id]['face_rectangle']
+        (bx0, by0), (bx1, by1) = self.__people[person_id]["body_rectangle"]
+        (fx0, fy0), (fx1, fy1) = self.__people[person_id]["face_rectangle"]
         frame_width = frame_copy.shape[1]
         frame_height = frame_copy.shape[0]
 
@@ -147,18 +157,27 @@ class PeoplePOM(Serializable):
         return image
 
     def faceSize(self, person_id):
+        if not self.__people[person_id]["has_face"]:
+            return 0
+
         rectangle = self.__people[person_id]["face_rectangle"]
         width = rectangle[1][0] - rectangle[0][0]
         height = rectangle[1][1] - rectangle[0][1]
         return (width, height)
 
     def bodySize(self, person_id):
+        if not self.__people[person_id]["has_body"]:
+            return 0
+
         rectangle = self.__people[person_id]["body_rectangle"]
         width = rectangle[1][0] - rectangle[0][0]
         height = rectangle[1][1] - rectangle[0][1]
         return (width, height)
 
     def wholeSize(self, person_id):
+        if not self.__people[person_id]["has_body"] or not self.__people[person_id]["has_face"]:
+            return 0
+
         body_size = self.bodySize(person_id)
         face_size = self.faceSize(person_id)
         return ((body_size[0] + face_size[0]), (body_size[1] + face_size[1]))
