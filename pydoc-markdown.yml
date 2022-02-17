@@ -7,12 +7,17 @@ renderer:
   mkdocs_config:
     site_name: Darcy AI
     theme: readthedocs
-    repo_url: https://github.com/darcyai/darcyai
   output_directory: pydocs
   pages:
     - title: Home
       name: index
-      source: README.md
+      source: GETTINGSTARTED.md
+    - title: Terminology
+      name: terminology
+      source: TERMINOLOGY.md
+    - title: Build
+      name: build
+      source: BUILD.md
     - title: Pipeline
       contents:
         - darcyai.pipeline.Pipeline
