@@ -126,7 +126,7 @@ class CameraStream(InputStream):
         ```
         """
         input_devices = []
-        
+
         index = 0
         while True:
             try:
@@ -135,7 +135,7 @@ class CameraStream(InputStream):
                     break
                 input_devices.append(index)
                 device.release()
-            except:
+            except Exception:
                 break
             index += 1
 
