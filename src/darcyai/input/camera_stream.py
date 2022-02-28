@@ -111,6 +111,36 @@ class CameraStream(InputStream):
 
             yield(VideoStreamData(frame, timestamp()))
 
+    @staticmethod
+    def get_video_inputs():
+        """
+        Gets the available video inputs.
+
+        # Returns
+        int[]: A list of strings.
+
+        # Examples
+        ```python
+        >>> from darcyai.input.camera_stream import CameraStream
+        >>> CameraStream.get_video_inputs()
+        ```
+        """
+        input_devices = []
+        
+        index = 0
+        while True:
+            try:
+                device = cv2.VideoCapture(index)
+                if not device.isOpened() or not device.read()[0]:
+                    break
+                input_devices.append(index)
+                device.release()
+            except:
+                break
+            index += 1
+
+        return input_devices
+
     def __initialize_video_camera_stream(self) -> video.VideoStream:
         """
         Initializes the video camera stream.

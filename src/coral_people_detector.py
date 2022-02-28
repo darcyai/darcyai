@@ -27,6 +27,9 @@ def live_feed_callback(pom, input_data):
     if pom.peeps.peopleCount() > 0:
         for person_id in pom.peeps.people():
             face_size = pom.peeps.faceSize(person_id)
+            if face_size == 0:
+                continue
+
             face_height = face_size[1]
             label2 = "{} face height".format(face_height)
             color = (0, 255, 255)

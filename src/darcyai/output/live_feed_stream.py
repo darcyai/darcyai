@@ -313,7 +313,9 @@ class LiveFeedStream(OutputStream):
                 frame = b"--frame\r\nContent-Type: image/jpeg\r\n\r\n" + \
                     self.__encoded_frame
                 yield frame
-            except BaseException:
+            except GeneratorExit:
+                break
+            except Exception:
                 self.__logger.exception("Error at generating stream")
                 pass
 
