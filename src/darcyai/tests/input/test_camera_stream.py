@@ -26,7 +26,7 @@ class TestCameraStream:
 
         imutils_mock.return_value = start_mock
 
-        camera_stream = CameraStream(video_device="/dev/video0")
+        camera_stream = CameraStream(video_device="/dev/video0", use_pi_camera=True)
         stream = camera_stream.stream()
 
         assert isinstance(stream, Iterable)
@@ -42,7 +42,7 @@ class TestCameraStream:
 
         imutils_mock.return_value = start_mock
 
-        camera_stream = CameraStream(video_device="/dev/video0")
+        camera_stream = CameraStream(video_device="/dev/video0", use_pi_camera=True)
         stream = camera_stream.stream()
 
         frame = next(stream)
@@ -59,7 +59,7 @@ class TestCameraStream:
 
         imutils_mock.return_value = start_mock
 
-        camera_stream = CameraStream(video_device="/dev/video0")
+        camera_stream = CameraStream(video_device="/dev/video0", use_pi_camera=True)
         stream = camera_stream.stream()
 
         count = 0
@@ -83,7 +83,7 @@ class TestCameraStream:
         imutils_mock.return_value = start_mock
 
         camera_stream = CameraStream(
-            flip_frames=True, video_device="/dev/video0")
+            flip_frames=True, video_device="/dev/video0", use_pi_camera=True)
         stream = camera_stream.stream()
 
         frame = next(stream)
@@ -101,7 +101,7 @@ class TestCameraStream:
 
         imutils_mock.return_value = start_mock
 
-        camera_stream = CameraStream(video_device="/dev/video0")
+        camera_stream = CameraStream(video_device="/dev/video0", use_pi_camera=True)
         stream = camera_stream.stream()
 
         with pytest.raises(Exception) as context:
