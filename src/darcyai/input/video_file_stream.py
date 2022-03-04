@@ -1,4 +1,5 @@
 import cv2
+import threading
 import time
 from typing import Iterable
 
@@ -39,6 +40,7 @@ class VideoFileStream(InputStream):
         self.__frame_number = 0
         self.__vs = None
         self.__stopped = True
+        self.__lock = threading.Lock()
 
     def stop(self) -> None:
         """
@@ -55,7 +57,10 @@ class VideoFileStream(InputStream):
         """
         self.__stopped = True
 
-        if self.__vs is not None:
+        if self.__vs is None:
+            return
+
+        with self.__lock:
             self.__vs.release()
             self.__vs = None
             self.__frame_number = 0
@@ -94,12 +99,15 @@ class VideoFileStream(InputStream):
 
         self.__frame_number = 0
         while not self.__stopped and self.__vs.isOpened():
-            success, frame = self.__get_next_frame()
+            with self.__lock:
+                if self.__stopped:
+                    break
 
-            if not success:
-                break
+                success, frame = self.__get_next_frame()
+                if not success:
+                    break
 
-            yield(VideoStreamData(frame, timestamp()))
+                yield(VideoStreamData(frame, timestamp()))
 
     def __initialize_video_file_stream(self) -> cv2.VideoCapture:
         cap = cv2.VideoCapture(self.__file_name)

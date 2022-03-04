@@ -1,7 +1,7 @@
 import cv2
 import time
 from imutils import video
-from typing import Iterable
+from typing import Any, Iterable
 
 from darcyai.input.input_stream import InputStream
 from darcyai.input.video_stream_data import VideoStreamData
@@ -66,8 +66,14 @@ class CameraStream(InputStream):
         """
         self.__stopped = True
 
-        if self.__vs is not None:
+        if self.__vs is None:
+            return
+
+        if self.__use_pi_camera:
             self.__vs.stop()
+            self.__vs = None
+        else:
+            self.__vs.release()
             self.__vs = None
 
     def stream(self) -> Iterable[VideoStreamData]:
@@ -88,11 +94,9 @@ class CameraStream(InputStream):
             self.__vs = self.__initialize_video_camera_stream()
             self.__stopped = False
 
-        frame = self.__vs.read()
-        if self.__flip_frames:
-            frame = cv2.flip(frame, 1)
-
+        frame = self.__read_frame(self.__vs)
         yield VideoStreamData(frame, timestamp())
+
         if self.__vs is None:
             self.__vs = self.__initialize_video_camera_stream()
 
@@ -104,10 +108,7 @@ class CameraStream(InputStream):
             if self.__stopped:
                 break
 
-            frame = self.__vs.read()
-
-            if self.__flip_frames:
-                frame = cv2.flip(frame, 1)
+            frame = self.__read_frame(self.__vs)
 
             yield(VideoStreamData(frame, timestamp()))
 
@@ -148,22 +149,20 @@ class CameraStream(InputStream):
         # Returns
         A video.VideoStream object.
         """
-        if not self.__use_pi_camera:
-            vs = video.VideoStream(
-                src=self.__video_device,
-                resolution=(
-                    self.__frame_width,
-                    self.__frame_height),
-                framerate=20).start()
-        else:
+        if self.__use_pi_camera:
             vs = video.VideoStream(
                 usePiCamera=True,
                 resolution=(
                     self.__frame_width,
                     self.__frame_height),
-                framerate=20).start()
+                framerate=self.__fps).start()
+        else:
+            vs = cv2.VideoCapture(self.__video_device)
+            vs.set(cv2.CAP_PROP_FRAME_WIDTH, self.__frame_width)
+            vs.set(cv2.CAP_PROP_FRAME_HEIGHT, self.__frame_height)
+            vs.set(cv2.CAP_PROP_FPS, self.__fps)
 
-        test_frame = vs.read()
+        test_frame = self.__read_frame(vs)
         counter = 0
         while test_frame is None:
             if counter == 10:
@@ -173,6 +172,28 @@ class CameraStream(InputStream):
             self.__logger.debug("Waiting for camera unit to start...")
             counter += 1
             time.sleep(1)
-            test_frame = vs.read()
+            test_frame = self.__read_frame(vs)
 
         return vs
+
+    def __read_frame(self, vs: Any):
+        """
+        Reads a frame from the video stream.
+
+        # Arguments
+        vs (Any): The video stream.
+
+        # Returns
+        A numpy array of the frame.
+        """
+        if self.__use_pi_camera:
+            frame = vs.read()
+        elif vs.isOpened():
+            frame = vs.read()[1]
+        else:
+            frame = None
+
+        if not frame is None and self.__flip_frames:
+            frame = cv2.flip(frame, 1)
+
+        return frame
