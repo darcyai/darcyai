@@ -128,17 +128,16 @@ class CameraStream(InputStream):
         """
         input_devices = []
 
-        index = 0
-        while True:
+        for index in range(10):
             try:
                 device = cv2.VideoCapture(index)
                 if not device.isOpened() or not device.read()[0]:
-                    break
+                    continue
                 input_devices.append(index)
-                device.release()
             except Exception:
-                break
-            index += 1
+                continue
+            finally:
+                device.release()
 
         return input_devices
 
