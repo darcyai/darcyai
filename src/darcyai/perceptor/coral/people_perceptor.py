@@ -316,6 +316,8 @@ class PeoplePerceptor(CoralPerceptorBase):
             self.__frame_history.popitem(last=False)
 
     def __process_body_attributes(self, bodies, frame, config):
+        max_face_height = 0
+        body_with_max_face_height = None
         for body in bodies:
             body["face_position"] = self.__determine_face_position(body, config)
             body["has_forehead"] = self.__determine_if_forehead_visible(body, config)
@@ -324,10 +326,16 @@ class PeoplePerceptor(CoralPerceptorBase):
             body["face_rectangle"] = self.__find_face_rectangle(body, config)
             body["tracking_info"] = self.__generate_tracking_info_for_body(frame, body, config)
 
+            if not body["has_face"]:
+                continue
+
             curFaceHeight = int(body["face_rectangle"][1][1] - body["face_rectangle"][0][1])
-            if curFaceHeight > self.__poiFaceHeight:
-              self.__poi = body
-              self.__poiFaceHeight = curFaceHeight
+            if curFaceHeight > max_face_height:
+                max_face_height = curFaceHeight
+                body_with_max_face_height = body
+
+        self.__poi = body_with_max_face_height
+        self.__poiFaceHeight = max_face_height
 
         return bodies
 
