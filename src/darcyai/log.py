@@ -24,7 +24,7 @@ def setup_custom_logger(name):
     handler.setFormatter(formatter)
 
     logger = logging.getLogger(name)
-    log_level = os.environ.get('DARCYAI_LOG_LEVEL', 'INFO').upper()
+    log_level = os.environ.get("DARCYAI_LOG_LEVEL", "INFO").upper()
     logger.setLevel(log_level)
     logger.addHandler(handler)
 
