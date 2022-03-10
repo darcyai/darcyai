@@ -47,5 +47,6 @@ setuptools.setup(
         "pytest==6.2.5",
         "flask==2.0.2",
         "requests==2.26.0",
+        "logging-json==0.2.1",
     ]
 )
