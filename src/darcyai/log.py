@@ -1,4 +1,5 @@
 import logging
+import logging_json
 import os
 
 
@@ -12,8 +13,12 @@ def setup_custom_logger(name):
     # Returns
     logger (logging.Logger): The logger.
     """
-    formatter = logging.Formatter(
-        fmt='%(asctime)s - %(levelname)s - %(module)s - %(message)s')
+    formatter = logging_json.JSONFormatter(fields={
+        "timestamp": "asctime",
+        "level": "levelname",
+        "thread": "threadName",
+        "module": "module",
+    })
 
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
