@@ -6,12 +6,13 @@ import time
 from collections import OrderedDict
 from collections.abc import Iterable
 from flask import Flask, request, Response, jsonify, render_template
+from json import JSONEncoder
 from multiprocessing.pool import ThreadPool
 from signal import SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGQUIT, signal
 from typing import Callable, Any, Dict, Tuple, Union, List
 from unittest.mock import sentinel
 
-from darcyai.config import Config
+from darcyai.config import Config, RGB
 from darcyai.config_registry import ConfigRegistry
 from darcyai.cyclic_toposort import acyclic_toposort
 from darcyai.input.input_multi_stream import InputMultiStream
@@ -1491,13 +1492,21 @@ class Pipeline():
             return
 
         config_schema = config_schema_dict[config_name]
-        if not config_schema.is_valid(value):
+
+        converted_value = value
+        if config_schema.type == "rgb" and isinstance(value, str):
+            if value[0] == "#":
+                converted_value = RGB.from_hex_string(value)
+            else:
+                converted_value = RGB.from_string(value)
+
+        if not config_schema.is_valid(converted_value):
             raise ValueError(f"Invalid value for config '{config_name}'")
 
         self.__perceptor_config_registry[perceptor_name].set_value(
-            config_name, value)
+            config_name, converted_value)
         self.__perceptors[perceptor_name].set_perceptor_config(
-            config_name, value)
+            config_name, converted_value)
 
     def __start_api_server(self) -> None:
         """
@@ -1509,6 +1518,7 @@ class Pipeline():
             self.__flask_app = Flask(__name__,
                 static_folder=os.path.join(swagger_path, "static"),
                 template_folder=os.path.join(swagger_path, "templates"))
+            self.__flask_app.json_encoder = CustomJSONEncoder
             ssl_context = None
             self.__setup_paths()
             self.__flask_app.run(
@@ -1863,3 +1873,23 @@ class Pipeline():
                      "perception_completion_callback must be a function")
 
         self.__perception_completion_callback = perception_completion_callback
+
+class CustomJSONEncoder(JSONEncoder):
+    """
+    Custom JSON encoder.
+    """
+
+    def default(self, o):
+        """
+        Default.
+
+        # Arguments
+        o: The object.
+
+        # Returns
+        Any: The result.
+        """
+        if isinstance(o, RGB):
+            return o.to_hex()
+        else:
+            return super().default(o)

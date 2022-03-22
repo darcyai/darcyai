@@ -2,7 +2,7 @@ import time
 from random import random
 
 from darcyai.perceptor.perceptor import Perceptor
-from darcyai.config import Config
+from darcyai.config import Config, RGB
 
 
 class PerceptorMock(Perceptor):
@@ -20,6 +20,7 @@ class PerceptorMock(Perceptor):
             Config("config_1", "str", "", "Config 1"),
             Config("config_2", "int", 0, "Config 2"),
             Config("config_3", "bool", False, "Config 3"),
+            Config("config_4", "rgb", RGB(255, 255, 255), "Config 4"),
         ]
 
         self.event_names = ["event_1", "event_2"]
