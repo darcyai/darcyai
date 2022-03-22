@@ -154,6 +154,11 @@ class RGB():
 
         # Returns
         RGB: The RGB object.
+
+        # Examples
+        ```python
+        >>> RGB.from_string("255,255,255")
+        ```
         """
         validate_not_none(rgb, "rgb is required.")
         validate_type(rgb, str, "rgb must be a string.")
@@ -164,3 +169,25 @@ class RGB():
         rgb = rgb.split(",")
 
         return RGB(int(rgb[0].strip()), int(rgb[1].strip()), int(rgb[2].strip()))
+
+    @staticmethod
+    def from_hex_string(hex_rgb:str) -> "RGB":
+        """
+        Creates an RGB object from a hex RGB string.
+
+        # Arguments
+        hex_rgb (str): The hex RGB string.
+
+        # Returns
+        RGB: The RGB object.
+        """
+        validate_not_none(hex_rgb, "hex_rgb is required.")
+        validate_type(hex_rgb, str, "hex_rgb must be a string.")
+
+        hex_rgb = hex_rgb.strip()
+        validate(len(hex_rgb) == 7, "hex_rgb must be a hex RGB string.")
+        validate(hex_rgb.startswith("#"), "hex_rgb must start with #.")
+
+        (red, green, blue) = tuple(int(hex_rgb.lstrip("#")[i:i+2], 16) for i in (0, 2, 4))
+
+        return RGB(red, green, blue)

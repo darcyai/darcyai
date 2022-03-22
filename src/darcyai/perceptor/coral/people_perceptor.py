@@ -12,7 +12,7 @@ import uuid
 from collections import OrderedDict
 from importlib import import_module
 from darcyai.utils import validate_type, validate
-from darcyai.config import Config
+from darcyai.config import Config, RGB
 
 from .coral_perceptor_base import CoralPerceptorBase
 from .people_perceptor_pom import PeoplePOM
@@ -161,14 +161,14 @@ class PeoplePerceptor(CoralPerceptorBase):
             Config("show_pose_landmark_dots", "bool", False, "Show pose landmark dots"),
             Config("show_body_rectangle", "bool", False, "Show body rectangle"),
             Config("show_face_rectangle", "bool", False, "Show face rectangle"),
-            Config("face_rectangle_color", "str", "255,0,0", "Face rectangle color"),
+            Config("face_rectangle_color", "rgb", RGB(255, 0, 0), "Face rectangle color"),
             Config("face_rectangle_thickness", "int", 1, "Face rectangle thickness"),
-            Config("body_rectangle_color", "str", "0,255,0", "Body rectangle color"),
+            Config("body_rectangle_color", "rgb", RGB(0, 255, 0), "Body rectangle color"),
             Config("pose_landmark_dot_confidence_threshold", "float", 0.5, "Pose landmark dot confidence threshold"),
             Config("pose_landmark_dot_size", "int", 1, "Pose landmark dot size"),
-            Config("pose_landmark_dot_color", "str", "255,255,255", "Pose landmark dot color"),
+            Config("pose_landmark_dot_color", "rgb", RGB(255, 255, 255), "Pose landmark dot color"),
             Config("show_face_position_arrow", "bool", False, "Show face position arrow"),
-            Config("face_position_arrow_color", "str", "255,255,255", "Face position arrow color"),
+            Config("face_position_arrow_color", "rgb", RGB(255, 255, 255), "Face position arrow color"),
             Config("face_position_arrow_stroke", "int", 1, "Face position arrow stroke"),
             Config("face_position_arrow_offset_x", "int", 0, "Face position arrow offset x"),
             Config("face_position_arrow_offset_y", "int", -30, "Face position arrow offset y"),
@@ -176,12 +176,12 @@ class PeoplePerceptor(CoralPerceptorBase):
             Config("face_position_left_right_threshold", "float", 0.3, "Face position left/right threshold"),
             Config("face_position_straight_threshold", "float", 0.7, "Face position straight threshold"),
             Config("show_forehead_center_dot", "bool", False, "Show forehead center dot"),
-            Config("forehead_center_dot_color", "str", "255,255,255", "Forehead center dot color"),
+            Config("forehead_center_dot_color", "rgb", RGB(255, 255, 255), "Forehead center dot color"),
             Config("forehead_center_dot_size", "int", 1, "Forehead center dot size"),
             Config("body_rectangle_thickness", "int", 1, "Body rectangle thickness"),
             Config("face_rectangle_y_factor", "float", 1.0, "Face rectangle Y factor"),
             Config("show_centroid_dots", "bool", False, "Show centroid dots"),
-            Config("centroid_dots_color", "str", "255,255,255", "Centroid dots color"),
+            Config("centroid_dots_color", "rgb", RGB(255, 255, 255), "Centroid dots color"),
             Config("centroid_dots_size", "int", 1, "Centroid dots size"),
             Config("object_tracking_allowed_missed_frames", "int", 50, "Object tracking allowed missed frames"),
             Config("object_tracking_color_sample_pixels", "int", 4, "Object tracking color sample pixels"),
@@ -196,9 +196,9 @@ class PeoplePerceptor(CoralPerceptorBase):
             Config("person_tracking_creation_m", "int", 20, "Person tracking creation M"),
             Config("person_tracking_creation_n", "int", 16, "Person tracking creation N"),
             Config("show_person_id", "bool", False, "Show person ID"),
-            Config("person_data_line_color", "str", "255,255,255", "Person data line color"),
+            Config("person_data_line_color", "rgb", RGB(255, 255, 255), "Person data line color"),
             Config("person_data_line_thickness", "int", 1, "Person data line thickness"),
-            Config("person_data_identity_text_color", "str", "255,255,255", "Person data identity text color"),
+            Config("person_data_identity_text_color", "rgb", RGB(255, 255, 255), "Person data identity text color"),
             Config("person_data_identity_text_stroke", "int", 1, "Person data identity text stroke"),
             Config("person_data_identity_text_font_size", "float", 1.0, "Person data identity text font size"),
             Config("person_data_text_offset_x", "int", 30, "Person data text offset X"),
@@ -459,14 +459,14 @@ class PeoplePerceptor(CoralPerceptorBase):
             start_point = (int(startX), int(startY))
             end_point = (int(endX), int(endY))
 
-        cv2.arrowedLine(frame, start_point, end_point, self.__parse_color_string(config.face_position_arrow_color), config.face_position_arrow_stroke, lineType=cv2.LINE_AA)  
+        cv2.arrowedLine(frame, start_point, end_point, self.__parse_rgb_color(config.face_position_arrow_color), config.face_position_arrow_stroke, lineType=cv2.LINE_AA)  
         return frame
 
     def __draw_forehead_center_dot_on_frame(self, frame, body, config):
         if body["has_forehead"] and body["forehead_center"] != (0,0):
             foreheadX = body["forehead_center"][0]
             foreheadY = body["forehead_center"][1]
-            cv2.circle(frame, (foreheadX, foreheadY), config.forehead_center_dot_size, self.__parse_color_string(config.forehead_center_dot_color), config.forehead_center_dot_size)
+            cv2.circle(frame, (foreheadX, foreheadY), config.forehead_center_dot_size, self.__parse_rgb_color(config.forehead_center_dot_color), config.forehead_center_dot_size)
 
         return frame
 
@@ -474,14 +474,14 @@ class PeoplePerceptor(CoralPerceptorBase):
         if body["has_body"] and body["body_rectangle"] != ((0,0),(0,0)):
             upperLeft = body["body_rectangle"][0]
             lowerRight = body["body_rectangle"][1]
-            cv2.rectangle(frame, upperLeft, lowerRight, self.__parse_color_string(config.body_rectangle_color), config.body_rectangle_thickness, lineType=cv2.LINE_AA)
+            cv2.rectangle(frame, upperLeft, lowerRight, self.__parse_rgb_color(config.body_rectangle_color), config.body_rectangle_thickness, lineType=cv2.LINE_AA)
 
         return frame
 
     def __draw_landmark_points_on_body(self, frame, body, config):
         for label, keypoint in body["pose"].keypoints.items():
             if keypoint.score < config.pose_landmark_dot_confidence_threshold: continue
-            cv2.circle(frame, (int(keypoint.point[0]), int(keypoint.point[1])), config.pose_landmark_dot_size, self.__parse_color_string(config.pose_landmark_dot_color), config.pose_landmark_dot_size, lineType=cv2.LINE_AA)
+            cv2.circle(frame, (int(keypoint.point[0]), int(keypoint.point[1])), config.pose_landmark_dot_size, self.__parse_rgb_color(config.pose_landmark_dot_color), config.pose_landmark_dot_size, lineType=cv2.LINE_AA)
 
         return frame
 
@@ -545,23 +545,19 @@ class PeoplePerceptor(CoralPerceptorBase):
     def __draw_centroid_circles_on_frame(self, frame, body, config):
         centroid = body["tracking_info"]["centroid"]
         text = "OBJECT {}".format(body["body_id"])
-        cv2.putText(frame, text, (centroid[0] - 10, centroid[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.__parse_color_string(config.centroid_dots_color), 2, cv2.LINE_AA)
-        cv2.circle(frame, (centroid[0], centroid[1]), config.centroid_dots_size, self.__parse_color_string(config.centroid_dots_color), config.centroid_dots_size, lineType=cv2.LINE_AA)
+        cv2.putText(frame, text, (centroid[0] - 10, centroid[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.__parse_rgb_color(config.centroid_dots_color), 2, cv2.LINE_AA)
+        cv2.circle(frame, (centroid[0], centroid[1]), config.centroid_dots_size, self.__parse_rgb_color(config.centroid_dots_color), config.centroid_dots_size, lineType=cv2.LINE_AA)
         return frame
 
     def __draw_face_rectangle_on_frame(self, frame, body, config):
         if body["has_face"] and body["face_rectangle"] != ((0,0),(0,0)):
             upperLeft = body["face_rectangle"][0]
             lowerRight = body["face_rectangle"][1]
-            cv2.rectangle(frame, upperLeft, lowerRight, self.__parse_color_string(config.face_rectangle_color), config.face_rectangle_thickness, lineType=cv2.LINE_AA)
+            cv2.rectangle(frame, upperLeft, lowerRight, self.__parse_rgb_color(config.face_rectangle_color), config.face_rectangle_thickness, lineType=cv2.LINE_AA)
         return frame
 
-    def __parse_color_string(self, color_string):
-        colorArray = color_string.split(",")
-        red = int(colorArray[0])
-        green = int(colorArray[1])
-        blue = int(colorArray[2])
-        return (blue, green, red)
+    def __parse_rgb_color(self, color_rgb):
+        return (color_rgb.blue(), color_rgb.green(), color_rgb.red())
 
     def __find_body_rectangle(self, body, config):
         bodyRectangle = ((0,0),(0,0))
@@ -963,10 +959,10 @@ class PeoplePerceptor(CoralPerceptorBase):
             textStartY = foreheadCenter[1] + config.person_data_text_offset_y
             
         #Draw line from forehead center to person data text box
-        cv2.line(frame, foreheadCenter, (lineEndX, lineEndY), self.__parse_color_string(config.person_data_line_color), config.person_data_line_thickness, lineType=cv2.LINE_AA)
+        cv2.line(frame, foreheadCenter, (lineEndX, lineEndY), self.__parse_rgb_color(config.person_data_line_color), config.person_data_line_thickness, lineType=cv2.LINE_AA)
         
         if config.show_person_id:
             idWriteY = textStartY + idHeight + idBaseLine
-            cv2.putText(frame, identityText, (lineEndX, idWriteY), cv2.FONT_HERSHEY_SIMPLEX, config.person_data_identity_text_font_size, self.__parse_color_string(config.person_data_identity_text_color), config.person_data_identity_text_stroke, cv2.LINE_AA)
+            cv2.putText(frame, identityText, (lineEndX, idWriteY), cv2.FONT_HERSHEY_SIMPLEX, config.person_data_identity_text_font_size, self.__parse_rgb_color(config.person_data_identity_text_color), config.person_data_identity_text_stroke, cv2.LINE_AA)
         
         return frame

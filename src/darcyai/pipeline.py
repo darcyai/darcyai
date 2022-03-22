@@ -714,7 +714,7 @@ class Pipeline():
         self.__logger.debug("Running Pipeline")
 
         self.__running = True
-        
+
         pipeline_start_time = time.time()
         pps = 0
 

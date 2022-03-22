@@ -4,6 +4,7 @@ from darcyai.perceptor.coral.people_perceptor import PeoplePerceptor
 from darcyai.input.camera_stream import CameraStream
 from darcyai.output.live_feed_stream import LiveFeedStream
 from darcyai.pipeline import Pipeline
+from darcyai.config import RGB
 
 #Create a callback function for handling the input that is about to pass to the People Perceptor
 def people_input_callback(input_data, pom, config):
@@ -57,7 +58,6 @@ pipeline.add_output_stream("output", live_feed_callback, live_feed)
 
 #Instantiate a People Perceptor
 people_ai = PeoplePerceptor()
-
 #Subscribe to the "New Person" event from the People Perceptor and use our callback from above as the handler
 people_ai.on("new_person_entered_scene", new_person_callback)
 
@@ -67,7 +67,12 @@ pipeline.add_perceptor("peeps", people_ai, input_callback=people_input_callback)
 #Update the configuration of the People Perceptor to show the pose landmark dots on the annotated video frame
 pipeline.set_perceptor_config("peeps", "show_pose_landmark_dots", True)
 pipeline.set_perceptor_config("peeps", "pose_landmark_dot_size", 2)
-pipeline.set_perceptor_config("peeps", "pose_landmark_dot_color", "0,255,0")
+pipeline.set_perceptor_config("peeps", "pose_landmark_dot_color", RGB(0, 255, 0))
+pipeline.set_perceptor_config("peeps", "show_body_rectangle", True)
+pipeline.set_perceptor_config("peeps", "show_face_rectangle", True)
+pipeline.set_perceptor_config("peeps", "show_person_id", True)
+pipeline.set_perceptor_config("peeps", "person_data_identity_text_font_size", 0.5)
+pipeline.set_perceptor_config("peeps", "person_data_identity_text_font_size", 0.5)
 
 #Start the Pipeline
 pipeline.run()

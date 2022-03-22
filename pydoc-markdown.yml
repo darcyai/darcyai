@@ -30,10 +30,6 @@ renderer:
       contents:
         - darcyai.stream_data.StreamData
         - darcyai.stream_data.StreamData.*
-    - title: Config
-      contents:
-        - darcyai.config.Config
-        - darcyai.config.Config.*
     - title: PerceptionObjectModel
       contents:
         - darcyai.perception_object_model.PerceptionObjectModel
@@ -42,6 +38,16 @@ renderer:
       contents:
         - darcyai.serializable.Serializable
         - darcyai.serializable.Serializable.*
+    - title: Pipeline Config
+      children:
+        - title: Config
+          contents:
+            - darcyai.config.Config
+            - darcyai.config.Config.*
+        - title: RGB
+          contents:
+            - darcyai.config.RGB
+            - darcyai.config.RGB.*
     - title: Input Streams
       children:
         - title: InputStream
