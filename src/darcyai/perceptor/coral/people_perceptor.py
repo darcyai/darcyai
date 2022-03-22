@@ -459,7 +459,7 @@ class PeoplePerceptor(CoralPerceptorBase):
             start_point = (int(startX), int(startY))
             end_point = (int(endX), int(endY))
 
-        cv2.arrowedLine(frame, start_point, end_point, self.__parse_color_string(config.face_position_arrow_color), config.face_position_arrow_stroke)  
+        cv2.arrowedLine(frame, start_point, end_point, self.__parse_color_string(config.face_position_arrow_color), config.face_position_arrow_stroke, lineType=cv2.LINE_AA)  
         return frame
 
     def __draw_forehead_center_dot_on_frame(self, frame, body, config):
@@ -474,14 +474,14 @@ class PeoplePerceptor(CoralPerceptorBase):
         if body["has_body"] and body["body_rectangle"] != ((0,0),(0,0)):
             upperLeft = body["body_rectangle"][0]
             lowerRight = body["body_rectangle"][1]
-            cv2.rectangle(frame, upperLeft, lowerRight, self.__parse_color_string(config.body_rectangle_color), config.body_rectangle_thickness)
+            cv2.rectangle(frame, upperLeft, lowerRight, self.__parse_color_string(config.body_rectangle_color), config.body_rectangle_thickness, lineType=cv2.LINE_AA)
 
         return frame
 
     def __draw_landmark_points_on_body(self, frame, body, config):
         for label, keypoint in body["pose"].keypoints.items():
             if keypoint.score < config.pose_landmark_dot_confidence_threshold: continue
-            cv2.circle(frame, (int(keypoint.point[0]), int(keypoint.point[1])), config.pose_landmark_dot_size, self.__parse_color_string(config.pose_landmark_dot_color), config.pose_landmark_dot_size)
+            cv2.circle(frame, (int(keypoint.point[0]), int(keypoint.point[1])), config.pose_landmark_dot_size, self.__parse_color_string(config.pose_landmark_dot_color), config.pose_landmark_dot_size, lineType=cv2.LINE_AA)
 
         return frame
 
@@ -546,14 +546,14 @@ class PeoplePerceptor(CoralPerceptorBase):
         centroid = body["tracking_info"]["centroid"]
         text = "OBJECT {}".format(body["body_id"])
         cv2.putText(frame, text, (centroid[0] - 10, centroid[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, self.__parse_color_string(config.centroid_dots_color), 2, cv2.LINE_AA)
-        cv2.circle(frame, (centroid[0], centroid[1]), config.centroid_dots_size, self.__parse_color_string(config.centroid_dots_color), config.centroid_dots_size)
+        cv2.circle(frame, (centroid[0], centroid[1]), config.centroid_dots_size, self.__parse_color_string(config.centroid_dots_color), config.centroid_dots_size, lineType=cv2.LINE_AA)
         return frame
 
     def __draw_face_rectangle_on_frame(self, frame, body, config):
         if body["has_face"] and body["face_rectangle"] != ((0,0),(0,0)):
             upperLeft = body["face_rectangle"][0]
             lowerRight = body["face_rectangle"][1]
-            cv2.rectangle(frame, upperLeft, lowerRight, self.__parse_color_string(config.face_rectangle_color), config.face_rectangle_thickness)
+            cv2.rectangle(frame, upperLeft, lowerRight, self.__parse_color_string(config.face_rectangle_color), config.face_rectangle_thickness, lineType=cv2.LINE_AA)
         return frame
 
     def __parse_color_string(self, color_string):
@@ -963,7 +963,7 @@ class PeoplePerceptor(CoralPerceptorBase):
             textStartY = foreheadCenter[1] + config.person_data_text_offset_y
             
         #Draw line from forehead center to person data text box
-        cv2.line(frame, foreheadCenter, (lineEndX, lineEndY), self.__parse_color_string(config.person_data_line_color), config.person_data_line_thickness)
+        cv2.line(frame, foreheadCenter, (lineEndX, lineEndY), self.__parse_color_string(config.person_data_line_color), config.person_data_line_thickness, lineType=cv2.LINE_AA)
         
         if config.show_person_id:
             idWriteY = textStartY + idHeight + idBaseLine

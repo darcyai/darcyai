@@ -9,10 +9,16 @@ You’ll need to have a few things in place before you build. Here’s the list:
 	- [https://code.visualstudio.com/](https://code.visualstudio.com/)
 	- [https://marketplace.visualstudio.com/items?itemName=ms-python.python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 - A Raspberry Pi with an attached video camera and Google Coral edge TPU
-- Set up your VS Code environment to develop on your Darcy Cam or Raspberry Pi remotely
+- Set up your VS Code environment to develop on your Raspberry Pi remotely
 	- [https://www.raspberrypi.com/news/coding-on-raspberry-pi-remotely-with-visual-studio-code/](https://www.raspberrypi.com/news/coding-on-raspberry-pi-remotely-with-visual-studio-code/)
 - Python 3.5+
 - Docker on your Raspberry Pi
+
+## Environment setup
+
+To check if your Raspberry Pi meets all of the requirements for building and debugging Darcy AI applications, run the system check script [check.bash](https://github.com/darcyai/darcyai-sdk/blob/master/check.bash).
+
+If you need to setup your Raspberry Pi as a Darcy AI development environment, follow the [Raspberry Pi Environment Setup Guide](https://github.com/darcyai/darcyai-sdk/blob/master/SETUP_RPI.md).
 
 ## Create your application Python file and import libraries
 
@@ -31,6 +37,11 @@ from darcyai.pipeline import Pipeline
 If you don’t have the `darcyai` library installed yet, you can install it with PIP package installer for Python using the following commands, which you should run both on your development workstation and on your Raspberry Pi where you will be running your application:
 ```
 pip install darcyai
+```
+
+If you have multiple versions of Python on your system, you may need to install the `darcyai` library using the Python3 version of PIP as follows:
+```
+pip3 install darcyai
 ```
 
 ## Add the Pipeline, Input Stream, and Output Stream objects
@@ -230,7 +241,7 @@ sudo docker build -t darcydev/my-people-ai-app:1.0.0 .
 
 Use this Docker command to run your application container right away. You can also use this Docker container with the [Darcy Cloud](https://cloud.darcy.ai) to deploy and manage the application.
 ```
-sudo docker run -d --privileged -p 3456:3456 -p 8080:8080 -v /dev:/dev darcydev/my-people-ai-app:1.0.0
+sudo docker run -d --privileged --net=host -p 3456:3456 -p 8080:8080 -v /dev:/dev darcydev/my-people-ai-app:1.0.0
 ```
 
 ## View your real-time Darcy AI application video output

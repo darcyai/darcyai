@@ -14,6 +14,7 @@ class Config():
         - float
         - bool
         - str
+        - rgb
     default_value (Any): The default value of the config.
     description (str): The description of the config.
     """
@@ -28,15 +29,15 @@ class Config():
         validate_type(name, str, "name must be a string.")
         self.name = name
 
+        valid_types = ["int", "float", "bool", "str", "rgb"]
         validate_not_none(config_type, "config_type is required.")
         validate_type(config_type, str, "config_type must be a string.")
-        validate(config_type in ["int", "float", "bool", "str"],
-                 "config_type must be one of: int, float, bool, str.")
+        validate(config_type in valid_types,
+            f"config_type must be one of: {', '.join(valid_types)}.")
         self.type = config_type
 
         validate_not_none(default_value, "default_value is required.")
-        if not self.is_valid(default_value):
-            raise Exception("default_value must be of type " + config_type)
+        validate(self.is_valid(default_value), f"default_value must be of type {config_type}.")
         self.default_value = default_value
 
         validate_not_none(description, "description is required.")
@@ -61,6 +62,8 @@ class Config():
             return isinstance(value, bool)
         elif self.type == "str":
             return isinstance(value, str)
+        elif self.type == "rgb":
+            return isinstance(value, RGB)
         else:
             return False
 
@@ -82,5 +85,82 @@ class Config():
             return bool(value)
         elif self.type == "str":
             return str(value)
+        elif self.type == "rgb":
+            return RGB.from_string(value)
         else:
             return value
+
+class RGB():
+    """
+    Class to hold the configuration for the RGB.
+
+    Arguments:
+        red (int): The red value.
+        green (int): The green value.
+        blue (int): The blue value.
+    """
+
+    def __init__(self, red: int, green: int, blue: int):
+        self.__red = red
+        self.__green = green
+        self.__blue = blue
+
+    def red(self) -> int:
+        """
+        Returns the red value.
+
+        # Returns
+        int: The red value.
+        """
+        return self.__red
+
+    def green(self) -> int:
+        """
+        Returns the green value.
+
+        # Returns
+        int: The green value.
+        """
+        return self.__green
+
+    def blue(self) -> int:
+        """
+        Returns the blue value.
+
+        # Returns
+        int: The blue value.
+        """
+        return self.__blue
+
+    def __str__(self) -> str:
+        return f"{self.__red},{self.__green},{self.__blue}"
+
+    def to_hex(self) -> str:
+        """
+        Returns the hex value of the RGB.
+
+        # Returns
+        str: The hex value.
+        """
+        return f"#{self.__red:02x}{self.__green:02x}{self.__blue:02x}"
+
+    @staticmethod
+    def from_string(rgb:str) -> "RGB":
+        """
+        Creates an RGB object from a comma separated RGB string.
+
+        # Arguments
+        rgb (str): The comma separated RGB string.
+
+        # Returns
+        RGB: The RGB object.
+        """
+        validate_not_none(rgb, "rgb is required.")
+        validate_type(rgb, str, "rgb must be a string.")
+
+        rgb = rgb.strip()
+        validate(rgb.count(",") == 2, "rgb must be a comma separated string.")
+
+        rgb = rgb.split(",")
+
+        return RGB(int(rgb[0].strip()), int(rgb[1].strip()), int(rgb[2].strip()))

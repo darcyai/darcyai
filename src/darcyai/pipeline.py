@@ -714,6 +714,9 @@ class Pipeline():
         self.__logger.debug("Running Pipeline")
 
         self.__running = True
+        
+        pipeline_start_time = time.time()
+        pps = 0
 
         stream = self.__input_stream.stream()
         validate_type(stream, Iterable, "input stream is not Iterable")
@@ -758,6 +761,7 @@ class Pipeline():
                     _ = [async_call.get() for async_call in async_calls]
 
                 pulse_execution_time = time.perf_counter() - start
+                pps = int(self.__pulse_number / (time.time() - pipeline_start_time))
 
                 # Calculate metrics
                 if self.__pulse_number == 1:
@@ -778,6 +782,7 @@ class Pipeline():
                 # Store pom
                 pom.set_input_data(input_data)
                 pom.set_pulse_number(self.__pulse_number)
+                pom.set_pps(pps)
                 self.__pom = pom
 
                 # Store pom history

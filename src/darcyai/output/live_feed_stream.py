@@ -132,7 +132,7 @@ class LiveFeedStream(OutputStream):
             ts_y = int(data.shape[0] - stamp_baseline)
 
             cv2.putText(frame_copy, ts, (ts_x, ts_y),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1, cv2.LINE_AA)
 
         self.__latest_frame = frame_copy
         self.__encoded_frame = self.__encode_jpeg(frame_copy)

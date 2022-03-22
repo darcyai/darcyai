@@ -14,6 +14,7 @@ class PerceptionObjectModel(Serializable):
         self.__dict__ = {}
         self.__input_data = None
         self.__pulse_number = None
+        self.__pps = 0
 
     def set_value(self, key: str, value: Any) -> None:
         """
@@ -67,6 +68,7 @@ class PerceptionObjectModel(Serializable):
             result["input_data"] = self.__input_data.serialize()
 
         result["pulse_number"] = self.__pulse_number
+        result["pps"] = self.__pps
 
         return result
 
@@ -105,6 +107,24 @@ class PerceptionObjectModel(Serializable):
         int: The pulse number.
         """
         return self.__pulse_number
+
+    def set_pps(self, pps: int) -> None:
+        """
+        Set the pps for the perception object model.
+
+        # Arguments
+        pps (int): The pps.
+        """
+        self.__pps = pps
+
+    def get_pps(self) -> int:
+        """
+        Get the pps for the perception object model.
+
+        # Returns
+        int: The pps.
+        """
+        return self.__pps
 
     def __serialize(self, value: Any) -> Any:
         """
