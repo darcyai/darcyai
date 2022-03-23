@@ -459,7 +459,7 @@ class PeoplePerceptor(CoralPerceptorBase):
             start_point = (int(startX), int(startY))
             end_point = (int(endX), int(endY))
 
-        cv2.arrowedLine(frame, start_point, end_point, self.__parse_rgb_color(config.face_position_arrow_color), config.face_position_arrow_stroke, lineType=cv2.LINE_AA)  
+        cv2.arrowedLine(frame, start_point, end_point, self.__parse_rgb_color(config.face_position_arrow_color), config.face_position_arrow_stroke)
         return frame
 
     def __draw_forehead_center_dot_on_frame(self, frame, body, config):

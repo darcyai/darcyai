@@ -1518,9 +1518,9 @@ class Pipeline():
             self.__flask_app = Flask(__name__,
                 static_folder=os.path.join(swagger_path, "static"),
                 template_folder=os.path.join(swagger_path, "templates"))
-            self.__flask_app.json_encoder = CustomJSONEncoder
             ssl_context = None
             self.__setup_paths()
+            self.__flask_app.json_encoder = CustomJSONEncoder
             self.__flask_app.run(
                 host=self.__host,
                 port=self.__port,
@@ -1528,6 +1528,7 @@ class Pipeline():
                 debug=False)
         else:
             self.__setup_paths()
+            self.__flask_app.json_encoder = CustomJSONEncoder
 
     def __setup_paths(self) -> None:
         """
