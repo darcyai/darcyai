@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 import pytest
 import time
 from collections.abc import Iterable

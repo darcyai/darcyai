@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 import time
 
 from darcyai.input.input_stream import InputStream

@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 from typing import Any, Dict, List
 
 from darcyai.serializable import Serializable

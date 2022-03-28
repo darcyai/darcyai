@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 import platform
 
 from darcyai.input.camera_stream import CameraStream

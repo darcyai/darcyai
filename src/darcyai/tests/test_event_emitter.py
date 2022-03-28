@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 from unittest.mock import Mock
 
 from darcyai.event_emitter import EventEmitter

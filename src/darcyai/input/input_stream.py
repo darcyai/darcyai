@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 from typing import Iterable
 
 from darcyai.stream_data import StreamData

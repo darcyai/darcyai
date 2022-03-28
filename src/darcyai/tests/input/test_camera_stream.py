@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 import numpy as np
 import pytest
 from collections.abc import Iterable

@@ -85,7 +85,7 @@ stages:
             git config --global user.email ""
             git config --global user.name ""
           displayName: 'Publish documentation'
-          condition: eq(variables['tagged'], true)
+          # condition: eq(variables['tagged'], true)
 
         - script: |
             python3 -m build

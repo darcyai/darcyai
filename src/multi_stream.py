@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 from darcyai.input.camera_stream import CameraStream
 from darcyai.input.input_multi_stream import InputMultiStream
 from darcyai.tests.perceptor_mock import PerceptorMock

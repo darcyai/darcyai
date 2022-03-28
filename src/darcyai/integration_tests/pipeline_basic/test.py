@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 from darcyai.pipeline import Pipeline
 
 from .sample_input_stream import SampleInputStream

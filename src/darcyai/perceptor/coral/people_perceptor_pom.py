@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 # pylint: skip-file
 from collections import OrderedDict
 

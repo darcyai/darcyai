@@ -1,3 +1,5 @@
+# Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
+
 from typing import Any
 
 from darcyai.utils import validate_not_none, validate_type, validate
