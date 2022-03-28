@@ -6,7 +6,7 @@ class SampleOutputStream(OutputStream):
         super().__init__()
 
         self.config_schema = [
-            Config("test", "bool", False, "Test"),
+            Config("test", "test", "bool", False, "Test"),
         ]
 
 

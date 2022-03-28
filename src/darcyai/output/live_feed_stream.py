@@ -81,14 +81,16 @@ class LiveFeedStream(OutputStream):
         self.config_schema = [
             Config(
                 "show_timestamp",
+                "Show Timestamp",
                 "bool",
                 True,
-                "Show timestamp"),
+                "Display timestamp on the frame"),
             Config(
                 "timestamp_format",
+                "Timestamp format",
                 "str",
                 "%A %d %B %Y %I:%M:%S %p %f",
-                "Timestamp format"),
+                "Format of the timestamp"),
         ]
 
     def write(self, data: Any) -> Any:

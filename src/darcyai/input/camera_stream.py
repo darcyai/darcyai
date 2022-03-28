@@ -47,6 +47,7 @@ class CameraStream(InputStream):
         self.__frame_height = video_height
         self.__flip_frames = flip_frames
         self.__fps = fps
+        self.__last_frame_timestamp = 0
 
         self.__vs = None
         self.__stopped = True
@@ -102,15 +103,17 @@ class CameraStream(InputStream):
 
         self.__stopped = False
 
+        delay = int(1000 / self.__fps)
         while not self.__stopped:
-            time.sleep(1 / self.__fps)
-
             if self.__stopped:
                 break
 
-            frame = self.__read_frame(self.__vs)
+            time.sleep(max(0, (delay - (timestamp() - self.__last_frame_timestamp)) / 1000))
 
-            yield(VideoStreamData(frame, timestamp()))
+            frame = self.__read_frame(self.__vs)
+            self.__last_frame_timestamp = timestamp()
+
+            yield VideoStreamData(frame, self.__last_frame_timestamp)
 
     @staticmethod
     def get_video_inputs():

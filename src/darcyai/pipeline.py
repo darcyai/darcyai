@@ -1641,6 +1641,7 @@ class Pipeline():
                 config_schema = self.__perceptor_config_schema[perceptor_name][config_name]
                 cfgs[perceptor_name].append({
                     "name": config_name,
+                    "label": config_schema.label,
                     "value": self.__perceptor_config_registry[perceptor_name].get(config_name),
                     "type": config_schema.type,
                     "description": config_schema.description,
@@ -1684,6 +1685,7 @@ class Pipeline():
             config_schema = self.__perceptor_config_schema[perceptor_name][config_name]
             cfgs.append({
                 "name": config_name,
+                "label": config_schema.label,
                 "value": self.__perceptor_config_registry[perceptor_name].get(config_name),
                 "type": config_schema.type,
                 "description": config_schema.description,
@@ -1725,6 +1727,7 @@ class Pipeline():
                 config_schema = self.__output_config_schema[output_name][config_name]
                 cfgs[output_name].append({
                     "name": config_name,
+                    "label": config_schema.label,
                     "value": self.__output_config_registry[output_name].get(config_name),
                     "type": config_schema.type,
                     "description": config_schema.description,
@@ -1768,6 +1771,7 @@ class Pipeline():
             config_schema = self.__output_config_schema[output_name][config_name]
             cfgs.append({
                 "name": config_name,
+                "label": config_schema.label,
                 "value": self.__output_config_registry[output_name].get(config_name),
                 "type": config_schema.type,
                 "description": config_schema.description,

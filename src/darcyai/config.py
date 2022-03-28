@@ -9,6 +9,7 @@ class Config():
 
     # Arguments
     name (str): The name of the config.
+    label (str): The label of the config.
     config_type (str): The type of the config. Valid types are:
         - int
         - float
@@ -22,12 +23,17 @@ class Config():
     def __init__(
             self,
             name: str,
+            label: str,
             config_type: str,
             default_value: Any,
             description: str):
         validate_not_none(name, "name is required.")
         validate_type(name, str, "name must be a string.")
         self.name = name
+
+        validate_not_none(label, "label is required.")
+        validate_type(label, str, "label must be a string.")
+        self.label = label
 
         valid_types = ["int", "float", "bool", "str", "rgb"]
         validate_not_none(config_type, "config_type is required.")
@@ -40,9 +46,11 @@ class Config():
         validate(self.is_valid(default_value), f"default_value must be of type {config_type}.")
         self.default_value = default_value
 
-        validate_not_none(description, "description is required.")
-        validate_type(description, str, "description must be a string.")
-        self.description = description
+        if description is None:
+            self.description = ""
+        else:
+            validate_type(description, str, "description must be a string.")
+            self.description = description
 
     def is_valid(self, value: Any) -> bool:
         """

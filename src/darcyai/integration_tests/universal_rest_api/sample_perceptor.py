@@ -15,10 +15,10 @@ class SamplePerceptor(Perceptor):
             self.__sleep = int(random() * 4) + 1
 
         self.config_schema = [
-            Config("bool_config", "bool", False, "Boolean"),
-            Config("int_config", "int", 2, "Integer"),
-            Config("float_config", "float", 0.2, "Float"),
-            Config("str_config", "str", "Something", "String"),
+            Config("bool_config", "bool config", "bool", False, "Boolean"),
+            Config("int_config", "int config", "int", 2, "Integer"),
+            Config("float_config", "float config", "float", 0.2, "Float"),
+            Config("str_config", "str config", "str", "Something", "String"),
         ]
 
 
