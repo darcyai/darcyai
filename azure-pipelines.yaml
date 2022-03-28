@@ -1,10 +1,14 @@
 trigger:
+  tags:
+    include:
+    - v*
   branches:
     include:
     - main
 
-pr:
-  - main
+variables:
+  tagged: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
+
 stages:
   - stage: DarcyAI
     jobs:
@@ -72,7 +76,8 @@ stages:
             rm -rf darcyai-sdk/docs
             mv docs darcyai-sdk/docs
             pushd darcyai-sdk > /dev/null
-            git commit -am "Update docs"
+            git add -A
+            git commit -m "Update docs"
             git push
             popd > /dev/null
             rm -rf darcyai-sdk
@@ -80,6 +85,7 @@ stages:
             git config --global user.email ""
             git config --global user.name ""
           displayName: 'Publish documentation'
+          condition: eq(variables['tagged'], true)
 
         - script: |
             python3 -m build
