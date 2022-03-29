@@ -51,10 +51,13 @@ class PoseEngine():
     """Engine used for pose tasks."""
 
     def __init__(self, model_path, mirror=False, arch=os.uname().machine):
-        """Creates a PoseEngine with given model.
+        """
+        Creates a PoseEngine with given model.
+        
         Args:
           model_path: String, path to TF-Lite Flatbuffer file.
           mirror: Flip keypoints horizontally.
+        
         Raises:
           ValueError: An error occurred when model output is invalid.
         """
@@ -89,7 +92,8 @@ class PoseEngine():
         self._inf_time = 0
 
     def run_inference(self, input_data):
-        """Run inference using the zero copy feature from pycoral and returns inference time in ms.
+        """
+        Run inference using the zero copy feature from pycoral and returns inference time in ms.
         """
         start = time.monotonic()
         self.__edgetpu.run_inference(self._interpreter, input_data)
@@ -97,10 +101,12 @@ class PoseEngine():
         return (self._inf_time * 1000)
 
     def DetectPosesInImage(self, img):
-        """Detects poses in a given image.
-           For ideal results make sure the image fed to this function is close to the
-           expected input size - it is the caller's responsibility to resize the
-           image accordingly.
+        """
+        Detects poses in a given image.
+        For ideal results make sure the image fed to this function is close to the
+        expected input size - it is the caller's responsibility to resize the
+        image accordingly.
+
         Args:
           img: numpy array containing image
         """
@@ -152,62 +158,281 @@ class PoseEngine():
         return poses, self._inf_time
 
 class PeoplePerceptor(CoralPerceptorBase):
+    """
+    Perceptor for detecting people in an image.
+
+    # Perceptor Config:
+        minimum_face_threshold (float):
+            Confidence threshold for detecting the face as a percent certainty
+            Default value: 0.4
+
+        minimum_body_threshold (float):
+            Confidence threshold for detecting the body as a percent certainty
+            Default value: 0.2
+
+        minimum_face_height (int):
+            The minimum height of the persons face in pixels that we want to work with
+            Default value: 20
+
+        minimum_body_height (int):
+            The minimum height of the persons body in pixels that we want to work with
+            Default value: 120
+
+        show_pose_landmark_dots (bool):
+            Show pose landmark dots (nose, ears, elbows, etc.)
+            Default value: False
+
+        show_body_rectangle (bool):
+            Draw a rectangle around the persons body
+            Default value: False
+
+        show_face_rectangle (bool):
+            Draw a rectangle around the persons face
+            Default value: False
+
+        face_rectangle_color (rgb):
+            Color of the face rectangle
+            Default value: RGB(255, 0, 0)
+
+        face_rectangle_thick (int):
+            Thickness of the face rectangle
+            Default value: 1
+
+        body_rectangle_color (rgb):
+            Color of the body rectangle
+            Default value: RGB(0, 255, 0)
+
+        body_rectangle_thick (int):
+            Thickness of the body rectangle
+            Default value: 1
+
+        pose_landmark_dot_confidence_threshold (float):
+            Confidence threshold for identifying pose landmarks as a percent certainty
+            Default value: 0.5
+
+        pose_landmark_dot_size (int):
+            Size of the pose landmark dots
+            Default value: 1
+
+        pose_landmark_dot_color (rgb):
+            Color of the pose landmark dots
+            Default value: RGB(255, 255, 255)
+
+        show_face_position_arrow (bool):
+            Show the arrow that indicates which direction the person is looking
+            Default value: False
+
+        face_position_arrow_color (rgb):
+            Color of the face position arrow
+            Default value: RGB(255, 255, 255)
+
+        face_position_arrow_stroke (int):
+            Thickness of the face position arrow
+            Default value: 1
+
+        face_position_arrow_offset_x (int):
+            X offset for the face position arrow
+            Default value: 0
+
+        face_position_arrow_offset_y (int):
+            Y offset for the face position arrow
+            Default value: -30
+
+        face_position_arrow_length (int):
+            Length of the face position arrow
+            Default value: 20
+
+        face_position_left_right_threshold (float):
+            Threshold for detecting if the person is looking left or right
+            Default value: 0.3
+
+        face_position_straight_threshold (float):
+            Threshold for detecting if the person is looking straight
+            Default value: 0.7
+
+        show_forehead_center_dot (bool):
+            Show a dot in the center of the persons forehead
+            Default value: False
+
+        forehead_center_dot_color (rgb):
+            Color of the forehead center dot
+            Default value: RGB(255, 255, 255)
+
+        forehead_center_dot_size (int):
+            Size of the forehead center dot
+            Default value: 1
+
+        face_rectangle_y_factor (float):
+            Size adjustment factor for the height of the persons face, which can be used to make sure objects like hair and hats are captured
+            Default value: 1.0
+
+        show_centroid_ (bool):
+            Show centroid information (center of the face or body)
+            Default value: False
+
+        centroid_dots_c (rgb):
+            Color of the centroid information
+            Default value: RGB(255, 255, 255)
+
+        centroid_dots_ (int):
+            Size of the centroid information
+            Default value: 1
+
+        object_tracking_allowed_missed_fr (int):
+            Object tracking allowed missed frames
+            Default value: 50
+
+        object_tracking_color_sample_pixels (int):
+            Number of pixels to use for color sampling when tracking objects
+            Default value: 4
+
+        object_tracking_info_history_count (int):
+            Number of video frames used to track an object in the field of view
+            Default value: 3
+
+        object_tracking_removal_c (int):
+            Number of frames to wait before removing an object from tracking
+            Default value: 50
+
+        object_tracking_centroid_we (float):
+            Level of importance that centroid data has when tracking objects
+            Default value: 0.25
+
+        object_tracking_color_weight (float):
+            Level of importance that color data has when tracking objects
+            Default value: 0.25
+
+        object_tracking_vector_weight (float):
+            Level of importance that vector data has when tracking objects
+            Default value: 0.25
+
+        object_tracking_size_weight (float):
+            Level of importance that size data has when tracking objects
+            Default value: 0.25
+
+        object_tracking_creati (int):
+            Minimum number of frames out of N frames that an object must be present in the field of view before it is tracked
+            Default value: 10
+
+        object_tracking_creati (int):
+            Total number of frames used to evaluate an object before it is tracked
+            Default value: 7
+
+        person_tracking_creati (int):
+            Minimum number of frames out of N frames needed to promote a tracked object to a person
+            Default value: 20
+
+        person_tracking_creati (int):
+            Total number of frames used to evaluate a tracked object before it is promoted to a person
+            Default value: 16
+
+        show_person_id (bool):
+            Show anonymous unique identifier for the person
+            Default value: False
+
+        person_data_line_color (rgb):
+            Color of the person data line
+            Default value: RGB(255, 255, 255)
+
+        person_data_line_thickness (int):
+            Thickness of the person data line
+            Default value: 1
+
+        person_data_identity_text_color (rgb):
+            Color of the person data identity text
+            Default value: RGB(255, 255, 255)
+
+        person_data_identity_text_stroke (int):
+            Thickness of the person data identity text
+            Default value: 1
+
+        person_data_identity_text_font_size (float):
+            Font size of the person data identity text
+            Default value: 1.0
+
+        person_data_text_offset_x (int):
+            X offset of the person data text
+            Default value: 30
+
+        person_data_text_offset_y (int):
+            Y offset of the person data text
+            Default value: -40
+
+        identity_text_prefix (str):
+            Text information that you want to display at the beginning of the person ID
+            Default value: Person ID:
+
+        rolling_video_storage_frame_count (int):
+            Number of the video frames to store while processing
+            Default value: 100
+
+    # Events:
+        new_person_entered_scene
+        person_facing_new_direction
+        new_person_in_front
+        person_left_scene
+        identity_determined_for_person
+        person_got_too_close
+        person_went_too_far_away
+        max_person_count_reached
+        person_count_fell_below_maximum
+        person_occluded
+    """
     def __init__(self, **kwargs):
         super().__init__(model_path="")
 
         self.config_schema = [
-            Config("minimum_face_threshold", "Minimum Face Threshold", "float", 0.4, "Minimum Face Threshold"),
-            Config("minimum_body_threshold", "Minimum Body Threshold", "float", 0.2, "Minimum Body Threshold"),
-            Config("minimum_face_height", "Minimum Face Height", "int", 20, "Minimum Face Height"),
-            Config("minimum_body_height", "Minimum Body Height", "int", 120, "Minimum Body Height"),
-            Config("show_pose_landmark_dots", "Show pose landmark dots", "bool", False, "Show pose landmark dots"),
-            Config("show_body_rectangle", "Show body rectangle", "bool", False, "Show body rectangle"),
-            Config("show_face_rectangle", "Show face rectangle", "bool", False, "Show face rectangle"),
-            Config("face_rectangle_color", "Face rectangle color", "rgb", RGB(255, 0, 0), "Face rectangle color"),
-            Config("face_rectangle_thickness", "Face rectangle thickness", "int", 1, "Face rectangle thickness"),
-            Config("body_rectangle_color", "Body rectangle color", "rgb", RGB(0, 255, 0), "Body rectangle color"),
-            Config("pose_landmark_dot_confidence_threshold", "Pose landmark dot confidence threshold", "float", 0.5, "Pose landmark dot confidence threshold"),
-            Config("pose_landmark_dot_size", "Pose landmark dot size", "int", 1, "Pose landmark dot size"),
-            Config("pose_landmark_dot_color", "Pose landmark dot color", "rgb", RGB(255, 255, 255), "Pose landmark dot color"),
-            Config("show_face_position_arrow", "Show face position arrow", "bool", False, "Show face position arrow"),
-            Config("face_position_arrow_color", "Face position arrow color", "rgb", RGB(255, 255, 255), "Face position arrow color"),
-            Config("face_position_arrow_stroke", "Face position arrow stroke", "int", 1, "Face position arrow stroke"),
-            Config("face_position_arrow_offset_x", "Face position arrow offset x", "int", 0, "Face position arrow offset x"),
-            Config("face_position_arrow_offset_y", "Face position arrow offset y", "int", -30, "Face position arrow offset y"),
-            Config("face_position_arrow_length", "Face position arrow length", "int", 20, "Face position arrow length"),
-            Config("face_position_left_right_threshold", "Face position left/right threshold", "float", 0.3, "Face position left/right threshold"),
-            Config("face_position_straight_threshold", "Face position straight threshold", "float", 0.7, "Face position straight threshold"),
-            Config("show_forehead_center_dot", "Show forehead center dot", "bool", False, "Show forehead center dot"),
-            Config("forehead_center_dot_color", "Forehead center dot color", "rgb", RGB(255, 255, 255), "Forehead center dot color"),
-            Config("forehead_center_dot_size", "Forehead center dot size", "int", 1, "Forehead center dot size"),
-            Config("body_rectangle_thickness", "Body rectangle thickness", "int", 1, "Body rectangle thickness"),
-            Config("face_rectangle_y_factor", "Face rectangle Y factor", "float", 1.0, "Face rectangle Y factor"),
-            Config("show_centroid_dots", "Show centroid dots", "bool", False, "Show centroid dots"),
-            Config("centroid_dots_color", "Centroid dots color", "rgb", RGB(255, 255, 255), "Centroid dots color"),
-            Config("centroid_dots_size", "Centroid dots size", "int", 1, "Centroid dots size"),
+            Config("minimum_face_threshold", "Minimum Face Threshold", "float", 0.4, "Confidence threshold for detecting the face as a percent certainty"),
+            Config("minimum_body_threshold", "Minimum Body Threshold", "float", 0.2, "Confidence threshold for detecting the body as a percent certainty"),
+            Config("minimum_face_height", "Minimum Face Height", "int", 20, "The minimum height of the persons face in pixels that we want to work with"),
+            Config("minimum_body_height", "Minimum Body Height", "int", 120, "The minimum height of the persons body in pixels that we want to work with"),
+            Config("show_pose_landmark_dots", "Show pose landmark dots", "bool", False, "Show pose landmark dots (nose, ears, elbows, etc.)"),
+            Config("show_body_rectangle", "Show body rectangle", "bool", False, "Draw a rectangle around the persons body"),
+            Config("show_face_rectangle", "Show face rectangle", "bool", False, "Draw a rectangle around the persons face"),
+            Config("face_rectangle_color", "Face rectangle color", "rgb", RGB(255, 0, 0), "Color of the face rectangle"),
+            Config("face_rectangle_thickness", "Face rectangle thickness", "int", 1, "Thickness of the face rectangle"),
+            Config("body_rectangle_color", "Body rectangle color", "rgb", RGB(0, 255, 0), "Color of the body rectangle"),
+            Config("body_rectangle_thickness", "Body rectangle thickness", "int", 1, "Thickness of the body rectangle"),
+            Config("pose_landmark_dot_confidence_threshold", "Pose landmark dot confidence threshold", "float", 0.5, "Confidence threshold for identifying pose landmarks as a percent certainty"),
+            Config("pose_landmark_dot_size", "Pose landmark dot size", "int", 1, "Size of the pose landmark dots"),
+            Config("pose_landmark_dot_color", "Pose landmark dot color", "rgb", RGB(255, 255, 255), "Color of the pose landmark dots"),
+            Config("show_face_position_arrow", "Show face position arrow", "bool", False, "Show the arrow that indicates which direction the person is looking"),
+            Config("face_position_arrow_color", "Face position arrow color", "rgb", RGB(255, 255, 255), "Color of the face position arrow"),
+            Config("face_position_arrow_stroke", "Face position arrow stroke", "int", 1, "Thickness of the face position arrow"),
+            Config("face_position_arrow_offset_x", "Face position arrow offset x", "int", 0, "X offset for the face position arrow"),
+            Config("face_position_arrow_offset_y", "Face position arrow offset y", "int", -30, "Y offset for the face position arrow"),
+            Config("face_position_arrow_length", "Face position arrow length", "int", 20, "Length of the face position arrow"),
+            Config("face_position_left_right_threshold", "Face position left/right threshold", "float", 0.3, "Threshold for detecting if the person is looking left or right"),
+            Config("face_position_straight_threshold", "Face position straight threshold", "float", 0.7, "Threshold for detecting if the person is looking straight"),
+            Config("show_forehead_center_dot", "Show forehead center dot", "bool", False, "Show a dot in the center of the persons forehead"),
+            Config("forehead_center_dot_color", "Forehead center dot color", "rgb", RGB(255, 255, 255), "Color of the forehead center dot"),
+            Config("forehead_center_dot_size", "Forehead center dot size", "int", 1, "Size of the forehead center dot"),
+            Config("face_rectangle_y_factor", "Face rectangle Y factor", "float", 1.0, "Size adjustment factor for the height of the persons face, which can be used to make sure objects like hair and hats are captured"),
+            Config("show_centroid_dots", "Show centroid information", "bool", False, "Show centroid information (center of the face or body)"),
+            Config("centroid_dots_color", "Centroid information color", "rgb", RGB(255, 255, 255), "Color of the centroid information"),
+            Config("centroid_dots_size", "Centroid information size", "int", 1, "Size of the centroid information"),
             Config("object_tracking_allowed_missed_frames", "Object tracking allowed missed frames", "int", 50, "Object tracking allowed missed frames"),
-            Config("object_tracking_color_sample_pixels", "Object tracking color sample pixels", "int", 4, "Object tracking color sample pixels"),
-            Config("object_tracking_info_history_count", "Object tracking info history count", "int", 3, "Object tracking info history count"),
-            Config("object_tracking_removal_count", "Object tracking removal count", "int", 50, "Object tracking removal count"),
-            Config("object_tracking_centroid_weight", "Object tracking centroid weight", "float", 0.25, "Object tracking centroid weight"),
-            Config("object_tracking_color_weight", "Object tracking color weight", "float", 0.25, "Object tracking color weight"),
-            Config("object_tracking_vector_weight", "Object tracking vector weight", "float", 0.25, "Object tracking vector weight"),
-            Config("object_tracking_size_weight", "Object tracking size weight", "float", 0.25, "Object tracking size weight"),
-            Config("object_tracking_creation_m", "Object tracking creation M", "int", 10, "Object tracking creation M"),
-            Config("object_tracking_creation_n", "Object tracking creation N", "int", 7, "Object tracking creation N"),
-            Config("person_tracking_creation_m", "Person tracking creation M", "int", 20, "Person tracking creation M"),
-            Config("person_tracking_creation_n", "Person tracking creation N", "int", 16, "Person tracking creation N"),
-            Config("show_person_id", "Show person ID", "bool", False, "Show person ID"),
-            Config("person_data_line_color", "Person data line color", "rgb", RGB(255, 255, 255), "Person data line color"),
-            Config("person_data_line_thickness", "Person data line thickness", "int", 1, "Person data line thickness"),
-            Config("person_data_identity_text_color", "Person data identity text color", "rgb", RGB(255, 255, 255), "Person data identity text color"),
-            Config("person_data_identity_text_stroke", "Person data identity text stroke", "int", 1, "Person data identity text stroke"),
-            Config("person_data_identity_text_font_size", "Person data identity text font size", "float", 1.0, "Person data identity text font size"),
-            Config("person_data_text_offset_x", "Person data text offset X", "int", 30, "Person data text offset X"),
-            Config("person_data_text_offset_y", "Person data text offset Y", "int", -40, "Person data text offset Y"),
-            Config("identity_text_prefix", "Identity text prefix", "str", "Person ID: ", "Identity text prefix"),
-            Config("face_height_resize_factor", "Face height resize factor", "float", 0.1, "Face height resize factor"),
-            Config("rolling_video_storage_frame_count", "Rolling video storage frame count", "int", 100, "Rolling video storage frame count")
+            Config("object_tracking_color_sample_pixels", "Object tracking color sample pixels", "int", 4, "Number of pixels to use for color sampling when tracking objects"),
+            Config("object_tracking_info_history_count", "Object tracking info history count", "int", 3, "Number of video frames used to track an object in the field of view"),
+            Config("object_tracking_removal_count", "Object tracking removal count", "int", 50, "Number of frames to wait before removing an object from tracking"),
+            Config("object_tracking_centroid_weight", "Object tracking centroid weight", "float", 0.25, "Level of importance that centroid data has when tracking objects"),
+            Config("object_tracking_color_weight", "Object tracking color weight", "float", 0.25, "Level of importance that color data has when tracking objects"),
+            Config("object_tracking_vector_weight", "Object tracking vector weight", "float", 0.25, "Level of importance that vector data has when tracking objects"),
+            Config("object_tracking_size_weight", "Object tracking size weight", "float", 0.25, "Level of importance that size data has when tracking objects"),
+            Config("object_tracking_creation_m", "Object tracking creation M", "int", 10, "Minimum number of frames out of N frames that an object must be present in the field of view before it is tracked"),
+            Config("object_tracking_creation_n", "Object tracking creation N", "int", 7, "Total number of frames used to evaluate an object before it is tracked"),
+            Config("person_tracking_creation_m", "Person tracking creation M", "int", 20, "Minimum number of frames out of N frames needed to promote a tracked object to a person"),
+            Config("person_tracking_creation_n", "Person tracking creation N", "int", 16, "Total number of frames used to evaluate a tracked object before it is promoted to a person"),
+            Config("show_person_id", "Show person ID", "bool", False, "Show anonymous unique identifier for the person"),
+            Config("person_data_line_color", "Person data line color", "rgb", RGB(255, 255, 255), "Color of the person data line"),
+            Config("person_data_line_thickness", "Person data line thickness", "int", 1, "Thickness of the person data line"),
+            Config("person_data_identity_text_color", "Person data identity text color", "rgb", RGB(255, 255, 255), "Color of the person data identity text"),
+            Config("person_data_identity_text_stroke", "Person data identity text stroke", "int", 1, "Thickness of the person data identity text"),
+            Config("person_data_identity_text_font_size", "Person data identity text font size", "float", 1.0, "Font size of the person data identity text"),
+            Config("person_data_text_offset_x", "Person data text offset X", "int", 30, "X offset of the person data text"),
+            Config("person_data_text_offset_y", "Person data text offset Y", "int", -40, "Y offset of the person data text"),
+            Config("identity_text_prefix", "Identity text prefix", "str", "Person ID: ", "Text information that you want to display at the beginning of the person ID"),
+            Config("rolling_video_storage_frame_count", "Rolling video storage frame count", "int", 100, "Number of the video frames to store while processing"),
         ]
 
         self.event_names = [

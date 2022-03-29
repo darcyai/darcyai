@@ -94,6 +94,10 @@ renderer:
             - darcyai.output.json_output_stream.JSONOutputStream.*
     - title: Coral Perceptors
       children:
+        - title: CoralPerceptorBase
+          contents:
+            - darcyai.perceptor.coral.coral_perceptor_base
+            - darcyai.perceptor.coral.coral_perceptor_base.*
         - title: ImageClassificationPerceptor
           contents:
             - darcyai.perceptor.coral.image_classification_perceptor
@@ -105,7 +109,7 @@ renderer:
         - title: PeoplePerceptor
           contents:
             - darcyai.perceptor.coral.people_perceptor
-            - darcyai.perceptor.coral.people_perceptor.*
+            - darcyai.perceptor.coral.people_perceptor.PeoplePerceptor
         - title: PeoplePOM
           contents:
             - darcyai.perceptor.coral.people_perceptor_pom
