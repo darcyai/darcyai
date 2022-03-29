@@ -74,7 +74,7 @@ class PeoplePOM(Serializable):
         Returns the person in front of the camera
 
         # Returns
-            int: The person id
+            The person in front of the camera
         """
         poi = None
         for person in self.__people:
@@ -98,7 +98,7 @@ class PeoplePOM(Serializable):
         Returns the person with the given id
 
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             dict: The person
@@ -113,7 +113,7 @@ class PeoplePOM(Serializable):
         Returns the face image of the person with the given id
 
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             np.array: The face image
@@ -146,7 +146,7 @@ class PeoplePOM(Serializable):
         Returns the body image of the person with the given id
         
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             np.array: The body image
@@ -179,7 +179,7 @@ class PeoplePOM(Serializable):
         Returns the image of the person with the given id
 
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             np.array: The person image
@@ -250,7 +250,7 @@ class PeoplePOM(Serializable):
         Returns the size of the face of the person with the given id
 
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             int: The size of the face
@@ -268,7 +268,7 @@ class PeoplePOM(Serializable):
         Returns the size of the body of the person with the given id
 
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             int: The size of the body
@@ -286,7 +286,7 @@ class PeoplePOM(Serializable):
         Returns the size of the whole person with the given id
 
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             int: The size of the whole person
@@ -303,7 +303,7 @@ class PeoplePOM(Serializable):
         Returns the PoseNet data of the person with the given id
 
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             The PoseNet data
@@ -315,7 +315,7 @@ class PeoplePOM(Serializable):
         Returns the PoseNet data history of the person with the given id
             
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             The PoseNet data
@@ -327,7 +327,7 @@ class PeoplePOM(Serializable):
         Returns the travel path of the person with the given id
 
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             The travel path
@@ -339,7 +339,7 @@ class PeoplePOM(Serializable):
         Returns the time the person with the given id has been in view
 
         # Arguments
-            person_id (int): The person id
+            person_id (str): The person id
 
         # Returns
             int: The time in view
