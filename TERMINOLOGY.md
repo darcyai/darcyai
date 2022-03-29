@@ -44,7 +44,7 @@ There are many software packages and libraries that Darcy AI applications need i
 
 ## Performance Metrics
 
-Darcy tracks her own performance when doing AI processing. Each trip through the pipeline steps is measured, along with the individual pipeline steps. Darcy AI application developers can request this performance data in their application, which allows for benchmarking, profiling, and innovative displays that show how fast each part of Darcy’s work is being done.
+Darcy tracks system performance when doing AI processing. Each trip through the pipeline steps is measured, along with the individual pipeline steps. Darcy AI application developers can request this performance data in their application, which allows for benchmarking, profiling, and innovative displays that show how fast each part of Darcy’s work is being done.
 
 ## AI Model
 

@@ -11,13 +11,25 @@ renderer:
   pages:
     - title: Home
       name: index
+      source: HOME.md
+    - title: Getting Started
+      name: getting-started
       source: GETTINGSTARTED.md
     - title: Terminology
       name: terminology
       source: TERMINOLOGY.md
+    - title: Darcy AI Explorer
+      name: darcy-ai-explorer
+      source: DARCY_EXPLORER.md
+    - title: Raspberry Pi Setup
+      name: raspberry-pi-setup
+      source: SETUP_RPI.md
     - title: Build
       name: build
       source: BUILD.md
+    - title: Deploy
+      name: deploy
+      source: DEPLOY.md
     - title: Pipeline
       contents:
         - darcyai.pipeline.Pipeline
