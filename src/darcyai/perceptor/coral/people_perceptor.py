@@ -152,6 +152,63 @@ class PoseEngine():
         return poses, self._inf_time
 
 class PeoplePerceptor(CoralPerceptorBase):
+    """
+    Perceptor for people detection.
+
+    Configs:
+        minimum_face_threshold (float): Minimum Face Threshold, Default value: 0.4
+        minimum_body_threshold (float): Minimum Body Threshold, Default value: 0.2
+        minimum_face_height (int): Minimum Face Height, Default value: 20
+        minimum_body_height (int): Minimum Body Height, Default value: 120
+        show_pose_landmark_dots (bool): Show pose landmark dots, Default value: False
+        show_body_rectangle (bool): Show body rectangle, Default value: False
+        show_face_rectangle (bool): Show face rectangle, Default value: False
+        face_rectangle_color (rgb): Face rectangle color, Default value: RGB(255, 0, 0)
+        face_rectangle_thickness (int): Face rectangle thickness, Default value: 1
+        body_rectangle_color (rgb): Body rectangle color, Default value: RGB(0, 255, 0)
+        pose_landmark_dot_confidence_threshold (float): Pose landmark dot confidence threshold, Default value: 0.5
+        pose_landmark_dot_size (int): Pose landmark dot size, Default value: 1
+        pose_landmark_dot_color (rgb): Pose landmark dot color, Default value: RGB(255, 255, 255)
+        show_face_position_arrow (bool): Show face position arrow, Default value: False
+        face_position_arrow_color (rgb): Face position arrow color, Default value: RGB(255, 255, 255)
+        face_position_arrow_stroke (int): Face position arrow stroke, Default value: 1
+        face_position_arrow_offset_x (int): Face position arrow offset x, Default value: 0
+        face_position_arrow_offset_y (int): Face position arrow offset y, Default value: -30
+        face_position_arrow_length (int): Face position arrow length, Default value: 20
+        face_position_left_right_threshold (float): Face position left/right threshold, Default value: 0.3
+        face_position_straight_threshold (float): Face position straight threshold, Default value: 0.7
+        show_forehead_center_dot (bool): Show forehead center dot, Default value: False
+        forehead_center_dot_color (rgb): Forehead center dot color, Default value: RGB(255, 255, 255)
+        forehead_center_dot_size (int): Forehead center dot size, Default value: 1
+        body_rectangle_thickness (int): Body rectangle thickness, Default value: 1
+        face_rectangle_y_factor (float): Face rectangle Y factor, Default value: 1.0
+        show_centroid_dots (bool): Show centroid dots, Default value: False
+        centroid_dots_color (rgb): Centroid dots color, Default value: RGB(255, 255, 255)
+        centroid_dots_size (int): Centroid dots size, Default value: 1
+        object_tracking_allowed_missed_frames (int): Object tracking allowed missed frames, Default value: 50
+        object_tracking_color_sample_pixels (int): Object tracking color sample pixels, Default value: 4
+        object_tracking_info_history_count (int): Object tracking info history count, Default value: 3
+        object_tracking_removal_count (int): Object tracking removal count, Default value: 50
+        object_tracking_centroid_weight (float): Object tracking centroid weight, Default value: 0.25
+        object_tracking_color_weight (float): Object tracking color weight, Default value: 0.25
+        object_tracking_vector_weight (float): Object tracking vector weight, Default value: 0.25
+        object_tracking_size_weight (float): Object tracking size weight, Default value: 0.25
+        object_tracking_creation_m (int): Object tracking creation M, Default value: 10
+        object_tracking_creation_n (int): Object tracking creation N, Default value: 7
+        person_tracking_creation_m (int): Person tracking creation M, Default value: 20
+        person_tracking_creation_n (int): Person tracking creation N, Default value: 16
+        show_person_id (bool): Show person ID, Default value: False
+        person_data_line_color (rgb): Person data line color, Default value: RGB(255, 255, 255)
+        person_data_line_thickness (int): Person data line thickness, Default value: 1
+        person_data_identity_text_color (rgb): Person data identity text color, Default value: RGB(255, 255, 255)
+        person_data_identity_text_stroke (int): Person data identity text stroke, Default value: 1
+        person_data_identity_text_font_size (float): Person data identity text font size, Default value: 1.0
+        person_data_text_offset_x (int): Person data text offset X, Default value: 30
+        person_data_text_offset_y (int): Person data text offset Y, Default value: -40
+        identity_text_prefix (str): Identity text prefix, Default value: "Person ID: "
+        face_height_resize_factor (float): Face height resize factor, Default value: 0.1
+        rolling_video_storage_frame_count (int): Rolling video storage frame count, Default value: 100
+    """
     def __init__(self, **kwargs):
         super().__init__(model_path="")
 
