@@ -146,4 +146,4 @@ Run the script called `check.bash` to scan your Raspberry Pi and make sure every
 
 ## Start building your AI applications with Darcy
 
-Go to the [Build Guide](./BUILD.md) and get started building with Darcy AI!
+Go to the [Build Guide](/build/) and get started building with Darcy AI!

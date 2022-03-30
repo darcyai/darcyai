@@ -4,7 +4,7 @@ Once you have built a Darcy AI application, you can deploy it to as many devices
 
 ## Make sure your Darcy AI application container is available
 
-If you followed the instructions in the [Build Guide](./BUILD.md) you probably created an application container called `darcydev/my-people-ai-app:1.0.0`. All Docker container identifiers are made of three parts. The first part, which is `darcydev` in this case, is the organization name. You must be a member of an organization in order to upload container images to that organization in [Docker Hub](https://hub.docker.com).
+If you followed the instructions in the [Build Guide](/build/) you probably created an application container called `darcydev/my-people-ai-app:1.0.0`. All Docker container identifiers are made of three parts. The first part, which is `darcydev` in this case, is the organization name. You must be a member of an organization in order to upload container images to that organization in [Docker Hub](https://hub.docker.com).
 
 If you don't already have an account, create one now at [https://hub.docker.com](https://hub.docker.com). You will be given an organization which is your username.
 
@@ -24,7 +24,7 @@ If you don't already have an account, you can create one now for free. Create an
 
 Once you are in your Darcy Cloud account, add your device as a node in your current project. Use the "plus button" in the bottom left to add a node. Follow the instructions in the pop-up window to add your device as a node.
 
-<img src="./examples/screenshots/darcy-cloud-plus-item-button.png" height="100" />
+<img src="https://github.com/darcyai/darcyai-sdk/raw/master/examples/screenshots/darcy-cloud-plus-item-button.png" height="100" />
 
 ## Create your application YAML
 
@@ -53,7 +53,7 @@ spec:
             accessMode: rw
 ```
 
-You can find this sample YAMl file in the `examples/deploy/` directory called [app_deployment.yml](./examples/deploy/app_deployment.yml).
+You can find this sample YAMl file in the `examples/deploy/` directory called [app_deployment.yml](https://github.com/darcyai/darcyai-sdk/blob/master/examples/deploy/app_deployment.yml).
 
 Your application deployment YAML file contains the information that the Darcy Cloud uses to load and run your Darcy AI application on any device. Replace the placeholder fields with your own information and save the file with whatever file name you like, such as `my-app-deploy.yml`.
 
@@ -63,10 +63,10 @@ For the agent name, which is shown above as `your-darcy-cloud-node-name` you sho
 
 Now that you have all of the pieces, it's easy to deploy your application to your device or any other device. In the Darcy Cloud, click on the "plus button" in the bottom left and choose "app".
 
-<img src="./examples/screenshots/darcy-cloud-plus-item-button.png" height="100" />
+<img src="https://github.com/darcyai/darcyai-sdk/raw/master/examples/screenshots/darcy-cloud-plus-item-button.png" height="100" />
 
 In the pop-up window, choose the "upload your app" option and you will see a drag-and-drop window on the right-hand side. You can drag and drop your YAML file into that window or you can click the "browse and upload" option and then select your YAML file.
 
-<img src="./examples/screenshots/darcy-cloud-custom-app-deployment.png" />
+<img src="https://github.com/darcyai/darcyai-sdk/raw/master/examples/screenshots/darcy-cloud-custom-app-deployment.png" />
 
 The Darcy Cloud will tell you if you have any issues with your YAML file or your app deployment. It will also tell you if your Darcy AI application was deployed successfully. You can then check the status of your application using the Darcy Cloud.

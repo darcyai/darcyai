@@ -14,13 +14,13 @@ If you don't already have an account, you can create one now for free. Create an
 
 Once you are in your Darcy Cloud account, add your device as a node in your current project. Use the "plus button" in the bottom left to add a node to your project. Follow the instructions in the pop-up window to add your device as a node.
 
-<img src="./examples/screenshots/darcy-cloud-plus-item-button.png" height="100" />
+<img src="https://github.com/darcyai/darcyai-sdk/raw/master/examples/screenshots/darcy-cloud-plus-item-button.png" height="100" />
 
 ## Deploy the Darcy AI Explorer application
 
 Click on the "plus button" and choose "app" to deploy a new application to your device. In the pop-up choose the "Darcy AI Explorer App" and then click "Next". Choose your device from the drop-down menu and then click "Deploy". The Darcy AI Explorer application will begin to download to your device. You can track the status of the app in the Darcy Cloud UI. When the app is listed as "Running" you can proceed to the next step. Depending on the Internet connection speed of your device, it may take about 15 minutes for the Darcy AI Explorer app to download and start on your device.
 
-<img src="./examples/screenshots/darcy-cloud-explorer-app-deploy.png" />
+<img src="https://github.com/darcyai/darcyai-sdk/raw/master/examples/screenshots/darcy-cloud-explorer-app-deploy.png" />
 
 ## Open the Darcy AI Explorer
 
@@ -31,4 +31,4 @@ http://YOUR.DEVICE.IP.ADDRESS:5555/
 
 ## Continue your Darcy AI exploration
 
-Now that you have a running Darcy AI application to explore, continue your journey by checking out the examples and getting started building your own application! [Darcy AI Documentation Home](./README.md)
+Now that you have a running Darcy AI application to explore, continue your journey by checking out the examples and getting started building your own application! [Darcy AI Documentation Home](https://github.com/darcyai/darcyai-sdk)

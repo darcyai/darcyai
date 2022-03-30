@@ -2,7 +2,7 @@
 
 This is the official software development kit (SDK) for building on the Darcy AI platform.
 
-To browse this document and all of the other documentation on a local web server, run the [docs.sh](./docs.sh) script and then visit [http://localhost:8000](http://localhost:8000).
+To browse this document and all of the other documentation on a local web server, run the [docs.sh](https://github.com/darcyai/darcyai-sdk/blob/master/docs.sh) script and then visit [http://localhost:8000](http://localhost:8000).
 
 ## Introducing the Darcy AI platform
 
@@ -14,29 +14,29 @@ With the Darcy AI SDK, you get everything you need to build real-time AI applica
 
 ## How to use this SDK
 
-Use this document and the other markdown files in this directory to learn about the Darcy AI platform and to get started. The guide documents will take you from an absolute beginner to building and deploying your own Darcy AI applications. The [docs](./docs) folder contains the full technical Darcy AI programming documentation.
+Use this document and the other markdown files in this directory to learn about the Darcy AI platform and to get started. The guide documents will take you from an absolute beginner to building and deploying your own Darcy AI applications. The [docs](https://github.com/darcyai/darcyai-sdk/blob/master/docs) folder contains the full technical Darcy AI programming documentation.
 
-To browse this document and all of the other documentation on a local web server, run the [docs.sh](./docs.sh) script and then visit [http://localhost:8000](http://localhost:8000).
+To browse this document and all of the other documentation on a local web server, run the [docs.sh](https://github.com/darcyai/darcyai-sdk/blob/master/docs.sh) script and then visit [http://localhost:8000](http://localhost:8000).
 
 ## Examples
 
-The [examples](./examples) folder contains a diverse set of sample applications that you can use as a reference or as a start of your own Darcy AI application. The code is commented to help you understand what to do and when to do it. Here are some short descriptions to help you understand what examples are available. Some example applications are stored in their own code repositories to make learning and building easier.
+The [examples](https://github.com/darcyai/darcyai-sdk/blob/master/examples) folder contains a diverse set of sample applications that you can use as a reference or as a start of your own Darcy AI application. The code is commented to help you understand what to do and when to do it. Here are some short descriptions to help you understand what examples are available. Some example applications are stored in their own code repositories to make learning and building easier.
 
 - Darcy AI Explorer - this demo application is a rich showcase of what the Darcy AI system can do. Use the source code as a model for building a full-featured production application. [https://github.com/darcyai/darcyai-explorer](https://github.com/darcyai/darcyai-explorer)
 
-- Real-time Audio Analysis - Build and deploy this Darcy AI demo application to learn how to add audio capabilities to Darcy and listen for important sounds. [Audio Analysis](./examples/audio_analysis)
+- Real-time Audio Analysis - Build and deploy this Darcy AI demo application to learn how to add audio capabilities to Darcy and listen for important sounds. [Audio Analysis](https://github.com/darcyai/darcyai-sdk/blob/master/examples/audio_analysis)
 
-- Basic Darcy AI Pipeline - Use this demo application to learn the basics of creating a Darcy AI pipeline. [Basic Pipeline](./examples/basic_pipeline)
+- Basic Darcy AI Pipeline - Use this demo application to learn the basics of creating a Darcy AI pipeline. [Basic Pipeline](https://github.com/darcyai/darcyai-sdk/blob/master/examples/basic_pipeline)
 
-- Sample Output Stream - Learn how to create a Darcy AI output stream by adding this example to your application. The example sends your Darcy AI output to an Amazon Web Services S3 bucket. [Output Stream](./examples/output_streams)
+- Sample Output Stream - Learn how to create a Darcy AI output stream by adding this example to your application. The example sends your Darcy AI output to an Amazon Web Services S3 bucket. [Output Stream](https://github.com/darcyai/darcyai-sdk/blob/master/examples/output_streams)
 
-- Sample Perceptors - Learn how to build your own Darcy AI perceptors with the examples in this directory. There is a basic mock perceptor that you can use as a template. There is a face detector perceptor that uses an AI model to find faces. There is also a face mask detector perceptor that checks a person's face for a mask. [Perceptors](./examples/perceptors)
+- Sample Perceptors - Learn how to build your own Darcy AI perceptors with the examples in this directory. There is a basic mock perceptor that you can use as a template. There is a face detector perceptor that uses an AI model to find faces. There is also a face mask detector perceptor that checks a person's face for a mask. [Perceptors](https://github.com/darcyai/darcyai-sdk/blob/master/examples/perceptors)
 
 - Heart Rate Demo - this demo application is a good example of how to build an edge application that is made of multiple microservices that communicate with each other. [https://github.com/darcyai/heart-rate-demo](https://github.com/darcyai/heart-rate-demo)
 
-- Sample Build Files - Get a sample Dockerfile in this folder so you don't have to create one from scratch. [Build Files](./examples/build)
+- Sample Build Files - Get a sample Dockerfile in this folder so you don't have to create one from scratch. [Build Files](https://github.com/darcyai/darcyai-sdk/blob/master/examples/build)
 
-- Sample Deployment Files - Get a sample application YAML file in this folder so you can just replace the default values and deploy your edge AI application easily. [Deployment Files](./examples/deploy)
+- Sample Deployment Files - Get a sample application YAML file in this folder so you can just replace the default values and deploy your edge AI application easily. [Deployment Files](https://github.com/darcyai/darcyai-sdk/blob/master/examples/deploy)
 
 ## What you need
 
@@ -63,25 +63,25 @@ You will need some hardware to run your Darcy AI application. Darcy can generall
 
 ## Getting started
 
-If you haven't already become familiar with the Darcy AI platform terminology, check out this [Terminology Guide](./TERMINOLOGY.md) to get up to speed quickly.
+If you haven't already become familiar with the Darcy AI platform terminology, check out this [Terminology Guide](terminology/) to get up to speed quickly.
 
-The best way to get started with Darcy is to see it in action. Start by trying out the Darcy AI Explorer application in the [Darcy Explorer Guide](./DARCY_EXPLORER.md).
+The best way to get started with Darcy is to see it in action. Start by trying out the Darcy AI Explorer application in the [Darcy Explorer Guide](darcy-ai-explorer/).
 
-When you are ready to create, you can launch your Darcy AI developer journey with the [Getting Started Guide](./GETTING_STARTED.md).
+When you are ready to create, you can launch your Darcy AI developer journey with the [Getting Started Guide](getting-started/).
 
 ## Building
 
-Learn how to package your Darcy AI application into a container that includes all of the dependencies needed to run with the [Build Guide](./BUILD.md).
+Learn how to package your Darcy AI application into a container that includes all of the dependencies needed to run with the [Build Guide](build/).
 
-To prepare your Raspberry Pi board as a development environment for building Darcy AI applications, follow the [Raspberry Pi Environment Setup Guide](./SETUP_RPI.md).
+To prepare your Raspberry Pi board as a development environment for building Darcy AI applications, follow the [Raspberry Pi Environment Setup Guide](raspberry-pi-setup/).
 
 ## Deploying
 
-Learn how to deploy your Darcy AI application to your edge devices using the Darcy Cloud in the [Deployment Guide](./DEPLOY.md).
+Learn how to deploy your Darcy AI application to your edge devices using the Darcy Cloud in the [Deployment Guide](deploy/).
 
 ## Documentation
 
-Open the Darcy AI technical documentation to search and browse the API with code examples. This is a local documentation site that will run directly in your browser. The documentation is specific to each version of the Darcy AI SDK so it's the best place to reference when building. To browse this document and all of the other documentation on a local web server, run the [docs.sh](./docs.sh) script and then visit [http://localhost:8000](http://localhost:8000).
+Open the Darcy AI technical documentation to search and browse the API with code examples. This is a local documentation site that will run directly in your browser. The documentation is specific to each version of the Darcy AI SDK so it's the best place to reference when building. To browse this document and all of the other documentation on a local web server, run the [docs.sh](https://github.com/darcyai/darcyai-sdk/blob/master/docs.sh) script and then visit [http://localhost:8000](http://localhost:8000).
 
 If you prefer to access the latest Darcy AI developer documentation with an internet connection, use [Hosted Darcy AI Documentation](https://darcyai.github.io/darcyai-sdk/).
 
