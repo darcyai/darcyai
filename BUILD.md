@@ -18,7 +18,7 @@ You’ll need to have a few things in place before you build. Here’s the list:
 
 To check if your Raspberry Pi meets all of the requirements for building and debugging Darcy AI applications, run the system check script [check.bash](https://github.com/darcyai/darcyai-sdk/blob/master/check.bash).
 
-If you need to setup your Raspberry Pi as a Darcy AI development environment, follow the [Raspberry Pi Environment Setup Guide](https://github.com/darcyai/darcyai-sdk/blob/master/SETUP_RPI.md).
+If you need to setup your Raspberry Pi as a Darcy AI development environment, follow the [Raspberry Pi Environment Setup Guide](/raspberry-pi-setup/).
 
 ## Create your application Python file and import libraries
 

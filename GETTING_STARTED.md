@@ -2,7 +2,7 @@
 
 The Darcy AI SDK offers a rich set of features that Darcy AI application developers can use to easily build complex AI processing chains. This makes developing rich real-time applications possible in a shorter timeframe and with a much more standardized approach.
 
-If you have not yet read the overview of Darcy AI terminology, it is recommended that you do that first. You can find it here [Darcy AI Terminology Guide](terminology/)
+If you have not yet read the overview of Darcy AI terminology, it is recommended that you do that first. You can find it here [Darcy AI Terminology Guide](/terminology/).
 
 ## Thinking in terms of Darcy AI pipelines
 
@@ -173,4 +173,4 @@ pipeline.run_perceptor(people_ai, my_data)
 
 ## Bring it all together with a full application
 
-The best way to learn all of these concepts is to see them in action. Start with building a sample application that illustrates all of these topics in actual code. Then build your own! You can find a sample application guide here [Build Guide](build/).
+The best way to learn all of these concepts is to see them in action. Start with building a sample application that illustrates all of these topics in actual code. Then build your own! You can find a sample application guide here [Build Guide](/build/).
