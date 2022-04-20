@@ -4,7 +4,7 @@ import cv2
 import os
 import pathlib
 
-from darcyai.perceptor.coral.image_classification_perceptor import ImageClassificationPerceptor
+from darcyai.perceptor.cpu.image_classification_perceptor import ImageClassificationPerceptor
 from darcyai.input.camera_stream import CameraStream
 from darcyai.output.live_feed_stream import LiveFeedStream
 from darcyai.pipeline import Pipeline
@@ -32,9 +32,13 @@ live_feed = LiveFeedStream(path="/", port=3456, host="0.0.0.0")
 pipeline.add_output_stream("output", live_feed_callback, live_feed)
 
 script_dir = pathlib.Path(__file__).parent.absolute()
-model_file = os.path.join(script_dir, "coral_mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite")
-labels_file = os.path.join(script_dir, "inat_bird_labels.txt")
-image_classification = ImageClassificationPerceptor(model_path=model_file, threshold=0.5, labels_file=labels_file, top_k=1)
+model_file = os.path.join(script_dir, "cpu_mobilenet_v2_1.0_224_quant.tflite")
+labels_file = os.path.join(script_dir, "cpu_mobilenet_v2_1.0_224_quant_labels.txt")
+image_classification = ImageClassificationPerceptor(model_path=model_file,
+                                                    threshold=50,
+                                                    labels_file=labels_file,
+                                                    top_k=1,
+                                                    quantized=True)
 
 pipeline.add_perceptor("image_classification", image_classification, input_callback=perceptor_input_callback)
 

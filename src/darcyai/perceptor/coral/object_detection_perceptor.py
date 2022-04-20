@@ -5,6 +5,7 @@ from importlib import import_module
 from typing import Any, List
 
 from darcyai.config_registry import ConfigRegistry
+from darcyai.perceptor.detected_object import Object
 from darcyai.utils import validate_not_none, validate_type, validate
 
 from .coral_perceptor_base import CoralPerceptorBase
@@ -46,7 +47,7 @@ class ObjectDetectionPerceptor(CoralPerceptorBase):
         self.__threshold = threshold
 
 
-    def run(self, input_data:Any, config:ConfigRegistry=None) -> (List[Any], List[str]):
+    def run(self, input_data:Any, config:ConfigRegistry=None) -> List[Object]:
         """
         Runs the object detection model on the input data.
 
@@ -55,10 +56,8 @@ class ObjectDetectionPerceptor(CoralPerceptorBase):
             config (ConfigRegistry): The configuration for the Perceptor.
 
         Returns:
-            (list[Any], list(str)): A tuple containing the detected objects and the labels.
+            list[Object]: A list of detected objects.
         """
-        labels = []
-
         _, scale = self.__common.set_resized_input(
             self.interpreter,
             (input_data.shape[1], input_data.shape[0]),
@@ -68,11 +67,22 @@ class ObjectDetectionPerceptor(CoralPerceptorBase):
 
         detected_objects = self.__detect.get_objects(self.interpreter, self.__threshold, scale)
 
-        if not self.__labels is None:
-            for detected_object in detected_objects:
-                labels.append(self.__labels.get(detected_object.id, detected_object.id))
+        result = []
+        for detected_object in detected_objects:
+            if self.__labels is None:
+                label = None
+            else:
+                label = self.__labels.get(detected_object.id, detected_object.id)
+            result.append(Object(
+                detected_object.id,
+                label,
+                detected_object.score,
+                max(detected_object.bbox.xmin, 0),
+                max(detected_object.bbox.ymin, 0),
+                detected_object.bbox.xmax,
+                detected_object.bbox.ymax))
 
-        return detected_objects, labels
+        return result
 
 
     def load(self, accelerator_idx:[int, None]) -> None:
