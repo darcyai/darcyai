@@ -114,6 +114,10 @@ renderer:
           contents:
             - darcyai.darcyai.perceptor.detected_object.Object
             - darcyai.darcyai.perceptor.detected_object.Object.*
+          - title: PeoplePOM
+            contents:
+              - darcyai.perceptor.people_perceptor_pom
+              - darcyai.perceptor.people_perceptor_pom.*
         - title: Coral Perceptors
           children:
             - title: CoralPerceptorBase
@@ -132,10 +136,6 @@ renderer:
               contents:
                 - darcyai.perceptor.coral.people_perceptor
                 - darcyai.perceptor.coral.people_perceptor.PeoplePerceptor
-            - title: PeoplePOM
-              contents:
-                - darcyai.perceptor.coral.people_perceptor_pom
-                - darcyai.perceptor.coral.people_perceptor_pom.*
         - title: CPU Perceptors
           children:
             - title: CpuPerceptorBase

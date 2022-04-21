@@ -4,12 +4,10 @@
 import os
 import pathlib
 
-from darcyai.utils import validate_type, validate
-
-from .coral_perceptor_base import CoralPerceptorBase
+from .cpu_perceptor_base import CpuPerceptorBase
 from ..people_perceptor_base import PeoplePerceptorBase, PoseEngine
 
-class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
+class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
     """
     Perceptor for detecting people in an image.
 
@@ -231,7 +229,7 @@ class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
         person_occluded
     """
     def __init__(self, **kwargs):
-        CoralPerceptorBase.__init__(self, **kwargs)
+        CpuPerceptorBase.__init__(self, **kwargs)
 
         self.__primary_pose_engine = None
 
@@ -240,15 +238,9 @@ class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
     
     def load(self, accelerator_idx:[int, None]) -> None:
         script_dir = pathlib.Path(__file__).parent.absolute()
+        # posenet_mobilenet_v1_075_353_481_quant_decoder
         model_file = os.path.join(script_dir, "models/posenet.tflite")
         
-        if accelerator_idx is None:
-            self.__primary_pose_engine = PoseEngine(model_file)
-        else:
-            validate_type(accelerator_idx, int, "accelerator_idx must be an integer")
-            validate(accelerator_idx >= 0, "accelerator_idx must be greater than or equal to 0")
-
-            #TODO: implement accelerator index pass-through to PoseEngine class above
-            self.__primary_pose_engine = PoseEngine(model_file, cpu=False)
+        self.__primary_pose_engine = PoseEngine(model_file, cpu=True)
         
         super().set_loaded(True)        

@@ -1,7 +1,6 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
 from importlib import import_module
-from typing import Union
 
 from darcyai.perceptor.perceptor import Perceptor
 from darcyai.utils import validate_type, validate
@@ -21,6 +20,7 @@ class CpuPerceptorBase(Perceptor):
         """
         self.interpreter = self.__tf.lite.Interpreter(model_path=self.model_path)
         self.interpreter.allocate_tensors()
+        super().set_loaded(True)        
 
     @staticmethod
     def read_label_file(filename:str, has_ids:bool=True) -> dict:

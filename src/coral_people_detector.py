@@ -2,7 +2,7 @@
 
 import cv2
 
-from darcyai.perceptor.coral.people_perceptor import PeoplePerceptor
+from darcyai.perceptor.cpu.people_perceptor import PeoplePerceptor
 from darcyai.input.camera_stream import CameraStream
 from darcyai.output.live_feed_stream import LiveFeedStream
 from darcyai.pipeline import Pipeline

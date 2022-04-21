@@ -1,7 +1,6 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
 import cv2
-from importlib import import_module
 from typing import Any, List
 
 from darcyai.config_registry import ConfigRegistry
