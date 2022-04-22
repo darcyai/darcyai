@@ -42,7 +42,7 @@ setuptools.setup(
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers"
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.6.9",
     install_requires=[
         "pillow==8.3.2",
         "imutils==0.5.4",
