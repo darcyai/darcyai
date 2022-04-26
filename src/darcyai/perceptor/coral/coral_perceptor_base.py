@@ -1,10 +1,9 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
-from importlib import import_module
 from typing import Union
 
 from darcyai.perceptor.perceptor import Perceptor
-from darcyai.utils import validate_type, validate
+from darcyai.utils import validate_type, validate, import_module
 
 class CoralPerceptorBase(Perceptor):
     """

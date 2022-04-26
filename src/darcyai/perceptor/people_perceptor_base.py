@@ -11,9 +11,9 @@ import os
 import uuid
 
 from collections import OrderedDict
-from importlib import import_module
 from darcyai.config import Config, RGB
 from darcyai.perceptor.perceptor import Perceptor
+from darcyai.utils import import_module
 
 from .people_perceptor_pom import PeoplePOM
 
@@ -67,22 +67,20 @@ class PoseEngine():
         posenet_shared_lib = os.path.join(
             script_dir, 'posenet_lib', arch, 'posenet_decoder.so')
 
-        if cpu:
-            tf = import_module("tensorflow")
-            posenet_decoder_delegate = tf.lite.experimental.load_delegate(posenet_shared_lib)
-            self._interpreter = tf.lite.Interpreter(
-                model_path, experimental_delegates=[posenet_decoder_delegate])
-        else:
+        tflite_runtime = import_module("tflite_runtime.interpreter")
+        load_delegate = tflite_runtime.load_delegate
+        Interpreter = tflite_runtime.Interpreter
+        posenet_decoder_delegate = load_delegate(posenet_shared_lib)
+        delegates = [posenet_decoder_delegate]
+
+        if not cpu:
             self.__edgetpu = import_module("pycoral.utils.edgetpu")
-            tflite_runtime = import_module("tflite_runtime.interpreter")
-            load_delegate = tflite_runtime.load_delegate
-            Interpreter = tflite_runtime.Interpreter
             edgetpu_shared_lib = 'libedgetpu.so.1'
             edgetpu_delegate = load_delegate(edgetpu_shared_lib)
-            posenet_decoder_delegate = load_delegate(posenet_shared_lib)
-            self._interpreter = Interpreter(
-                model_path, experimental_delegates=[edgetpu_delegate, posenet_decoder_delegate])
+            delegates.append(edgetpu_delegate)
 
+        self._interpreter = Interpreter(
+            model_path, experimental_delegates=delegates)
         self._interpreter.allocate_tensors()
 
         self._mirror = mirror

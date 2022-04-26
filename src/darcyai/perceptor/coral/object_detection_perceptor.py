@@ -1,12 +1,11 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
 import cv2
-from importlib import import_module
 from typing import Any, List
 
 from darcyai.config_registry import ConfigRegistry
 from darcyai.perceptor.detected_object import Object
-from darcyai.utils import validate_not_none, validate_type, validate
+from darcyai.utils import validate_not_none, validate_type, validate, import_module
 
 from .coral_perceptor_base import CoralPerceptorBase
 
