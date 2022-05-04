@@ -1,5 +1,7 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
+import importlib
+
 from darcyai.perceptor.perceptor import Perceptor
 from darcyai.utils import import_module
 
@@ -10,13 +12,18 @@ class CpuPerceptorBase(Perceptor):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.__tf = import_module("tflite_runtime.interpreter")
+        if importlib.util.find_spec("tensorflow") is None:
+            tf = import_module("tflite_runtime.interpreter")
+            self.__tf_interpreter = tf.Interpreter
+        else:
+            tf = import_module("tensorflow")
+            self.__tf_interpreter = tf.lite.Interpreter
 
     def load(self) -> None:
         """
         Loads the perceptor.
         """
-        self.interpreter = self.__tf.Interpreter(model_path=self.model_path)
+        self.interpreter = self.__tf_interpreter(model_path=self.model_path)
         self.interpreter.allocate_tensors()
         super().set_loaded(True)        
 

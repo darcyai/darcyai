@@ -2,12 +2,13 @@
 
 # pylint: skip-file
 import cv2
-import time
 import collections
 import enum
+import importlib
 import math
 import numpy as np
 import os
+import time
 import uuid
 
 from collections import OrderedDict
@@ -48,7 +49,7 @@ Pose = collections.namedtuple('Pose', ['keypoints', 'score'])
 class PoseEngine():
     """Engine used for pose tasks."""
 
-    def __init__(self, model_path, mirror=False, arch=os.uname().machine, cpu:bool=False):
+    def __init__(self, model_path, mirror=False, arch=os.uname().machine, tpu:bool=True):
         """
         Creates a PoseEngine with given model.
         
@@ -56,7 +57,7 @@ class PoseEngine():
             model_path: String, path to TF-Lite Flatbuffer file.
             mirror: Flip keypoints horizontally.
             arch: Architecture of the device.
-            cpu: If true, use CPU instead of Coral.
+            tpu: Whether to use TPU or CPU.
         
         Raises:
             ValueError: An error occurred when model output is invalid.
@@ -67,13 +68,22 @@ class PoseEngine():
         posenet_shared_lib = os.path.join(
             script_dir, 'posenet_lib', arch, 'posenet_decoder.so')
 
-        tflite_runtime = import_module("tflite_runtime.interpreter")
-        load_delegate = tflite_runtime.load_delegate
-        Interpreter = tflite_runtime.Interpreter
+        if not os.path.exists(posenet_shared_lib):
+            raise ValueError('Posenet library not found at %s' % posenet_shared_lib)
+
+        if importlib.util.find_spec("tensorflow") is None:
+            tf = import_module("tflite_runtime.interpreter")
+            load_delegate = tf.load_delegate
+            Interpreter = tf.Interpreter
+        else:
+            tf = import_module("tensorflow")
+            load_delegate = tf.lite.experimental.load_delegate
+            Interpreter = tf.lite.Interpreter
+
         posenet_decoder_delegate = load_delegate(posenet_shared_lib)
         delegates = [posenet_decoder_delegate]
 
-        if not cpu:
+        if tpu:
             self.__edgetpu = import_module("pycoral.utils.edgetpu")
             edgetpu_shared_lib = 'libedgetpu.so.1'
             edgetpu_delegate = load_delegate(edgetpu_shared_lib)
@@ -95,14 +105,14 @@ class PoseEngine():
         _, self._input_height, self._input_width, self._input_depth = self.get_input_tensor_shape()
         self._input_type = self._interpreter.get_input_details()[0]['dtype']
         self._inf_time = 0
-        self.__cpu = cpu
+        self.__tpu = tpu
 
     def run_inference(self, input_data):
         """
         Run inference using the zero copy feature from pycoral and returns inference time in ms.
         """
         start = time.monotonic()
-        if self.__cpu:
+        if not self.__tpu:
             self._interpreter.set_tensor(self._interpreter.get_input_details()[0]['index'], input_data)
             self._interpreter.invoke()
         else:
@@ -137,7 +147,7 @@ class PoseEngine():
             # Assuming to be uint8
             input_data = np.asarray(img)
 
-        if self.__cpu:
+        if not self.__tpu:
             input_data = np.expand_dims(input_data, axis=0)
         else:
             input_data = input_data.flatten()
