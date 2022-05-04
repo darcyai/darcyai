@@ -241,6 +241,6 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
         # posenet_mobilenet_v1_075_353_481_quant_decoder
         model_file = os.path.join(script_dir, "models/posenet.tflite")
         
-        self.__primary_pose_engine = PoseEngine(model_file, cpu=True)
+        self.__primary_pose_engine = PoseEngine(model_file, tpu=False)
         
         super().set_loaded(True)        

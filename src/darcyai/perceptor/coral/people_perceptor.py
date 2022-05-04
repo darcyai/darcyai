@@ -249,6 +249,6 @@ class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
             validate(accelerator_idx >= 0, "accelerator_idx must be greater than or equal to 0")
 
             #TODO: implement accelerator index pass-through to PoseEngine class above
-            self.__primary_pose_engine = PoseEngine(model_file, cpu=False)
+            self.__primary_pose_engine = PoseEngine(model_file, tpu=True)
         
         super().set_loaded(True)        

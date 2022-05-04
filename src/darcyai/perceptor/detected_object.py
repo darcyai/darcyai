@@ -23,3 +23,13 @@ class Object:
         self.ymin = ymin
         self.xmax = xmax
         self.ymax = ymax
+
+    def __str__(self):
+        """
+        Returns a string representation of the class.
+
+        Returns:
+            str: The string representation of the class.
+        """
+        return f"Object(class_id={self.class_id}, name={self.name}, confidence={self.confidence},\
+            xmin={self.xmin}, ymin={self.ymin}, xmax={self.xmax}, ymax={self.ymax})"
