@@ -1,5 +1,6 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
+import importlib
 from typing import Union
 
 from darcyai.perceptor.perceptor import Perceptor
@@ -40,3 +41,28 @@ class CoralPerceptorBase(Perceptor):
                 device=f":{accelerator_idx}")
 
         self.interpreter.allocate_tensors()
+
+    @staticmethod
+    def list_edge_tpus() -> list:
+        """
+        Lists the Coral Edge TPUs.
+
+        # Returns
+        list: The Coral Edge TPUs.
+
+        # Example
+        ```python
+        >>> from darcyai.perceptor.coral.coral_perceptor_base import CoralPerceptorBase
+        >>> CoralPerceptorBase.list_edge_tpus()
+        ["/device:coral:0"]
+        ```
+        """
+        tpus = []
+        if importlib.util.find_spec("pycoral.utils.edgetpu") is not None:
+            try:
+                edgetpu = import_module("pycoral.utils.edgetpu")
+                tpus = edgetpu.list_edge_tpus()
+            except Exception:
+                pass
+
+        return tpus

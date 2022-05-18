@@ -16,14 +16,13 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
     ImageClassificationPerceptor is a class that implements the Perceptor interface for
     image classification.
 
-    Arguments:
-        threshold (float): The threshold for object detection.
-        top_k (int): The number of top predictions to return.
-        labels_file (str): The path to the labels file.
-        labels (dict): A dictionary of labels.
-        mean (float): The mean of the image.
-        std (float): The standard deviation of the image.
-        **kwargs: Keyword arguments to pass to Perceptor.
+    # Arguments
+    threshold (float): The threshold for object detection.
+    top_k (int): The number of top predictions to return.
+    labels_file (str): The path to the labels file.
+    labels (dict): A dictionary of labels.
+    mean (float): The mean of the image.
+    std (float): The standard deviation of the image.
     """
 
 
@@ -73,12 +72,12 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
         """
         Runs the image classification model.
 
-        Arguments:
-            input_data (Any): The input data to run the model on.
-            config (ConfigRegistry): The configuration for the perceptor.
+        # Arguments
+        input_data (Any): The input data to run the model on.
+        config (ConfigRegistry): The configuration for the perceptor.
 
-        Returns:
-            list[Class]: A list of detected classes.
+        # Returns
+        list[Class]: A list of detected classes.
         """
         resized_frame = cv2.resize(input_data, self.__inference_shape)
 
@@ -117,11 +116,8 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
         """
         Loads the image classification model.
 
-        Arguments:
-            accelerator_idx (int): The index of the Edge TPU to use.
-
-        Returns:
-            None
+        # Arguments
+        accelerator_idx (int): The index of the Edge TPU to use.
         """
         CoralPerceptorBase.load(self, accelerator_idx)
 

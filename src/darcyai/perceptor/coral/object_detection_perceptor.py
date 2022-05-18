@@ -15,10 +15,10 @@ class ObjectDetectionPerceptor(CoralPerceptorBase):
     ObjectDetectionPerceptor is a class that implements the Perceptor interface for
     object detection.
 
-    Arguments:
-        threshold (float): The threshold for object detection.
-        labels_file (str): The path to the labels file.
-        **kwargs: Keyword arguments to pass to Perceptor.
+    # Arguments
+    threshold (float): The threshold for object detection.
+    labels_file (str): The path to the labels file.
+    labels (dict): A dictionary of labels.
     """
 
 
@@ -50,12 +50,12 @@ class ObjectDetectionPerceptor(CoralPerceptorBase):
         """
         Runs the object detection model on the input data.
 
-        Arguments:
-            input_data (Any): The input data to run the model on.
-            config (ConfigRegistry): The configuration for the Perceptor.
+        # Arguments
+        input_data (Any): The input data to run the model on.
+        config (ConfigRegistry): The configuration for the Perceptor.
 
-        Returns:
-            list[Object]: A list of detected objects.
+        # Returns
+        list[Object]: A list of detected objects.
         """
         _, scale = self.__common.set_resized_input(
             self.interpreter,
@@ -88,10 +88,10 @@ class ObjectDetectionPerceptor(CoralPerceptorBase):
         """
         Loads the object detection model.
 
-        Arguments:
-            accelerator_idx (int): The index of the Edge TPU to use.
+        # Arguments
+        accelerator_idx (int): The index of the Edge TPU to use.
 
-        Returns:
-            None
+        # Returns
+        None
         """
         CoralPerceptorBase.load(self, accelerator_idx)

@@ -85,7 +85,6 @@ class Pipeline():
     ...                     rest_api_host="localhost")
     ```
     """
-
     def __init__(self,
                  input_stream: InputStream,
                  input_data_history_len: int = 50,
@@ -241,7 +240,7 @@ class Pipeline():
                                                 Any] = None,
                       parent: str = None,
                       multi: bool = False,
-                      accelerator_idx: Union[int, None] = None,
+                      accelerator_idx: int = 0,
                       default_config: Dict[str, Any] = None) -> None:
         """
         Adds a new Perceptor to the pipeline.
@@ -259,7 +258,7 @@ class Pipeline():
         multi (bool): Whether or not to run the perceptor for each item in input data.
             Defaults to `False`.
         accelerator_idx (int): The index of the Edge TPU to be used by the Perceptor.
-            Defaults to `None`.
+            Defaults to `0`.
         default_config (Dict[str, Any]): The default configuration for the Perceptor.
             Defaults to `None`.
 
@@ -322,7 +321,7 @@ class Pipeline():
                                                         ConfigRegistry],
                                                        Any] = None,
                              multi: bool = False,
-                             accelerator_idx: Union[int, None] = None,
+                             accelerator_idx: int = 0,
                              default_config: dict = None) -> None:
         """
         Adds a new Perceptor to the pipeline.
@@ -341,7 +340,7 @@ class Pipeline():
         multi (bool): Whether or not to run the perceptor for each item in input data.
             Defaults to `False`.
         accelerator_idx (int): The index of the Edge TPU to be used by the Perceptor.
-            Defaults to `None`.
+            Defaults to `0`.
         default_config (dict): The default configuration for the Perceptor.
             Defaults to `None`.
 
@@ -419,7 +418,7 @@ class Pipeline():
                                                        ConfigRegistry],
                                                       Any] = None,
                             multi: bool = False,
-                            accelerator_idx: Union[int, None] = None,
+                            accelerator_idx: int = 0,
                             default_config: dict = None) -> None:
         """
         Adds a new Perceptor to the pipeline.
@@ -438,7 +437,7 @@ class Pipeline():
         multi (bool): Whether or not to run the perceptor for each item in input data.
             Defaults to `False`.
         accelerator_idx (int): The index of the Edge TPU to be used by the Perceptor.
-            Defaults to `None`.
+            Defaults to `0`.
         default_config (dict): The default configuration for the Perceptor.
             Defaults to `None`.
 
@@ -482,7 +481,7 @@ class Pipeline():
                                                           ConfigRegistry],
                                                          Any] = None,
                                multi: bool = False,
-                               accelerator_idx: Union[int, None] = None,
+                               accelerator_idx: int = 0,
                                default_config: dict = None) -> None:
         """
         Adds a new Perceptor to the pipeline.
@@ -1385,7 +1384,7 @@ class Pipeline():
             callback function for the input stream. Default is `None`.
         output_callback (Callable[[Any, PerceptionObjectModel], Any]): The
             callback function for the output stream. Default is `None`.
-        accelerator_idx (int): The index of the accelerator. Defaults to `None`.
+        accelerator_idx (int): The index of the accelerator. Defaults to `0`.
         default_config (dict): The default config. Defaults to `None`.
         """
         if self.__running:
@@ -1412,15 +1411,15 @@ class Pipeline():
                 callable(output_callback),
                 "output_callback must be a function")
 
-        if accelerator_idx is not None:
-            validate_type(
-                accelerator_idx,
-                int,
-                "accelerator_idx must be an integer")
+        validate_not_none(accelerator_idx, "accelerator_idx is required")
+        validate_type(
+            accelerator_idx,
+            int,
+            "accelerator_idx must be an integer")
 
-            if accelerator_idx >= self.__num_of_edge_tpus:
-                raise ValueError(
-                    f"accelerator_idx must be >= 0 and < {self.__num_of_edge_tpus}")
+        if accelerator_idx >= self.__num_of_edge_tpus:
+            raise ValueError(
+                f"accelerator_idx must be >= 0 and < {self.__num_of_edge_tpus}")
 
         if default_config is not None:
             validate_type(

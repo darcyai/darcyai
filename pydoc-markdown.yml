@@ -108,16 +108,31 @@ renderer:
             - darcyai.perception_object_model.PerceptionObjectModel.*
         - title: Class
           contents:
-            - darcyai.darcyai.perceptor.detected_class.Class
-            - darcyai.darcyai.perceptor.detected_class.Class.*
+            - darcyai.perceptor.detected_class.Class
+            - darcyai.perceptor.detected_class.Class.*
         - title: Object
           contents:
-            - darcyai.darcyai.perceptor.detected_object.Object
-            - darcyai.darcyai.perceptor.detected_object.Object.*
-          - title: PeoplePOM
-            contents:
-              - darcyai.perceptor.people_perceptor_pom
-              - darcyai.perceptor.people_perceptor_pom.*
+            - darcyai.perceptor.detected_object.Object
+            - darcyai.perceptor.detected_object.Object.*
+        - title: PeoplePOM
+          contents:
+            - darcyai.perceptor.people_perceptor_pom
+            - darcyai.perceptor.people_perceptor_pom.*
+        - title: ImageClassificationPerceptor
+          contents:
+            - darcyai.perceptor.image_classification_perceptor
+            - darcyai.perceptor.image_classification_perceptor.*
+        - title: ObjectDetectionPerceptor
+          contents:
+            - darcyai.perceptor.object_detection_perceptor
+            - darcyai.perceptor.object_detection_perceptor.*
+        - title: PeoplePerceptor
+          contents:
+            - darcyai.perceptor.people_perceptor
+            - darcyai.perceptor.people_perceptor.PeoplePerceptor
+        - title: Perceptor Utils
+          contents:
+            - darcyai.perceptor.perceptor_utils.*
         - title: Coral Perceptors
           children:
             - title: CoralPerceptorBase
@@ -154,7 +169,3 @@ renderer:
               contents:
                 - darcyai.perceptor.cpu.people_perceptor
                 - darcyai.perceptor.cpu.people_perceptor.PeoplePerceptor
-            - title: PeoplePOM
-              contents:
-                - darcyai.perceptor.cpu.people_perceptor_pom
-                - darcyai.perceptor.cpu.people_perceptor_pom.*

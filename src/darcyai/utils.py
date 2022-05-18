@@ -65,5 +65,5 @@ def import_module(name: str) -> Any:
 
     module = import_helper(name)
     imported_modules[name] = module
-    
+
     return module

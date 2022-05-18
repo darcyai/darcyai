@@ -53,14 +53,14 @@ class PoseEngine():
         """
         Creates a PoseEngine with given model.
         
-        Arguments:
-            model_path: String, path to TF-Lite Flatbuffer file.
-            mirror: Flip keypoints horizontally.
-            arch: Architecture of the device.
-            tpu: Whether to use TPU or CPU.
+        # Arguments
+        model_path: String, path to TF-Lite Flatbuffer file.
+        mirror: Flip keypoints horizontally.
+        arch: Architecture of the device.
+        tpu: Whether to use TPU or CPU.
         
         Raises:
-            ValueError: An error occurred when model output is invalid.
+        ValueError: An error occurred when model output is invalid.
         """
 
         script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -71,7 +71,7 @@ class PoseEngine():
         if not os.path.exists(posenet_shared_lib):
             raise ValueError('Posenet library not found at %s' % posenet_shared_lib)
 
-        if importlib.util.find_spec("tensorflow") is None:
+        if importlib.util.find_spec("tflite_runtime") is not None:
             tf = import_module("tflite_runtime.interpreter")
             load_delegate = tf.load_delegate
             Interpreter = tf.Interpreter
@@ -127,8 +127,8 @@ class PoseEngine():
         expected input size - it is the caller's responsibility to resize the
         image accordingly.
 
-        Args:
-          img: numpy array containing image
+        # Arguments
+        img: numpy array containing image
         """
 
         # Extend or crop the input to match the input shape of the network.

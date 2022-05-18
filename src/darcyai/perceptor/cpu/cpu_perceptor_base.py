@@ -12,7 +12,7 @@ class CpuPerceptorBase(Perceptor):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        if importlib.util.find_spec("tensorflow") is None:
+        if importlib.util.find_spec("tflite_runtime") is not None:
             tf = import_module("tflite_runtime.interpreter")
             self.__tf_interpreter = tf.Interpreter
         else:
@@ -32,12 +32,12 @@ class CpuPerceptorBase(Perceptor):
         """
         Reads the labels file.
 
-        Arguments:
-            filename (str): The path to the labels file.
-            has_ids (bool): Whether the labels file contains IDs.
+        # Arguments
+        filename (str): The path to the labels file.
+        has_ids (bool): Whether the labels file contains IDs.
 
-        Returns:
-            dict: A dictionary containing the labels.
+        # Returns
+        dict: A dictionary containing the labels.
         """
         labels = {}
 

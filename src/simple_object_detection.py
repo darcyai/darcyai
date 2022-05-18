@@ -4,7 +4,8 @@ import cv2
 import os
 import pathlib
 
-from darcyai.perceptor.cpu.object_detection_perceptor import ObjectDetectionPerceptor
+from darcyai.perceptor.object_detection_perceptor import ObjectDetectionPerceptor
+from darcyai.perceptor.processor import Processor
 from darcyai.input.camera_stream import CameraStream
 from darcyai.output.live_feed_stream import LiveFeedStream
 from darcyai.pipeline import Pipeline
@@ -33,11 +34,24 @@ live_feed = LiveFeedStream(path="/", port=3456, host="0.0.0.0")
 pipeline.add_output_stream("output", live_feed_callback, live_feed)
 
 script_dir = pathlib.Path(__file__).parent.absolute()
-model_file = os.path.join(script_dir, "cpu_coco_ssd_mobilenet.tflite")
-labels_file = os.path.join(script_dir, "coco_labels.txt")
-object_detection = ObjectDetectionPerceptor(model_path=model_file,
+
+coral_model_file = os.path.join(script_dir, "models", "coral_ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite")
+coral_labels_file = os.path.join(script_dir, "models", "coco_labels.txt")
+
+cpu_model_file = os.path.join(script_dir, "models", "cpu_coco_ssd_mobilenet.tflite")
+cpu_labels_file = os.path.join(script_dir, "models", "coco_labels.txt")
+
+object_detection = ObjectDetectionPerceptor(processor_preference={
+                                                Processor.CORAL_EDGE_TPU: {
+                                                    "model_path": coral_model_file,
+                                                    "labels_file": coral_labels_file,
+                                                },
+                                                Processor.CPU: {
+                                                    "model_path": cpu_model_file,
+                                                    "labels_file": cpu_labels_file,
+                                                },
+                                            },
                                             threshold=0.5,
-                                            labels_file=labels_file,
                                             quantized=False)
 
 pipeline.add_perceptor("object_detection", object_detection, accelerator_idx=0, input_callback=perceptor_input_callback)

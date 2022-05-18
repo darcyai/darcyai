@@ -2,11 +2,14 @@
 
 import cv2
 
-from darcyai.perceptor.coral.people_perceptor import PeoplePerceptor
+# from darcyai.perceptor.coral.people_perceptor import PeoplePerceptor
 from darcyai.input.camera_stream import CameraStream
 from darcyai.output.live_feed_stream import LiveFeedStream
 from darcyai.pipeline import Pipeline
 from darcyai.config import RGB
+
+from darcyai.perceptor.processor import Processor
+from darcyai.perceptor.people_perceptor import PeoplePerceptor
 
 #Create a callback function for handling the input that is about to pass to the People Perceptor
 def people_input_callback(input_data, pom, config):
@@ -59,7 +62,7 @@ live_feed = LiveFeedStream(path="/", port=3456, host="0.0.0.0")
 pipeline.add_output_stream("output", live_feed_callback, live_feed)
 
 #Instantiate a People Perceptor
-people_ai = PeoplePerceptor()
+people_ai = PeoplePerceptor([Processor.CORAL_EDGE_TPU, Processor.CPU])
 #Subscribe to the "New Person" event from the People Perceptor and use our callback from above as the handler
 people_ai.on("new_person_entered_scene", new_person_callback)
 

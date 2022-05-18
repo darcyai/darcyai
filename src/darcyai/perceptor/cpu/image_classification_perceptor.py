@@ -18,13 +18,12 @@ class ImageClassificationPerceptor(CpuPerceptorBase):
     ImageClassificationPerceptor is a class that implements the Perceptor interface for
     image classification.
 
-    Arguments:
-        threshold (float): The threshold for object detection.
-        top_k (int): The number of top predictions to return.
-        labels_file (str): The path to the labels file.
-        labels (dict): A dictionary of labels.
-        quantized (bool): Whether the model is quantized.
-        **kwargs: Keyword arguments to pass to Perceptor.
+    # Arguments
+    threshold (float): The threshold for object detection.
+    top_k (int): The number of top predictions to return.
+    labels_file (str): The path to the labels file.
+    labels (dict): A dictionary of labels.
+    quantized (bool): Whether the model is quantized.
     """
 
 
@@ -68,12 +67,12 @@ class ImageClassificationPerceptor(CpuPerceptorBase):
         """
         Runs the image classification model.
 
-        Arguments:
-            input_data (Any): The input data to run the model on.
-            config (ConfigRegistry): The configuration for the perceptor.
+        # Arguments
+        input_data (Any): The input data to run the model on.
+        config (ConfigRegistry): The configuration for the perceptor.
 
-        Returns:
-            (list[Any], list(str)): A tuple containing the detected classes and the labels.
+        # Returns
+        (list[Any], list(str)): A tuple containing the detected classes and the labels.
         """
         resized_input = cv2.resize(input_data, (self.__input_details[0]["shape"][1], self.__input_details[0]["shape"][2]))
         resized_input = resized_input.reshape([1, self.__input_details[0]["shape"][1], self.__input_details[0]["shape"][2], 3])
@@ -110,11 +109,8 @@ class ImageClassificationPerceptor(CpuPerceptorBase):
         """
         Loads the image classification model.
 
-        Arguments:
-            accelerator_idx (int): Not used.
-
-        Returns:
-            None
+        # Arguments
+        accelerator_idx (int): Not used.
         """
         CpuPerceptorBase.load(self)
         self.__input_details = self.interpreter.get_input_details()

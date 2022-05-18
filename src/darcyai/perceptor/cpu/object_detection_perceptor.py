@@ -15,11 +15,11 @@ class ObjectDetectionPerceptor(CpuPerceptorBase):
     ObjectDetectionPerceptor is a class that implements the Perceptor interface for
     object detection.
 
-    Arguments:
-        threshold (float): The threshold for object detection.
-        labels_file (str): The path to the labels file.
-        quantized (bool): Whether the model is quantized.
-        **kwargs: Keyword arguments to pass to Perceptor.
+    # Arguments
+    threshold (float): The threshold for object detection.
+    labels_file (str): The path to the labels file.
+    labels (dict): A dictionary of labels.
+    quantized (bool): Whether the model is quantized.
     """
 
 
@@ -57,12 +57,12 @@ class ObjectDetectionPerceptor(CpuPerceptorBase):
         """
         Runs the object detection model on the input data.
 
-        Arguments:
-            input_data (Any): The input data to run the model on.
-            config (ConfigRegistry): The configuration for the Perceptor.
+        # Arguments
+        input_data (Any): The input data to run the model on.
+        config (ConfigRegistry): The configuration for the Perceptor.
 
-        Returns:
-            (list[Any], list(str)): A tuple containing the detected objects and the labels.
+        # Returns
+        (list[Any], list(str)): A tuple containing the detected objects and the labels.
         """
 
         resized_input = cv2.resize(input_data, (self.__input_details[0]["shape"][1], self.__input_details[0]["shape"][2]))
@@ -103,11 +103,8 @@ class ObjectDetectionPerceptor(CpuPerceptorBase):
         """
         Loads the object detection model.
 
-        Arguments:
-            accelerator_idx (int): Not used.
-
-        Returns:
-            None
+        # Arguments
+        accelerator_idx (int): Not used.
         """
         CpuPerceptorBase.load(self)
         self.__input_details = self.interpreter.get_input_details()
@@ -117,12 +114,12 @@ class ObjectDetectionPerceptor(CpuPerceptorBase):
         """
         Scales the bounding box.
 
-        Arguments:
-            input_shape (tuple): The shape of the input data.
-            bbox (tuple): The bounding box to scale.
+        # Arguments
+        input_shape (tuple): The shape of the input data.
+        bbox (tuple): The bounding box to scale.
 
-        Returns:
-            tuple: The scaled bounding box.
+        # Returns
+        tuple: The scaled bounding box.
         """
 
         w = input_shape[1]
