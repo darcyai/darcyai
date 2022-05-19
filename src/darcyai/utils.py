@@ -1,8 +1,10 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
 import time
+from importlib import import_module as import_helper
 from typing import Any
 
+imported_modules = {}
 
 def validate_not_none(value: Any, message: str) -> None:
     """
@@ -47,3 +49,21 @@ def timestamp() -> int:
     int: the current timestamp in milliseconds
     """
     return int(time.time() * 1000)
+
+def import_module(name: str) -> Any:
+    """
+    Imports the specified module.
+
+    # Arguments
+    name (str): the name of the module to import
+
+    # Returns
+    Any: the imported module
+    """
+    if name in imported_modules:
+        return imported_modules[name]
+
+    module = import_helper(name)
+    imported_modules[name] = module
+
+    return module

@@ -67,6 +67,7 @@ stages:
         - script: |
             bash ./apidocs.bash --generate
           displayName: 'Generate documentation'
+          condition: eq(variables['tagged'], true)
 
         - script: |
             git config --global user.email "info@darcy.ai"
@@ -85,7 +86,7 @@ stages:
             git config --global user.email ""
             git config --global user.name ""
           displayName: 'Publish documentation'
-          # condition: eq(variables['tagged'], true)
+          condition: eq(variables['tagged'], true)
 
         - script: |
             python3 -m build

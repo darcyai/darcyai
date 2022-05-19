@@ -1,17 +1,19 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
+import collections
 import cv2
+import operator
 import numpy as np
 from typing import Any, List
 
 from darcyai.config_registry import ConfigRegistry
 from darcyai.perceptor.detected_class import Class
-from darcyai.utils import validate_not_none, validate_type, validate, import_module
+from darcyai.utils import validate_not_none, validate_type, validate
 
-from .coral_perceptor_base import CoralPerceptorBase
+from .cpu_perceptor_base import CpuPerceptorBase
 
 
-class ImageClassificationPerceptor(CoralPerceptorBase):
+class ImageClassificationPerceptor(CpuPerceptorBase):
     """
     ImageClassificationPerceptor is a class that implements the Perceptor interface for
     image classification.
@@ -21,8 +23,7 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
     top_k (int): The number of top predictions to return.
     labels_file (str): The path to the labels file.
     labels (dict): A dictionary of labels.
-    mean (float): The mean of the image.
-    std (float): The standard deviation of the image.
+    quantized (bool): Whether the model is quantized.
     """
 
 
@@ -31,14 +32,9 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
                  top_k:int=None,
                  labels_file:str=None,
                  labels:dict=None,
-                 mean:float=128.0,
-                 std:float=128.0,
+                 quantized:bool=True,
                  **kwargs):
         super().__init__(**kwargs)
-
-        dataset = import_module("pycoral.utils.dataset")
-        self.__classify = import_module("pycoral.adapters.classify")
-        self.__common = import_module("pycoral.adapters.common")
 
         validate_not_none(threshold, "threshold is required")
         validate_type(threshold, (float, int), "threshold must be a number")
@@ -53,19 +49,18 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
             self.__labels = labels
         elif labels_file is not None:
             validate_type(labels_file, str, "labels_file must be a string")
-            self.__labels = dataset.read_label_file(labels_file)
+            self.__labels = CpuPerceptorBase.read_label_file(labels_file)
         else:
             self.__labels = None
 
-        validate_type(mean, (int, float), "mean must be a number")
-        validate_type(std, (int, float), "std must be a number")
+        validate_not_none(quantized, "quantized is required")
+        validate_type(quantized, bool, "quantized must be a boolean")
 
         self.interpreter = None
         self.__threshold = threshold
         self.__top_k = top_k
-        self.__mean = mean
-        self.__std = std
-        self.__inference_shape = None
+        self.__quantized = quantized
+        self.__input_details = None
 
 
     def run(self, input_data:Any, config:ConfigRegistry=None) -> List[Class]:
@@ -77,36 +72,34 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
         config (ConfigRegistry): The configuration for the perceptor.
 
         # Returns
-        list[Class]: A list of detected classes.
+        (list[Any], list(str)): A tuple containing the detected classes and the labels.
         """
-        resized_frame = cv2.resize(input_data, self.__inference_shape)
+        resized_input = cv2.resize(input_data, (self.__input_details[0]["shape"][1], self.__input_details[0]["shape"][2]))
+        resized_input = resized_input.reshape([1, self.__input_details[0]["shape"][1], self.__input_details[0]["shape"][2], 3])
 
-        params = self.__common.input_details(self.interpreter, "quantization_parameters")
-        scales = params["scales"]
-        zero_points = params["zero_points"]
-
-        if abs(scales * self.__std - 1) < 1e-5 and abs(self.__mean - zero_points) < 1e-5:
-            # Input data does not require preprocessing.
-            self.__common.set_input(self.interpreter, resized_frame)
-        else:
-            normalized_frame = (np.asarray(resized_frame) - self.__mean) / (self.__std * scales) \
-                + zero_points
-            np.clip(normalized_frame, 0, 255, out=normalized_frame)
-            self.__common.set_input(self.interpreter, normalized_frame.astype(np.uint8))
-
+        self.interpreter.set_tensor(self.__input_details[0]["index"], resized_input)
         self.interpreter.invoke()
 
-        detected_classes = self.__classify.get_classes(
-            self.interpreter,
-            self.__top_k,
-            self.__threshold)
+        scores = self.interpreter.get_tensor(self.__output_details[0]["index"])[0]
+        if self.__quantized:
+            scale, zero_point = self.__output_details[0]["quantization"]
+            scores = scale * (scores - zero_point)
+
+        top_k = min(self.__top_k, len(scores)) if self.__top_k is not None else len(scores)
+        clazz = collections.namedtuple("Class", ["id", "score"])
+        classes = [
+            clazz(i, scores[i])
+            for i in np.argpartition(scores, -top_k)[-top_k:]
+            if scores[i] >= self.__threshold
+        ]
+        detected_classes = sorted(classes, key=operator.itemgetter(1), reverse=True)
 
         result = []
         for detected_class in detected_classes:
             if self.__labels is None:
                 label = None
             else:
-                label = self.__labels.get(detected_class.id, detected_class.id)
+                label = self.__labels[detected_class.id]
             result.append(Class(detected_class.id, label, detected_class.score))
 
         return result
@@ -117,9 +110,8 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
         Loads the image classification model.
 
         # Arguments
-        accelerator_idx (int): The index of the Edge TPU to use.
+        accelerator_idx (int): Not used.
         """
-        CoralPerceptorBase.load(self, accelerator_idx)
-
-        input_shape = self.interpreter.get_input_details()[0]["shape"]
-        self.__inference_shape = (input_shape[2], input_shape[1])
+        CpuPerceptorBase.load(self)
+        self.__input_details = self.interpreter.get_input_details()
+        self.__output_details = self.interpreter.get_output_details()

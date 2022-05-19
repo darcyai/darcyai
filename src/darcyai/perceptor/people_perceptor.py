@@ -1,15 +1,11 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
-# pylint: skip-file
-import os
-import pathlib
+from darcyai.perceptor.multi_platform_perceptor_base import MultiPlatformPerceptorBase
+from darcyai.perceptor.coral.people_perceptor import PeoplePerceptor as CoralPeoplePerceptor
+from darcyai.perceptor.cpu.people_perceptor import PeoplePerceptor as CPUPeoplePerceptor
+from darcyai.perceptor.processor import Processor
 
-from darcyai.utils import validate_type, validate
-
-from .coral_perceptor_base import CoralPerceptorBase
-from ..people_perceptor_base import PeoplePerceptorBase, PoseEngine
-
-class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
+class PeoplePerceptor(MultiPlatformPerceptorBase):
     """
     Perceptor for detecting people in an image.
 
@@ -115,7 +111,8 @@ class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
             Default value: 1
 
         face_rectangle_y_factor (float):
-            Size adjustment factor for the height of the persons face, which can be used to make sure objects like hair and hats are captured
+            Size adjustment factor for the height of the persons face, which can be used to make
+            sure objects like hair and hats are captured
             Default value: 1.0
 
         show_centroid_ (bool):
@@ -163,7 +160,8 @@ class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
             Default value: 0.25
 
         object_tracking_creati (int):
-            Minimum number of frames out of N frames that an object must be present in the field of view before it is tracked
+            Minimum number of frames out of N frames that an object must be present in the field
+            of view before it is tracked
             Default value: 10
 
         object_tracking_creati (int):
@@ -175,7 +173,8 @@ class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
             Default value: 20
 
         person_tracking_creati (int):
-            Total number of frames used to evaluate a tracked object before it is promoted to a person
+            Total number of frames used to evaluate a tracked object before it is promoted
+            to a person
             Default value: 16
 
         show_person_id (bool):
@@ -230,25 +229,15 @@ class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
         person_count_fell_below_maximum
         person_occluded
     """
-    def __init__(self, **kwargs):
-        CoralPerceptorBase.__init__(self, **kwargs)
+    def __init__(self, processor_preference:list=None, **kwargs):
+        """
+        # Arguments
+        processor_preference: The order of processors to use.
+            Example: [Processor.CORAL_EDGE_TPU, Processor.CPU]
+        """
+        super().__init__(processor_preference=processor_preference)
 
-        self.__primary_pose_engine = None
-
-    def run(self, input_data, config):
-        return PeoplePerceptorBase.run(self, input_data, config, self.__primary_pose_engine)
-    
-    def load(self, accelerator_idx:[int, None]) -> None:
-        script_dir = pathlib.Path(__file__).parent.absolute()
-        model_file = os.path.join(script_dir, "models/posenet.tflite")
-        
-        if accelerator_idx is None:
-            self.__primary_pose_engine = PoseEngine(model_file)
-        else:
-            validate_type(accelerator_idx, int, "accelerator_idx must be an integer")
-            validate(accelerator_idx >= 0, "accelerator_idx must be greater than or equal to 0")
-
-            #TODO: implement accelerator index pass-through to PoseEngine class above
-            self.__primary_pose_engine = PoseEngine(model_file, tpu=True)
-        
-        super().set_loaded(True)        
+        if self.processor == Processor.CORAL_EDGE_TPU:
+            self.perceptor = CoralPeoplePerceptor(**kwargs)
+        elif self.processor == Processor.CPU:
+            self.perceptor = CPUPeoplePerceptor(**kwargs)

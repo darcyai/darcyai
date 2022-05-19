@@ -37,18 +37,10 @@ renderer:
       contents:
         - darcyai.pipeline.Pipeline
         - darcyai.pipeline.Pipeline.*
-    - title: Perceptor
-      contents:
-        - darcyai.perceptor.perceptor.Perceptor
-        - darcyai.perceptor.perceptor.Perceptor.*
     - title: StreamData
       contents:
         - darcyai.stream_data.StreamData
         - darcyai.stream_data.StreamData.*
-    - title: PerceptionObjectModel
-      contents:
-        - darcyai.perception_object_model.PerceptionObjectModel
-        - darcyai.perception_object_model.PerceptionObjectModel.*
     - title: Serializable
       contents:
         - darcyai.serializable.Serializable
@@ -107,25 +99,76 @@ renderer:
           contents:
             - darcyai.output.json_output_stream.JSONOutputStream
             - darcyai.output.json_output_stream.JSONOutputStream.*
-    - title: Coral Perceptors
+    - title: Perceptors
       children:
-        - title: CoralPerceptorBase
+        - title: Perceptor
           contents:
-            - darcyai.perceptor.coral.coral_perceptor_base
-            - darcyai.perceptor.coral.coral_perceptor_base.*
-        - title: ImageClassificationPerceptor
+            - darcyai.perceptor.perceptor.Perceptor
+            - darcyai.perceptor.perceptor.Perceptor.*
+        - title: PerceptionObjectModel
           contents:
-            - darcyai.perceptor.coral.image_classification_perceptor
-            - darcyai.perceptor.coral.image_classification_perceptor.*
-        - title: ObjectDetectionPerceptor
+            - darcyai.perception_object_model.PerceptionObjectModel
+            - darcyai.perception_object_model.PerceptionObjectModel.*
+        - title: Class
           contents:
-            - darcyai.perceptor.coral.object_detection_perceptor
-            - darcyai.perceptor.coral.object_detection_perceptor.*
-        - title: PeoplePerceptor
+            - darcyai.perceptor.detected_class.Class
+            - darcyai.perceptor.detected_class.Class.*
+        - title: Object
           contents:
-            - darcyai.perceptor.coral.people_perceptor
-            - darcyai.perceptor.coral.people_perceptor.PeoplePerceptor
+            - darcyai.perceptor.detected_object.Object
+            - darcyai.perceptor.detected_object.Object.*
         - title: PeoplePOM
           contents:
-            - darcyai.perceptor.coral.people_perceptor_pom
-            - darcyai.perceptor.coral.people_perceptor_pom.*
+            - darcyai.perceptor.people_perceptor_pom
+            - darcyai.perceptor.people_perceptor_pom.*
+        - title: ImageClassificationPerceptor
+          contents:
+            - darcyai.perceptor.image_classification_perceptor
+            - darcyai.perceptor.image_classification_perceptor.*
+        - title: ObjectDetectionPerceptor
+          contents:
+            - darcyai.perceptor.object_detection_perceptor
+            - darcyai.perceptor.object_detection_perceptor.*
+        - title: PeoplePerceptor
+          contents:
+            - darcyai.perceptor.people_perceptor
+            - darcyai.perceptor.people_perceptor.PeoplePerceptor
+        - title: Perceptor Utils
+          contents:
+            - darcyai.perceptor.perceptor_utils.*
+        - title: Coral Perceptors
+          children:
+            - title: CoralPerceptorBase
+              contents:
+                - darcyai.perceptor.coral.coral_perceptor_base
+                - darcyai.perceptor.coral.coral_perceptor_base.*
+            - title: ImageClassificationPerceptor
+              contents:
+                - darcyai.perceptor.coral.image_classification_perceptor
+                - darcyai.perceptor.coral.image_classification_perceptor.*
+            - title: ObjectDetectionPerceptor
+              contents:
+                - darcyai.perceptor.coral.object_detection_perceptor
+                - darcyai.perceptor.coral.object_detection_perceptor.*
+            - title: PeoplePerceptor
+              contents:
+                - darcyai.perceptor.coral.people_perceptor
+                - darcyai.perceptor.coral.people_perceptor.PeoplePerceptor
+        - title: CPU Perceptors
+          children:
+            - title: CpuPerceptorBase
+              contents:
+                - darcyai.perceptor.cpu.cpu_perceptor_base
+                - darcyai.perceptor.cpu.cpu_perceptor_base.*
+            - title: ImageClassificationPerceptor
+              contents:
+                - darcyai.perceptor.cpu.image_classification_perceptor
+                - darcyai.perceptor.cpu.image_classification_perceptor.*
+            - title: ObjectDetectionPerceptor
+              contents:
+                - darcyai.perceptor.cpu.object_detection_perceptor
+                - darcyai.perceptor.cpu.object_detection_perceptor.*
+            - title: PeoplePerceptor
+              contents:
+                - darcyai.perceptor.cpu.people_perceptor
+                - darcyai.perceptor.cpu.people_perceptor.PeoplePerceptor

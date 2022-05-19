@@ -40,7 +40,7 @@ live_feed = LiveFeedStream(path="/", port=3456, host="0.0.0.0")
 pipeline.add_output_stream("output", live_feed_callback, live_feed)
 
 script_dir = pathlib.Path(__file__).parent.absolute()
-model_file = os.path.join(script_dir, "face_mask_detection.tflite")
+model_file = os.path.join(script_dir, "models", "face_mask_detection.tflite")
 labels = {
     0: "No Mask",
     1: "Mask",

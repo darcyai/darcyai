@@ -104,10 +104,10 @@ class RGB():
     """
     Class to hold the configuration for the RGB.
 
-    Arguments:
-        red (int): The red value.
-        green (int): The green value.
-        blue (int): The blue value.
+    # Arguments
+    red (int): The red value.
+    green (int): The green value.
+    blue (int): The blue value.
     """
 
     def __init__(self, red: int, green: int, blue: int):
