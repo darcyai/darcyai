@@ -1,15 +1,11 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
-from typing import Any, Union
-
-from darcyai.config_registry import ConfigRegistry
-from darcyai.perceptor.people_perceptor_base import PeoplePerceptorBase
-from darcyai.perceptor.perceptor_utils import get_perceptor_processor
+from darcyai.perceptor.multi_platform_perceptor_base import MultiPlatformPerceptorBase
 from darcyai.perceptor.coral.people_perceptor import PeoplePerceptor as CoralPeoplePerceptor
 from darcyai.perceptor.cpu.people_perceptor import PeoplePerceptor as CPUPeoplePerceptor
 from darcyai.perceptor.processor import Processor
 
-class PeoplePerceptor(PeoplePerceptorBase):
+class PeoplePerceptor(MultiPlatformPerceptorBase):
     """
     Perceptor for detecting people in an image.
 
@@ -239,23 +235,9 @@ class PeoplePerceptor(PeoplePerceptorBase):
         processor_preference: The order of processors to use.
             Example: [Processor.CORAL_EDGE_TPU, Processor.CPU]
         """
-        super().__init__(**kwargs)
-
-        try:
-            self.processor = get_perceptor_processor(processor_preference)
-        except Exception:
-            self.processor = get_perceptor_processor([Processor.CORAL_EDGE_TPU, Processor.CPU])
-
-        if self.processor is None:
-            raise Exception("No processor found")
+        super().__init__(processor_preference=processor_preference)
 
         if self.processor == Processor.CORAL_EDGE_TPU:
-            self.__perceptor = CoralPeoplePerceptor(**kwargs)
+            self.perceptor = CoralPeoplePerceptor(**kwargs)
         elif self.processor == Processor.CPU:
-            self.__perceptor = CPUPeoplePerceptor(**kwargs)
-
-    def run(self, input_data: Any, config: ConfigRegistry = None) -> Any:
-        return self.__perceptor.run(input_data, config)
-
-    def load(self, accelerator_idx: Union[int, None] = None) -> None:
-        return self.__perceptor.load(accelerator_idx)
+            self.perceptor = CPUPeoplePerceptor(**kwargs)

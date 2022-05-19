@@ -185,8 +185,8 @@ class PoseEngine():
         return poses, self._inf_time
 
 class PeoplePerceptorBase(Perceptor):
-    def __init__(self, **kwargs):
-        super().__init__(model_path="", **kwargs)
+    def __init__(self):
+        super().__init__(model_path="")
 
         self.config_schema = [
             Config("minimum_face_threshold", "Minimum Face Threshold", "float", 0.4, "Confidence threshold for detecting the face as a percent certainty"),
