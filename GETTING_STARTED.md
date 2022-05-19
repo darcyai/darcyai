@@ -6,7 +6,7 @@ If you have not yet read the overview of Darcy AI terminology, it is recommended
 
 ## Thinking in terms of Darcy AI pipelines
 
-The concept of an AI pipeline is similar to complex event processing (CEP) and data stream processing, but there are some unique aspects you will notice when building with the Darcy AI.
+The concept of an AI [Pipeline](../terminology/#pipeline) is similar to complex event processing (CEP) and data stream processing, but there are some unique aspects you will notice when building with the Darcy AI.
 
 You are allowed only one Darcy AI pipeline in your application. There is a reason for this. A pipeline allows you to order the AI operations in a way that produces predictable trade-offs. One example is placing two different AI operations in parallel. On a hardware system that does not have enough AI accelerator hardware, Darcy will need to make a decision about how to run those operations. If you had more than one pipeline, Darcy would have conflicting intelligence about how to sequence the operations and you would be unable to predict which pipeline would be able to process.
 
@@ -29,7 +29,7 @@ Every application has a main processing loop that defines the code structure. Ev
 
 ## Start with an Input Stream
 
-The first stage of every pipeline cycle (also called a frame or pulse) is the unprocessed data coming from the Input Stream that you have chosen for your application. Choose an Input Stream that provides the sensor data that you want Darcy to process. This may be audio, video, LiDAR, thermal video, or just about anything you can imagine.
+The first stage of every pipeline cycle (also called a [frame or pulse](../terminology/#frame-cycle-or-pulse)) is the unprocessed data coming from the [Input Stream](../terminology/#input-stream) that you have chosen for your application. Choose an Input Stream that provides the sensor data that you want Darcy to process. This may be audio, video, LiDAR, thermal video, or just about anything you can imagine.
 
 A good example of an Input Stream is the CameraStream class that comes built-in with the Darcy AI SDK. This Input Stream allows you to specify the device path for a video camera. It will read the video camera feed and bring it into Darcy at the frame rate and resolution you specify.
 
@@ -42,7 +42,7 @@ camera = CameraStream(video_device="/dev/video0", fps=20)
 
 ## Attach a Perceptor
 
-The main processing of the Darcy AI Pipeline is found in the Percpetors. Adding a Perceptor is easy. You just instantiate the Perceptor class, perform any initial operations to set it up, and then add it to the Pipeline in whatever position you desire. Each Perceptor offers different configuration options and produces different results. Perceptors also offer events to which you can subscribe.
+The main processing of the Darcy AI Pipeline is found in the [Perceptors](../terminology/#perceptor). Adding a Perceptor is easy. You just instantiate the Perceptor class, perform any initial operations to set it up, and then add it to the Pipeline in whatever position you desire. Each Perceptor offers different configuration options and produces different results. Perceptors also offer events to which you can subscribe.
 
 A good example of a powerful Perceptor is the People Perceptor that is built-in with the Darcy AI SDK. This Perceptor is focused on detecting and processing people so you, as the developer, can simply work with semantic data results.
 
@@ -56,11 +56,11 @@ pipeline.add_perceptor("mypeople", people_ai, input_callback=people_input_callba
 
 ## Every pipeline step stores data in the Perception Object Model (POM)
 
-When a Perceptor has executed, its results are added to the Perception Object Model (POM) and the Pipeline continues to the next Perceptor or Output Stream if there are not further Perceptors in the Pipeline. The POM is like a shopping cart that gets loaded with data as it moves along. Everything is categorized in the POM so you can easily access the data associated with any Perceptor. The reference is the name you gave that Perceptor when adding it to the Pipeline.
+When a Perceptor has executed, its results are added to the [Perception Object Model (POM)](../terminology/#perception-object-model-pom) and the Pipeline continues to the next Perceptor or [Output Stream](../terminology/#output-stream) if there are not further Perceptors in the Pipeline. The POM is like a shopping cart that gets loaded with data as it moves along. Everything is categorized in the POM so you can easily access the data associated with any Perceptor. The reference is the name you gave that Perceptor when adding it to the Pipeline.
 
 Every Perceptor produces its own specific data structure and may also provide convenience functions for performing operations on the result data, such as retrieving a particular person from a set or grabbing the face image of a specific person. The data structure and set of convenience functions for each Perceptor can be found in the documentation for that Perceptor.
 
-Here is an example of a callback that is taking advantage of several powerful convenience functions in the POM under the results of the People Perceptor named as “mypeople”:
+Here is an example of a [callback](../terminology/#callback) that is taking advantage of several powerful convenience functions in the POM under the results of the People Perceptor named as “mypeople”:
 ```
 def my_callback(pom, input_data):
   current_display_frame = pom.mypeople.annotatedFrame().copy()

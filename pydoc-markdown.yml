@@ -24,6 +24,9 @@ renderer:
     - title: Raspberry Pi Setup
       name: raspberry-pi-setup
       source: SETUP_RPI.md
+    - title: Jetson Nano Setup
+      name: jetson-nano-setup
+      source: SETUP_JETSON.md
     - title: Build
       name: build
       source: BUILD.md
