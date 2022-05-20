@@ -17,14 +17,14 @@ class TestEventEmitter:
         emitter = EventEmitter()
         emitter.set_event_names(["event_1"])
         emitter.on("event_1", lambda: None)
-        assert len(emitter.get_event_handlers()["event_1"]) == 1
+        assert len(emitter.get_event_handlers("event_1")) == 1
 
     def test_on_adds_multiple_listeners(self):
         emitter = EventEmitter()
         emitter.set_event_names(["event_1"])
         emitter.on("event_1", lambda: None)
         emitter.on("event_1", lambda: None)
-        assert len(emitter.get_event_handlers()["event_1"]) == 2
+        assert len(emitter.get_event_handlers("event_1")) == 2
 
     def test_off_removes_listeners(self):
         emitter = EventEmitter()
@@ -32,7 +32,7 @@ class TestEventEmitter:
         emitter.on("event_1", lambda: None)
         emitter.on("event_1", lambda: None)
         emitter.off("event_1")
-        assert "event_1" not in emitter.get_event_handlers()
+        assert len(emitter.get_event_handlers("event_1")) == 0
 
     def test_get_event_names(self):
         emitter = EventEmitter()

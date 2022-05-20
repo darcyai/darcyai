@@ -30,6 +30,21 @@ class EventEmitter():
         """
         return self.__event_names
 
+    def get_event_handlers(self, event_name: str) -> List[callable]:
+        """
+        Gets the event handlers.
+
+        # Arguments
+        event_name (str): The event name.
+
+        # Returns
+        List[callable]: The event handlers.
+        """
+        if event_name not in self.__event_handlers:
+            return []
+
+        return self.__event_handlers[event_name]
+
     def on(self, event_name: str, handler: callable) -> None:
         """
         Adds an event handler.
