@@ -68,6 +68,7 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
         self.__inference_shape = None
 
 
+    # pylint: disable=unused-argument
     def run(self, input_data:Any, config:ConfigRegistry=None) -> List[Class]:
         """
         Runs the image classification model.

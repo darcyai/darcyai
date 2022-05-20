@@ -36,6 +36,7 @@ class PerceptorMock(Perceptor):
 
         self.__counter = 0
 
+    # pylint: disable=unused-argument
     def run(self, input_data, config):
         if self.__mock is not None:
             self.__mock.run(input_data)
@@ -45,6 +46,7 @@ class PerceptorMock(Perceptor):
         self.__counter += 1
         return f"Hello!!! {self.__counter}"
 
+    # pylint: disable=unused-argument
     def load(self, accelerator_idx=None):
         if self.__mock is not None:
             self.__mock.load(accelerator_idx=None)

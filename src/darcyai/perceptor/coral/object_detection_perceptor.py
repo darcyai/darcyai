@@ -45,7 +45,7 @@ class ObjectDetectionPerceptor(CoralPerceptorBase):
         self.interpreter = None
         self.__threshold = threshold
 
-
+    # pylint: disable=unused-argument
     def run(self, input_data:Any, config:ConfigRegistry=None) -> List[Object]:
         """
         Runs the object detection model on the input data.
