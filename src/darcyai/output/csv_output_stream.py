@@ -60,7 +60,7 @@ class CSVOutputStream(OutputStream):
         self.__delimiter = delimiter
         self.__quotechar = quotechar
 
-        self.config_schema = []
+        self.set_config_schema([])
 
     def write(self, data: list) -> None:
         """

@@ -11,7 +11,16 @@ class Configurable():
     """
 
     def __init__(self):
-        self.config_schema = []
+        self.__config_schema = []
+
+    def set_config_schema(self, config_schema: List[Config]) -> None:
+        """
+        Sets the config schema.
+
+        # Arguments
+        config_schema (list): The config schema.
+        """
+        self.__config_schema = config_schema
 
     def get_config_schema(self) -> List[Config]:
         """
@@ -20,4 +29,4 @@ class Configurable():
         # Returns
         List[Config]: The config schema.
         """
-        return self.config_schema
+        return self.__config_schema

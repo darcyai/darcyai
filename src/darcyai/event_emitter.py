@@ -9,8 +9,17 @@ class EventEmitter():
     """
 
     def __init__(self):
-        self.event_names = []
-        self.event_handlers = {}
+        self.__event_names = []
+        self.__event_handlers = {}
+
+    def set_event_names(self, event_names: List[str]) -> None:
+        """
+        Sets the event names.
+
+        # Arguments
+        event_names (list): The event names.
+        """
+        self.__event_names = event_names
 
     def get_event_names(self) -> List[str]:
         """
@@ -19,7 +28,7 @@ class EventEmitter():
         # Returns
         List[str]: The event names.
         """
-        return self.event_names
+        return self.__event_names
 
     def on(self, event_name: str, handler: callable) -> None:
         """
@@ -29,13 +38,13 @@ class EventEmitter():
         event_name (str): The event name.
         handler (callable): The handler function.
         """
-        if event_name not in self.event_names:
+        if event_name not in self.__event_names:
             raise Exception(f"Event name '{event_name}' is not valid.")
 
-        if event_name not in self.event_handlers:
-            self.event_handlers[event_name] = []
+        if event_name not in self.__event_handlers:
+            self.__event_handlers[event_name] = []
 
-        self.event_handlers[event_name].append(handler)
+        self.__event_handlers[event_name].append(handler)
 
     def off(self, event_name: str) -> None:
         """
@@ -44,13 +53,13 @@ class EventEmitter():
         # Arguments
         event_name (str): The event name.
         """
-        if event_name not in self.event_names:
+        if event_name not in self.__event_names:
             raise Exception(f"Event name '{event_name}' is not valid.")
 
-        if event_name not in self.event_handlers:
+        if event_name not in self.__event_handlers:
             return
 
-        del self.event_handlers[event_name]
+        del self.__event_handlers[event_name]
 
     def emit(self, event_name: str, *args, **kwargs) -> Any:
         """
@@ -61,8 +70,8 @@ class EventEmitter():
         *args (list): The arguments.
         **kwargs (dict): The keyword arguments.
         """
-        if event_name not in self.event_handlers:
+        if event_name not in self.__event_handlers:
             return
 
-        for handler in self.event_handlers[event_name]:
+        for handler in self.__event_handlers[event_name]:
             handler(*args, **kwargs)

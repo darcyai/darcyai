@@ -7,9 +7,9 @@ class SampleOutputStream(OutputStream):
     def __init__(self):
         super().__init__()
 
-        self.config_schema = [
+        self.set_config_schema([
             Config("test", "test", "bool", False, "Test"),
-        ]
+        ])
 
 
     def write(self, data):

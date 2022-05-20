@@ -188,7 +188,7 @@ class PeoplePerceptorBase(Perceptor):
     def __init__(self):
         super().__init__(model_path="")
 
-        self.config_schema = [
+        self.set_config_schema([
             Config("minimum_face_threshold", "Minimum Face Threshold", "float", 0.4, "Confidence threshold for detecting the face as a percent certainty"),
             Config("minimum_body_threshold", "Minimum Body Threshold", "float", 0.2, "Confidence threshold for detecting the body as a percent certainty"),
             Config("minimum_face_height", "Minimum Face Height", "int", 20, "The minimum height of the persons face in pixels that we want to work with"),
@@ -240,9 +240,9 @@ class PeoplePerceptorBase(Perceptor):
             Config("person_data_text_offset_y", "Person data text offset Y", "int", -40, "Y offset of the person data text"),
             Config("identity_text_prefix", "Identity text prefix", "str", "Person ID: ", "Text information that you want to display at the beginning of the person ID"),
             Config("rolling_video_storage_frame_count", "Rolling video storage frame count", "int", 100, "Number of the video frames to store while processing"),
-        ]
+        ])
 
-        self.event_names = [
+        self.set_event_names([
             "new_person_entered_scene",
             "person_facing_new_direction",
             "new_person_in_front",
@@ -253,7 +253,7 @@ class PeoplePerceptorBase(Perceptor):
             "max_person_count_reached",
             "person_count_fell_below_maximum",
             "person_occluded"
-            ]
+            ])
 
         self.__body_number = 0
         self.__body_history = OrderedDict()

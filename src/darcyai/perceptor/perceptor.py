@@ -134,5 +134,5 @@ class Perceptor(Configurable, EventEmitter):
             return
 
         self.__config_registry = ConfigRegistry()
-        for config in self.config_schema:
+        for config in self.get_config_schema():
             self.__config_registry.set_value(config.name, config.default_value)

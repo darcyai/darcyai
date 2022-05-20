@@ -70,7 +70,7 @@ class RestApiStream(OutputStream):
         elif content_type == "form":
             self.__headers["Content-Type"] = "application/x-www-form-urlencoded"
 
-        self.config_schema = []
+        self.set_config_schema([])
 
     def write(self, data: Any) -> Response:
         """

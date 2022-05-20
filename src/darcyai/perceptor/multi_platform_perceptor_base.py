@@ -59,3 +59,9 @@ class MultiPlatformPerceptorBase(Perceptor):
 
     def emit(self, event_name: str, *args, **kwargs) -> Any:
         return self.perceptor.emit(event_name, *args, **kwargs)
+
+    def set_event_names(self, event_names) -> None:
+        self.perceptor.set_event_names(event_names)
+
+    def set_config_schema(self, config_schema) -> None:
+        self.perceptor.set_config_schema(config_schema)

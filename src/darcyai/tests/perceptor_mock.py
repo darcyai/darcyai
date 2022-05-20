@@ -18,14 +18,14 @@ class PerceptorMock(Perceptor):
     def __init__(self, sleep=None, mock=None, **kwargs):
         super().__init__(model_path="models/p1.tflite", **kwargs)
 
-        self.config_schema = [
+        self.set_config_schema([
             Config("config_1", "Config 1", "str", "", "Config 1 Description"),
             Config("config_2", "Config 2", "int", 0, "Config 2 Description"),
             Config("config_3", "Config 3", "bool", False, "Config 3 Description"),
             Config("config_4", "Config 4", "rgb", RGB(255, 255, 255), "Config 4 Description"),
-        ]
+        ])
 
-        self.event_names = ["event_1", "event_2"]
+        self.set_event_names(["event_1", "event_2"])
 
         if sleep is not None:
             self.__sleep = sleep

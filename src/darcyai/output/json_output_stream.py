@@ -40,7 +40,7 @@ class JSONOutputStream(OutputStream):
             buffer_size=buffer_size,
             flush_interval=flush_interval)
 
-        self.config_schema = []
+        self.set_config_schema([])
 
     def write(self, data: dict) -> None:
         """

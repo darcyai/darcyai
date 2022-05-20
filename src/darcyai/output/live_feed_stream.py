@@ -80,7 +80,7 @@ class LiveFeedStream(OutputStream):
 
         threading.Thread(target=self.__start_api_server).start()
 
-        self.config_schema = [
+        self.set_config_schema([
             Config(
                 "show_timestamp",
                 "Show Timestamp",
@@ -93,7 +93,7 @@ class LiveFeedStream(OutputStream):
                 "str",
                 "%A %d %B %Y %I:%M:%S %p %f",
                 "Format of the timestamp"),
-        ]
+        ])
 
     def write(self, data: Any) -> Any:
         """
