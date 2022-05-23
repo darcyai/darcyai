@@ -30,10 +30,12 @@ setuptools.setup(
             "src/darcyai/swagger/static/js/*",
             "src/darcyai/swagger/templates/*",
             "src/darcyai/perceptor/coral/models/*",
-            "src/darcyai/perceptor/coral/posenet_lib/aarch64/*",
-            "src/darcyai/perceptor/coral/posenet_lib/armv7a/*",
-            "src/darcyai/perceptor/coral/posenet_lib/armv7l/*",
-            "src/darcyai/perceptor/coral/posenet_lib/x86_64/*"
+            "src/darcyai/perceptor/cpu/models/*",
+            "src/darcyai/perceptor/posenet_lib/aarch64/*",
+            "src/darcyai/perceptor/posenet_lib/arm64/*",
+            "src/darcyai/perceptor/posenet_lib/armv7a/*",
+            "src/darcyai/perceptor/posenet_lib/armv7l/*",
+            "src/darcyai/perceptor/posenet_lib/x86_64/*"
         ]
     },
     package_dir={"": "src"},
