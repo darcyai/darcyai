@@ -149,7 +149,7 @@ class TestObjectDetectionPerceptor:
             with patch("darcyai.perceptor.coral.edgetpu.make_interpreter", mock_make_interpreter):
                 with patch("darcyai.perceptor.coral.dataset.read_label_file", mock_dataset):
                     _ = ObjectDetectionPerceptor(threshold=0.5,
-                                                        model_path="model.tflite",
-                                                        labels_file="labels.txt")
+                                                 model_path="model.tflite",
+                                                 labels_file="labels.txt")
 
         mock_dataset.assert_called_once_with("labels.txt")

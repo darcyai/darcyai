@@ -25,30 +25,31 @@ class CpuPerceptorBase(Perceptor):
         """
         self.interpreter = self.__tf_interpreter(model_path=self.model_path)
         self.interpreter.allocate_tensors()
-        super().set_loaded(True)        
+        super().set_loaded(True)
 
     @staticmethod
-    def read_label_file(filename:str, has_ids:bool=True) -> dict:
+    def read_label_file(filename:str, has_ids:bool=True, encoding:str="UTF-8") -> dict:
         """
         Reads the labels file.
 
         # Arguments
         filename (str): The path to the labels file.
         has_ids (bool): Whether the labels file contains IDs.
+        encoding (str): The encoding of the labels file.
 
         # Returns
         dict: A dictionary containing the labels.
         """
         labels = {}
 
-        with open(filename, "r") as file:
+        with open(filename, "r", encoding=encoding) as file:
             for line in file:
                 line = line.strip()
                 if len(line) == 0:
                     continue
                 if has_ids:
-                    (id, label) = line.split(" ", maxsplit=1)
-                    labels[int(id)] = label.strip()
+                    (class_id, label) = line.split(" ", maxsplit=1)
+                    labels[int(class_id)] = label.strip()
                 else:
                     labels[len(labels)] = line
 

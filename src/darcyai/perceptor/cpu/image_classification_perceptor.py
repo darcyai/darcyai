@@ -74,8 +74,10 @@ class ImageClassificationPerceptor(CpuPerceptorBase):
         # Returns
         (list[Any], list(str)): A tuple containing the detected classes and the labels.
         """
-        resized_input = cv2.resize(input_data, (self.__input_details[0]["shape"][1], self.__input_details[0]["shape"][2]))
-        resized_input = resized_input.reshape([1, self.__input_details[0]["shape"][1], self.__input_details[0]["shape"][2], 3])
+        resized_input = cv2.resize(
+            input_data, (self.__input_details[0]["shape"][1], self.__input_details[0]["shape"][2]))
+        resized_input = resized_input.reshape(
+            [1, self.__input_details[0]["shape"][1], self.__input_details[0]["shape"][2], 3])
 
         self.interpreter.set_tensor(self.__input_details[0]["index"], resized_input)
         self.interpreter.invoke()
@@ -105,6 +107,7 @@ class ImageClassificationPerceptor(CpuPerceptorBase):
         return result
 
 
+    # pylint: disable=unused-argument
     def load(self, accelerator_idx:[int, None]) -> None:
         """
         Loads the image classification model.
