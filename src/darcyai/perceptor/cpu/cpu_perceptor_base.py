@@ -1,6 +1,6 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
-import importlib
+import importlib.util
 
 from darcyai.perceptor.perceptor import Perceptor
 from darcyai.utils import import_module

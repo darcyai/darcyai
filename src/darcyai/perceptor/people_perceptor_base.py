@@ -4,7 +4,7 @@
 import cv2
 import collections
 import enum
-import importlib
+import importlib.util
 import math
 import numpy as np
 import os

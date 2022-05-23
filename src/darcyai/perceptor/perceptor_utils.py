@@ -1,6 +1,6 @@
 # Copyright (c) 2022 Edgeworx, Inc. All rights reserved.
 
-import importlib
+import importlib.util
 import multiprocessing
 
 from darcyai.perceptor.coral.coral_perceptor_base import CoralPerceptorBase
