@@ -48,7 +48,7 @@ A good example of a powerful Perceptor is the People Perceptor that is built-in 
 
 Here is an example of creating a People Perceptor instance and adding it to the Pipeline:
 ```
-from darcyai.perceptor.coral.people_perceptor import PeoplePerceptor
+from darcyai.perceptor.people_perceptor import PeoplePerceptor
 
 people_ai = PeoplePerceptor()
 pipeline.add_perceptor("mypeople", people_ai, input_callback=people_input_callback)

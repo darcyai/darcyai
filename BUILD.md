@@ -40,7 +40,7 @@ import cv2
 import os
 import pathlib
 
-from darcyai.perceptor.coral.people_perceptor import PeoplePerceptor
+from darcyai.perceptor.people_perceptor import PeoplePerceptor
 from darcyai.input.camera_stream import CameraStream
 from darcyai.output.live_feed_stream import LiveFeedStream
 from darcyai.pipeline import Pipeline
@@ -103,7 +103,7 @@ def live_feed_callback(pom, input_data):
 pipeline.add_output_stream("output", live_feed_callback, live_feed)
 ```
 
-## Define an event Output Stream and an input Output Stream and instantiate the People Pipeline
+## Define an event Output Stream and an input Output Stream and instantiate the People Perceptor
 
 Just like the LiveFeed Output Stream, the People [Perceptor](../terminology/#perceptor) must have the callback already defined before it can work with those callbacks. The input callback simply takes the [Input Stream](../terminology/#input-stream) data and sends it onward to the People [Perceptor](../terminology/#perceptor). The “New Person” event callback simply prints the unique person identifier string to the console output when a new person has been detected by Darcy.
 ```
@@ -156,7 +156,7 @@ import cv2
 import os
 import pathlib
 
-from darcyai.perceptor.coral.people_perceptor import PeoplePerceptor
+from darcyai.perceptor.people_perceptor import PeoplePerceptor
 from darcyai.input.camera_stream import CameraStream
 from darcyai.output.live_feed_stream import LiveFeedStream
 from darcyai.pipeline import Pipeline
