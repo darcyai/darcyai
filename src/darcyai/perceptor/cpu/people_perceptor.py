@@ -44,7 +44,7 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
             Color of the face rectangle
             Default value: RGB(255, 0, 0)
 
-        face_rectangle_thick (int):
+        face_rectangle_thickness (int):
             Thickness of the face rectangle
             Default value: 1
 
@@ -52,7 +52,7 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
             Color of the body rectangle
             Default value: RGB(0, 255, 0)
 
-        body_rectangle_thick (int):
+        body_rectangle_thickness (int):
             Thickness of the body rectangle
             Default value: 1
 
@@ -116,19 +116,19 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
             Size adjustment factor for the height of the persons face, which can be used to make sure objects like hair and hats are captured
             Default value: 1.0
 
-        show_centroid_ (bool):
+        show_centroid_dots (bool):
             Show centroid information (center of the face or body)
             Default value: False
 
-        centroid_dots_c (rgb):
+        centroid_dots_color (rgb):
             Color of the centroid information
             Default value: RGB(255, 255, 255)
 
-        centroid_dots_ (int):
+        centroid_dots_size (int):
             Size of the centroid information
             Default value: 1
 
-        object_tracking_allowed_missed_fr (int):
+        object_tracking_allowed_missed_frames (int):
             Object tracking allowed missed frames
             Default value: 50
 
@@ -140,11 +140,11 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
             Number of video frames used to track an object in the field of view
             Default value: 3
 
-        object_tracking_removal_c (int):
+        object_tracking_removal_count (int):
             Number of frames to wait before removing an object from tracking
             Default value: 50
 
-        object_tracking_centroid_we (float):
+        object_tracking_centroid_weight (float):
             Level of importance that centroid data has when tracking objects
             Default value: 0.25
 
@@ -160,19 +160,19 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
             Level of importance that size data has when tracking objects
             Default value: 0.25
 
-        object_tracking_creati (int):
+        object_tracking_creation_m (int):
             Minimum number of frames out of N frames that an object must be present in the field of view before it is tracked
             Default value: 10
 
-        object_tracking_creati (int):
+        object_tracking_creation_n (int):
             Total number of frames used to evaluate an object before it is tracked
             Default value: 7
 
-        person_tracking_creati (int):
+        person_tracking_creation_m (int):
             Minimum number of frames out of N frames needed to promote a tracked object to a person
             Default value: 20
 
-        person_tracking_creati (int):
+        person_tracking_creation_m (int):
             Total number of frames used to evaluate a tracked object before it is promoted to a person
             Default value: 16
 

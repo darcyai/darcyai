@@ -62,7 +62,7 @@ pip3 install darcyai
 This part is quite easy. Just follow the comments to learn more about these 3 important lines of code.
 ```
 #Instantiate an Camera Stream input stream object
-camera = CameraStream(video_device="/dev/video0", fps=20)
+camera = CameraStream(video_device=0, fps=20)
 
 #Instantiate the Pipeline object and pass it the Camera Stream object as its input stream source
 pipeline = Pipeline(input_stream=camera)

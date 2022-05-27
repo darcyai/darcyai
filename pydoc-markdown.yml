@@ -27,6 +27,9 @@ renderer:
     - title: Jetson Nano Setup
       name: jetson-nano-setup
       source: SETUP_JETSON.md
+    - title: macOS Setup
+      name: macos-setup
+      source: SETUP_MACOS.md
     - title: Build
       name: build
       source: BUILD.md
