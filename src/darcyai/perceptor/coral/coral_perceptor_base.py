@@ -58,11 +58,11 @@ class CoralPerceptorBase(Perceptor):
         ```
         """
         tpus = []
-        if importlib.util.find_spec("pycoral.utils.edgetpu") is not None:
-            try:
+        try:
+            if importlib.util.find_spec("pycoral.utils.edgetpu") is not None:
                 edgetpu = import_module("pycoral.utils.edgetpu")
                 tpus = edgetpu.list_edge_tpus()
-            except Exception:
-                pass
+        except Exception:
+            pass
 
         return tpus

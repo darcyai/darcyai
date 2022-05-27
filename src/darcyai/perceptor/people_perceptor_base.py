@@ -65,11 +65,16 @@ class PoseEngine():
 
         script_dir = os.path.dirname(os.path.realpath(__file__))
 
+        if arch == "x86_64" and os.uname().sysname == "Darwin":
+            darwin = "darwin"
+        else:
+            darwin = ""
+
         posenet_shared_lib = os.path.join(
-            script_dir, 'posenet_lib', arch, 'posenet_decoder.so')
+            script_dir, "posenet_lib", arch, darwin, "posenet_decoder.so")
 
         if not os.path.exists(posenet_shared_lib):
-            raise ValueError('Posenet library not found at %s' % posenet_shared_lib)
+            raise ValueError("Posenet library not found at %s" % posenet_shared_lib)
 
         if importlib.util.find_spec("tflite_runtime") is not None:
             tf = import_module("tflite_runtime.interpreter")
@@ -85,7 +90,7 @@ class PoseEngine():
 
         if tpu:
             self.__edgetpu = import_module("pycoral.utils.edgetpu")
-            edgetpu_shared_lib = 'libedgetpu.so.1'
+            edgetpu_shared_lib = "libedgetpu.so.1"
             edgetpu_delegate = load_delegate(edgetpu_shared_lib)
             delegates.append(edgetpu_delegate)
 
@@ -100,8 +105,8 @@ class PoseEngine():
                 self._input_tensor_shape[3] != 3 or
                 self._input_tensor_shape[0] != 1):
             raise ValueError(
-                ('Image model should have input shape [1, height, width, 3]!'
-                 ' This model has {}.'.format(self._input_tensor_shape)))
+                ("Image model should have input shape [1, height, width, 3]!"
+                 " This model has {}.".format(self._input_tensor_shape)))
         _, self._input_height, self._input_width, self._input_depth = self.get_input_tensor_shape()
         self._input_type = self._interpreter.get_input_details()[0]['dtype']
         self._inf_time = 0

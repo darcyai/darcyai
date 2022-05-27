@@ -35,6 +35,7 @@ setuptools.setup(
             "src/darcyai/perceptor/posenet_lib/arm64/*",
             "src/darcyai/perceptor/posenet_lib/armv7a/*",
             "src/darcyai/perceptor/posenet_lib/armv7l/*",
+            "src/darcyai/perceptor/posenet_lib/x86_64/darwin/*"
             "src/darcyai/perceptor/posenet_lib/x86_64/*"
         ]
     },

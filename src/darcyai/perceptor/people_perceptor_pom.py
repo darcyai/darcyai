@@ -256,7 +256,7 @@ class PeoplePOM(Serializable):
             int: The size of the face
         """
         if not self.__people[person_id]["has_face"]:
-            return 0
+            return (0, 0)
 
         rectangle = self.__people[person_id]["face_rectangle"]
         width = rectangle[1][0] - rectangle[0][0]
@@ -274,7 +274,7 @@ class PeoplePOM(Serializable):
             int: The size of the body
         """
         if not self.__people[person_id]["has_body"]:
-            return 0
+            return (0, 0)
 
         rectangle = self.__people[person_id]["body_rectangle"]
         width = rectangle[1][0] - rectangle[0][0]
@@ -292,7 +292,7 @@ class PeoplePOM(Serializable):
             int: The size of the whole person
         """
         if not self.__people[person_id]["has_body"] or not self.__people[person_id]["has_face"]:
-            return 0
+            return (0, 0)
 
         body_size = self.bodySize(person_id)
         face_size = self.faceSize(person_id)
