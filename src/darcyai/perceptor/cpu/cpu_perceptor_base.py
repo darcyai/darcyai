@@ -29,7 +29,8 @@ class CpuPerceptorBase(Perceptor):
         """
         Loads the perceptor.
         """
-        self.interpreter = self.__tf_interpreter(model_path=self.model_path, num_threads=self.__num_cpu_threads)
+        self.interpreter = \
+            self.__tf_interpreter(model_path=self.model_path, num_threads=self.__num_cpu_threads)
         self.interpreter.allocate_tensors()
         super().set_loaded(True)
 
