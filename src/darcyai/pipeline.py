@@ -3,6 +3,7 @@
 import json
 import os
 import pathlib
+import platform
 import threading
 import time
 from collections import OrderedDict
@@ -10,7 +11,7 @@ from collections.abc import Iterable
 from flask import Flask, request, Response, jsonify, render_template
 from json import JSONEncoder
 from multiprocessing.pool import ThreadPool
-from signal import SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGQUIT, signal
+from signal import SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM, signal
 from typing import Callable, Any, Dict, Tuple, Union, List
 from unittest.mock import sentinel
 
@@ -204,7 +205,14 @@ class Pipeline():
         if universal_rest_api:
             threading.Thread(target=self.__start_api_server).start()
 
-        signals = [SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGQUIT]
+        signals = [SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM]
+        #pylint: disable=import-outside-toplevel
+        if platform.system() == "Windows":
+            from signal import SIGBREAK
+            signals.append(SIGBREAK)
+        else:
+            from signal import SIGQUIT
+            signals.append(SIGQUIT)
         for sig in signals:
             signal(sig, self.stop)
 
