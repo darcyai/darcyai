@@ -20,7 +20,8 @@ class ImageClassificationPerceptor(MultiPlatformPerceptorBase):
                  top_k:int=None,
                  mean:float=128.0,
                  std:float=128.0,
-                 quantized:bool=True):
+                 quantized:bool=True,
+                 num_cpu_threads:int=1):
         """
         # Arguments
         processor_preference: A dictionary of processor preference.
@@ -30,6 +31,8 @@ class ImageClassificationPerceptor(MultiPlatformPerceptorBase):
         mean (float): The mean of the image (Coral Edge TPU).
         std (float): The standard deviation of the image (Coral Edge TPU).
         quantized (bool): Whether the model is quantized (CPU).
+        num_cpu_threads (int): The number of threads to use for inference (CPU).
+            Defaults to 1.
 
         # Example
         ```python
@@ -79,4 +82,5 @@ class ImageClassificationPerceptor(MultiPlatformPerceptorBase):
                                                              top_k=top_k,
                                                              labels_file=labels_file,
                                                              labels=labels,
-                                                             quantized=quantized)
+                                                             quantized=quantized,
+                                                             num_cpu_threads=num_cpu_threads)

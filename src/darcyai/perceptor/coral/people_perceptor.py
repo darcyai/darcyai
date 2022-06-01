@@ -6,8 +6,8 @@ import pathlib
 
 from darcyai.utils import validate_type, validate
 
-from .coral_perceptor_base import CoralPerceptorBase
-from ..people_perceptor_base import PeoplePerceptorBase, PoseEngine
+from darcyai.perceptor.coral.coral_perceptor_base import CoralPerceptorBase
+from darcyai.perceptor.people_perceptor_base import PeoplePerceptorBase, PoseEngine
 
 class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
     """

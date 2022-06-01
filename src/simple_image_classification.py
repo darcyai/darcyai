@@ -52,7 +52,8 @@ image_classification = ImageClassificationPerceptor(processor_preference={
                                                     },
                                                     threshold=0.5,
                                                     top_k=1,
-                                                    quantized=True)
+                                                    quantized=True,
+                                                    num_cpu_threads=2)
 
 pipeline.add_perceptor("image_classification", image_classification, input_callback=perceptor_input_callback)
 

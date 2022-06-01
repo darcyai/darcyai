@@ -24,6 +24,8 @@ class ImageClassificationPerceptor(CpuPerceptorBase):
     labels_file (str): The path to the labels file.
     labels (dict): A dictionary of labels.
     quantized (bool): Whether the model is quantized.
+    num_cpu_threads (int): The number of threads to use for inference (CPU).
+        Defaults to 1.
     """
 
 
@@ -33,8 +35,9 @@ class ImageClassificationPerceptor(CpuPerceptorBase):
                  labels_file:str=None,
                  labels:dict=None,
                  quantized:bool=True,
+                 num_cpu_threads:int=1,
                  **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(num_cpu_threads=num_cpu_threads, **kwargs)
 
         validate_not_none(threshold, "threshold is required")
         validate_type(threshold, (float, int), "threshold must be a number")

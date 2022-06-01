@@ -16,13 +16,19 @@ class ObjectDetectionPerceptor(MultiPlatformPerceptorBase):
     """
 
 
-    def __init__(self, processor_preference:dict, threshold:float, quantized:bool=True):
+    def __init__(self,
+                 processor_preference:dict,
+                 threshold:float,
+                 quantized:bool=True,
+                 num_cpu_threads:int=1):
         """
         # Arguments
         processor_preference: A dictionary of processor preference.
             The key is the processor. Values are dictionaries of model paths and labels.
         threshold (float): The threshold for object detection.
         quantized (bool): Whether the model is quantized (CPU).
+        num_cpu_threads (int): The number of threads to use for inference (CPU).
+            Defaults to 1.
 
         # Example
         ```python
@@ -70,4 +76,5 @@ class ObjectDetectionPerceptor(MultiPlatformPerceptorBase):
                                                          threshold=threshold,
                                                          labels_file=labels_file,
                                                          labels=labels,
-                                                         quantized=quantized)
+                                                         quantized=quantized,
+                                                         num_cpu_threads=num_cpu_threads)

@@ -52,7 +52,8 @@ object_detection = ObjectDetectionPerceptor(processor_preference={
                                                 },
                                             },
                                             threshold=0.5,
-                                            quantized=False)
+                                            quantized=False,
+                                            num_cpu_threads=2)
 
 pipeline.add_perceptor("object_detection", object_detection, accelerator_idx=0, input_callback=perceptor_input_callback)
 

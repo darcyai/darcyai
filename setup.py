@@ -32,11 +32,18 @@ setuptools.setup(
             "src/darcyai/perceptor/coral/models/*",
             "src/darcyai/perceptor/cpu/models/*",
             "src/darcyai/perceptor/posenet_lib/aarch64/*",
+            "src/darcyai/perceptor/posenet_lib/aarch64/linux/*",
             "src/darcyai/perceptor/posenet_lib/arm64/*",
+            "src/darcyai/perceptor/posenet_lib/arm64/darwin/*",
+            "src/darcyai/perceptor/posenet_lib/arm64/linux/*",
             "src/darcyai/perceptor/posenet_lib/armv7a/*",
+            "src/darcyai/perceptor/posenet_lib/armv7a/linux/*",
             "src/darcyai/perceptor/posenet_lib/armv7l/*",
-            "src/darcyai/perceptor/posenet_lib/x86_64/darwin/*"
+            "src/darcyai/perceptor/posenet_lib/armv7l/linux/*",
             "src/darcyai/perceptor/posenet_lib/x86_64/*"
+            "src/darcyai/perceptor/posenet_lib/x86_64/darwin/*"
+            "src/darcyai/perceptor/posenet_lib/x86_64/linux/*"
+            "src/darcyai/perceptor/posenet_lib/x86_64/windows/*"
         ]
     },
     package_dir={"": "src"},

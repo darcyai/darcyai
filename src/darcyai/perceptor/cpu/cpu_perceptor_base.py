@@ -3,14 +3,18 @@
 import importlib.util
 
 from darcyai.perceptor.perceptor import Perceptor
-from darcyai.utils import import_module
+from darcyai.utils import import_module, validate_not_none, validate_type, validate
 
 class CpuPerceptorBase(Perceptor):
     """
     Base class for all CPU Perceptors.
     """
-    def __init__(self, **kwargs):
+    def __init__(self, num_cpu_threads:int=1, **kwargs):
         super().__init__(**kwargs)
+
+        validate_not_none(num_cpu_threads, "num_cpu_threads is required")
+        validate_type(num_cpu_threads, int, "num_cpu_threads must be an integer")
+        validate(num_cpu_threads > 0, "num_cpu_threads must be greater than 0")
 
         if importlib.util.find_spec("tflite_runtime") is not None:
             tf = import_module("tflite_runtime.interpreter")
@@ -19,11 +23,13 @@ class CpuPerceptorBase(Perceptor):
             tf = import_module("tensorflow")
             self.__tf_interpreter = tf.lite.Interpreter
 
+        self.__num_cpu_threads = num_cpu_threads
+
     def load(self) -> None:
         """
         Loads the perceptor.
         """
-        self.interpreter = self.__tf_interpreter(model_path=self.model_path)
+        self.interpreter = self.__tf_interpreter(model_path=self.model_path, num_threads=self.__num_cpu_threads)
         self.interpreter.allocate_tensors()
         super().set_loaded(True)
 

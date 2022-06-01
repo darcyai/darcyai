@@ -229,15 +229,16 @@ class PeoplePerceptor(MultiPlatformPerceptorBase):
         person_count_fell_below_maximum
         person_occluded
     """
-    def __init__(self, processor_preference:list=None, **kwargs):
+    def __init__(self, processor_preference:list=None, num_cpu_threads:int=1, **kwargs):
         """
         # Arguments
         processor_preference: The order of processors to use.
             Example: [Processor.CORAL_EDGE_TPU, Processor.CPU]
+        num_cpu_threads: Number of CPU threads to use.
         """
         super().__init__(processor_preference=processor_preference)
 
         if self.processor == Processor.CORAL_EDGE_TPU:
             self.perceptor = CoralPeoplePerceptor(**kwargs)
         elif self.processor == Processor.CPU:
-            self.perceptor = CPUPeoplePerceptor(**kwargs)
+            self.perceptor = CPUPeoplePerceptor(num_cpu_threads=num_cpu_threads, **kwargs)

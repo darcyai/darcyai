@@ -62,7 +62,7 @@ live_feed = LiveFeedStream(path="/", port=3456, host="0.0.0.0")
 pipeline.add_output_stream("output", live_feed_callback, live_feed)
 
 #Instantiate a People Perceptor
-people_ai = PeoplePerceptor([Processor.CORAL_EDGE_TPU, Processor.CPU])
+people_ai = PeoplePerceptor([Processor.CORAL_EDGE_TPU, Processor.CPU], num_cpu_threads=2)
 #Subscribe to the "New Person" event from the People Perceptor and use our callback from above as the handler
 people_ai.on("new_person_entered_scene", new_person_callback)
 

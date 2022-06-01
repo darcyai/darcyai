@@ -8,6 +8,7 @@ import importlib.util
 import math
 import numpy as np
 import os
+import platform
 import time
 import uuid
 
@@ -48,8 +49,23 @@ Pose = collections.namedtuple('Pose', ['keypoints', 'score'])
 
 class PoseEngine():
     """Engine used for pose tasks."""
+    __EDGETPU_SHARED_LIB = {
+        'Linux': 'libedgetpu.so.1',
+        'Darwin': 'libedgetpu.1.dylib',
+        'Windows': 'edgetpu.dll'
+        }[platform.system()]
+    __POSENET_SHARED_LIB = {
+        'Linux': 'posenet_decoder.so',
+        'Darwin': 'posenet_decoder.so',
+        'Windows': 'posenet_decoder.dll'
+        }[platform.system()]
 
-    def __init__(self, model_path, mirror=False, arch=os.uname().machine, tpu:bool=True):
+    def __init__(self,
+                 model_path,
+                 mirror=False,
+                 arch=platform.uname().machine,
+                 tpu:bool=True,
+                 num_cpu_threads:int=1):
         """
         Creates a PoseEngine with given model.
         
@@ -58,20 +74,17 @@ class PoseEngine():
         mirror: Flip keypoints horizontally.
         arch: Architecture of the device.
         tpu: Whether to use TPU or CPU.
-        
-        Raises:
-        ValueError: An error occurred when model output is invalid.
+        num_cpu_threads: Number of CPU threads to use.
         """
+
+        if arch == "AMD64":
+            arch = "x86_64"
 
         script_dir = os.path.dirname(os.path.realpath(__file__))
 
-        if arch == "x86_64" and os.uname().sysname == "Darwin":
-            darwin = "darwin"
-        else:
-            darwin = ""
-
+        sysname = platform.uname().system.lower()
         posenet_shared_lib = os.path.join(
-            script_dir, "posenet_lib", arch, darwin, "posenet_decoder.so")
+            script_dir, "posenet_lib", arch, sysname, PoseEngine.__POSENET_SHARED_LIB)
 
         if not os.path.exists(posenet_shared_lib):
             raise ValueError("Posenet library not found at %s" % posenet_shared_lib)
@@ -90,12 +103,11 @@ class PoseEngine():
 
         if tpu:
             self.__edgetpu = import_module("pycoral.utils.edgetpu")
-            edgetpu_shared_lib = "libedgetpu.so.1"
-            edgetpu_delegate = load_delegate(edgetpu_shared_lib)
+            edgetpu_delegate = load_delegate(PoseEngine.__EDGETPU_SHARED_LIB)
             delegates.append(edgetpu_delegate)
 
         self._interpreter = Interpreter(
-            model_path, experimental_delegates=delegates)
+            model_path, experimental_delegates=delegates, num_threads=num_cpu_threads)
         self._interpreter.allocate_tensors()
 
         self._mirror = mirror
