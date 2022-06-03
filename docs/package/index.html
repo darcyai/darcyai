@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Packaging - Darcy AI</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Packaging";
+    var mkdocs_page_input_path = "package.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Darcy AI</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../terminology/">Terminology</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../darcy-ai-explorer/">Darcy AI Explorer</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../raspberry-pi-setup/">Raspberry Pi Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../jetson-nano-setup/">Jetson Nano Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../macos-setup/">macOS Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../windows-setup/">Windows Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../build/">Build</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Packaging</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-you-will-accomplish">What you will accomplish</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#overview-of-the-process">Overview of the process</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#add-a-dockerfile-to-the-same-directory-as-your-python-file">Add a Dockerfile to the same directory as your Python file</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#create-a-builder-namespace-for-your-build-process">Create a builder namespace for your build process</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build-your-docker-container">Build your Docker container</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#next-step-is-to-deploy-your-darcy-ai-application">Next step is to deploy your Darcy AI application</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../deploy/">Deploy</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../pipeline/">Pipeline</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../streamdata/">StreamData</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../serializable/">Serializable</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Pipeline Config</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../pipeline-config/config/">Config</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../pipeline-config/rgb/">RGB</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Input Streams</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/inputstream/">InputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/inputmultistream/">InputMultiStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/camerastream/">CameraStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/videofilestream/">VideoFileStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/videostreamdata/">VideoStreamData</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Output Streams</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/outputstream/">OutputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/livefeedstream/">LiveFeedStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/restapistream/">RestApiStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/csvoutputstream/">CSVOutputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/jsonoutputstream/">JSONOutputStream</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Perceptors</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptor/">Perceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptionobjectmodel/">PerceptionObjectModel</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/class/">Class</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/object/">Object</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/peoplepom/">PeoplePOM</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/peopleperceptor/">PeoplePerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptor-utils/">Perceptor Utils</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="#">Coral Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/coralperceptorbase/">CoralPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="#">CPU Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/cpuperceptorbase/">CpuPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Darcy AI</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Packaging</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="packaging-your-darcy-ai-application">Packaging your Darcy AI application</h1>
+<p>Once you have a Darcy AI application built and tested, the next step is to package it for deployment. Packaging pulls together your Python code, the Darcy AI libraries, and anything else needed to run your application and puts it all into a set of Docker containers that will run on a wide variety of hardware devices.</p>
+<h2 id="what-you-will-accomplish">What you will accomplish</h2>
+<p>By the end of this guide, you will be able to make deployable Darcy AI application packages that will run on any hardware that meets the requirements for Darcy AI. The list of compatible hardware is extensive, allowing you to deploy your Darcy AI applications to the devices that fit your solution needs.</p>
+<h2 id="requirements">Requirements</h2>
+<p>In order to package your Darcy AI applications, you only need to meet a couple of requirements:
+- Docker Desktop for Mac, Windows, or Linux
+- A Docker Hub account for hosting your container images (or another registry compatible with Docker)</p>
+<h2 id="overview-of-the-process">Overview of the process</h2>
+<p>To perform the packaging process, you will simply need to follow a few steps.
+- Create a Dockerfile so Docker knows how to build your container images
+- Open a builder namespace
+- Build the container images for multiple platforms (different CPU architectures)
+- Upload your container images to your Docker Hub account or similar container registry</p>
+<h2 id="add-a-dockerfile-to-the-same-directory-as-your-python-file">Add a Dockerfile to the same directory as your Python file</h2>
+<p>To build your Darcy AI application container, you only need your Python file and a Dockerfile. A Dockerfile is just a text file with the specific name <code>Dockerfile</code> that tells the Docker command tools how to make your containers. You can include as many files as you want in your container. The commands for adding those files are discussed below. Make sure you create the Dockerfile in the same directory as your Python file and change the name below from YOURFILE.py to the actual name of your file.</p>
+<pre><code>FROM darcyai/darcy-ai-coral:dev
+
+RUN python3 -m pip install darcyai
+
+COPY ./YOURFILE.py /src/app.py
+
+CMD python3 -u /src/app.py
+</code></pre>
+<p>The <code>FROM</code> command tells Docker which base image to use. It will build your application container starting from the base image.</p>
+<p>Every <code>RUN</code> command tells Docker to execute a step. In the example above, the step is to install the <code>darcyai</code> Python library. We don't include that library in the base image because that would make it more difficult to use the latest Darcy AI library. Using this single command in your Dockerfile, you will always get the latest Darcy AI library when building your container images.</p>
+<p>Similarly, every <code>COPY</code> command tells Docker to take something from your local environment and make a copy of it in your container. Use this command to copy in files that are part of your application, such as .mp4 videos, .tflite AI models, and additional Python code files. The first part of the command is the source and the second part is the destination. In the example above, the <code>YOURFILE.py</code> file is copied into the <code>/src/</code> directory in the container and renamed to <code>app.py</code>.</p>
+<p>The <code>CMD</code> command tells Docker to execute this command when the container is started. This is different than the <code>RUN</code> command which tells Docker to execute the command while building the container. The <code>CMD</code> statement is found at the end because the container must be fully built before this statement. When the container starts, the instructions found after the <code>CMD</code> will be executed. In the example above, the instructions are to run the <code>/src/app.py</code> Python file using <code>python3</code> and we have added the <code>-u</code> parameter which tells the Python3 engine to use unbuffered output because we want to see the output in the container logs unhindered.</p>
+<h2 id="create-a-builder-namespace-for-your-build-process">Create a builder namespace for your build process</h2>
+<p>The <code>docker buildx</code> command line tool that was installed with your Docker Desktop will allow you to build and package container images for several target device platforms (CPU architectures) at the same time. If you do not have the <code>docker buildx</code> tool installed, you can learn about it and install it from the <a href="https://docs.docker.com/buildx/working-with-buildx/">Docker BuildX Guide</a>.</p>
+<p>The first step is to create a named builder that BuildX can use. You can do that with the following command. Replace YOURNAME with the name you would like to use.</p>
+<p>NOTE: If your installation of Docker Desktop requires you to use <code>sudo</code> when using <code>docker</code> commands, simply add the <code>sudo</code> to the beginning of everything shown in this guide.</p>
+<pre><code>docker buildx create --name YOURNAME
+</code></pre>
+<p>And now that you have created a builder namespace, let's set BuildX to use that namespace with this command.</p>
+<pre><code>docker buildx use YOURNAME
+</code></pre>
+<h2 id="build-your-docker-container">Build your Docker container</h2>
+<p>Now that you have a working BuildX builder namespace and a Dockerfile in your current working directory where your Python file is located, you can do the actual build.</p>
+<p>NOTE: If you don't already have an account, create one now at <a href="https://hub.docker.com">https://hub.docker.com</a>. You will be given an organization which is your username.</p>
+<p>Use the following command to perform the build. You will need to replace <code>organization</code> with your actual Docker Hub organization name. Also replace <code>application-name</code> with the name you want to use for this container. The part after the <code>:</code> is the tag. You can put anything you want here. It is a common practice to put a version number, such as <code>1.0.0</code> in the example below.</p>
+<pre><code>docker buildx build -t organization/application-name:1.0.0 --platform linux/amd64,linux/arm64,linux/arm/v7 --push .
+</code></pre>
+<p>The <code>--platform</code> part of this build command specifies the platforms for which you want containers built. It is recommended to build for the list of platforms shown in the example here. This will allow you to run your Darcy AI application container on 64-bit x86 devices and both 64-bit and 32-bit ARM devices.</p>
+<p>The <code>--push</code> part of the command tells Docker to upload your container images to Docker Hub when it is finished building.</p>
+<p>Don't forget the <code>.</code> on the end of the command. That tells the BuildX tool to look for your <code>Dockerfile</code> in the current directory.</p>
+<p>Your build process may take 10 or 15 minutes if you are building for the first time and you do not have a very fast internet connection. This is because the underlying container <a href="../terminology/#docker-base-image">base images</a> will need to be downloaded. After the first build, this process should only take a few minutes. You can watch the output of the command to see the build progress. A separate container image will be built for each of the platforms specified in the command. Additionally a container manifest file will be created and added to the container registry (Docker Hub) so different platforms will know which image to download and start.</p>
+<h2 id="next-step-is-to-deploy-your-darcy-ai-application">Next step is to deploy your Darcy AI application</h2>
+<p>Now you have a fully packaged Darcy AI application! The next step is to learn how to deploy. Follow the <a href="../deploy/">Deployment Guide</a> to learn how to deploy your packaged Darcy AI apps.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../deploy/" class="btn btn-neutral float-right" title="Deploy">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../build/" class="btn btn-neutral" title="Build"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../build/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../deploy/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

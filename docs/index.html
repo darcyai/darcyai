@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>Darcy AI</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> Darcy AI</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href=".">Home</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#introducing-the-darcy-ai-platform">Introducing the Darcy AI platform</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-use-this-sdk">How to use this SDK</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-you-need">What you need</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#system-requirements-for-developer-environments">System requirements for developer environments</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#system-requirements-for-running-deployed-darcy-ai-applications">System requirements for running deployed Darcy AI applications</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#darcy-ai-ready-edge-boards">Darcy AI ready edge boards</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting started</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#building">Building</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#packaging">Packaging</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#deploying">Deploying</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#getting-help">Getting help</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#python-packages-for-darcy-ai">Python packages for Darcy AI</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#darcy-cloud">Darcy Cloud</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#other-helpful-links">Other helpful links</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="getting-started/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="terminology/">Terminology</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="darcy-ai-explorer/">Darcy AI Explorer</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="raspberry-pi-setup/">Raspberry Pi Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="jetson-nano-setup/">Jetson Nano Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="macos-setup/">macOS Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="windows-setup/">Windows Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="build/">Build</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="package/">Packaging</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="deploy/">Deploy</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="pipeline/">Pipeline</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="streamdata/">StreamData</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="serializable/">Serializable</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Pipeline Config</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="pipeline-config/config/">Config</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="pipeline-config/rgb/">RGB</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Input Streams</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="input-streams/inputstream/">InputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="input-streams/inputmultistream/">InputMultiStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="input-streams/camerastream/">CameraStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="input-streams/videofilestream/">VideoFileStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="input-streams/videostreamdata/">VideoStreamData</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Output Streams</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="output-streams/outputstream/">OutputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="output-streams/livefeedstream/">LiveFeedStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="output-streams/restapistream/">RestApiStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="output-streams/csvoutputstream/">CSVOutputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="output-streams/jsonoutputstream/">JSONOutputStream</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Perceptors</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="perceptors/perceptor/">Perceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="perceptors/perceptionobjectmodel/">PerceptionObjectModel</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="perceptors/class/">Class</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="perceptors/object/">Object</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="perceptors/peoplepom/">PeoplePOM</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="perceptors/peopleperceptor/">PeoplePerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="perceptors/perceptor-utils/">Perceptor Utils</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="#">Coral Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="perceptors/coral-perceptors/coralperceptorbase/">CoralPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="perceptors/coral-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="perceptors/coral-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="perceptors/coral-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="#">CPU Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="perceptors/cpu-perceptors/cpuperceptorbase/">CpuPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="perceptors/cpu-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="perceptors/cpu-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="perceptors/cpu-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">Darcy AI</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="darcy-ai-sdk">Darcy AI SDK</h1>
+<p>This is the official software development kit (SDK) for building on the Darcy AI platform.</p>
+<p>To browse this document and all of the other documentation on a local web server, run the <a href="https://github.com/darcyai/darcyai/blob/main/apidocs.bash">apidocs.bash</a> script and then visit <a href="http://localhost:8000">http://localhost:8000</a>.</p>
+<h2 id="introducing-the-darcy-ai-platform">Introducing the Darcy AI platform</h2>
+<p>Darcy is an artificial intelligence (AI) that is focused on real-time interactions with the world. It has a variety of senses, such as vision and hearing, that allow it to perceive the local environment. You can give Darcy additional senses, such as LiDAR or thermal vision, to expand its capabilities. Darcy is present in every device where a Darcy AI application is running. It runs entirely in each device. No data needs to leave the device and no computation is done in the cloud.</p>
+<p>Darcy was designed to bring AI technology into the real world while keeping privacy and security as top priorities. Building real-time AI applications is very challenging. The Darcy AI SDK is a developer platform for computer vision and other applications which handles all of the most difficult and repetitive problems for you so you can focus on building amazing solutions.</p>
+<p>With the Darcy AI SDK, you get everything you need to build real-time AI applications. If you can write web applications with Node.js or you have moderate Python experience, then you can develop a fully functioning AI app with Darcy. The SDK comes with documentation, build instructions, example applications, and more.</p>
+<h2 id="how-to-use-this-sdk">How to use this SDK</h2>
+<p>Use this document and the other markdown files in this directory to learn about the Darcy AI platform and to get started. The guide documents will take you from an absolute beginner to building and deploying your own Darcy AI applications. The <a href="https://github.com/darcyai/darcyai/blob/main/docs">docs</a> folder contains the full technical Darcy AI programming documentation.</p>
+<p>To browse this document and all of the other documentation on a local web server, run the <a href="https://github.com/darcyai/darcyai/blob/main/apidocs.bash">apidocs.bash</a> script and then visit <a href="http://localhost:8000">http://localhost:8000</a>.</p>
+<h2 id="what-you-need">What you need</h2>
+<p>To develop and package Darcy AI applications, you only need a Mac, Windows, or Linux computer. To run Darcy AI applications on devices, you just need one or more devices that meet the minimum requirements below.</p>
+<h3 id="system-requirements-for-developer-environments">System requirements for developer environments</h3>
+<ul>
+<li>Any modern CPU (both x86 and ARM processors will work)</li>
+<li>4GB of RAM</li>
+<li>Camera (the integrated webcam on most laptops will work)</li>
+<li>5GB of available disk space for Docker, Python, required libraries, and your application containers</li>
+<li>Optional: Google Coral AI accelerator for testing accelerated processing</li>
+</ul>
+<h3 id="system-requirements-for-running-deployed-darcy-ai-applications">System requirements for running deployed Darcy AI applications</h3>
+<ul>
+<li>ARM or x86 CPU (two or more cores recommended)</li>
+<li>Google Coral AI accelerator (more than one Coral increases performance for many applications)</li>
+<li>512MB of RAM (4GB or more recommended)</li>
+<li>Camera (required for using Darcy with live video)</li>
+<li>Internet connectivity (wired Ethernet or WiFi)</li>
+<li>200MB available disk space (1GB or more recommended and your application size will vary)</li>
+</ul>
+<h3 id="darcy-ai-ready-edge-boards">Darcy AI ready edge boards</h3>
+<ul>
+<li>Raspberry Pi with Coral USB<ul>
+<li>Raspberry Pi 4 single board computer <a href="https://www.raspberrypi.com/products/raspberry-pi-4-model-b/">https://www.raspberrypi.com/products/raspberry-pi-4-model-b/</a></li>
+<li>Google Coral AI accelerator USB module <a href="https://coral.ai/products/accelerator/">https://coral.ai/products/accelerator/</a></li>
+</ul>
+</li>
+<li>Nvidia Jetson Nano with Coral USB<ul>
+<li>Jetson Nano Developer Kit <a href="https://developer.nvidia.com/embedded/jetson-nano-developer-kit">https://developer.nvidia.com/embedded/jetson-nano-developer-kit</a></li>
+<li>Google Coral AI accelerator USB module <a href="https://coral.ai/products/accelerator/">https://coral.ai/products/accelerator/</a></li>
+</ul>
+</li>
+<li>Google Coral Dev Board <a href="https://coral.ai/products/dev-board/">https://coral.ai/products/dev-board/</a></li>
+<li>Google Coral Dev Board Mini <a href="https://coral.ai/products/dev-board-mini/">https://coral.ai/products/dev-board-mini/</a></li>
+<li>ASUS Tinker T <a href="https://www.asus.com/us/Networking-IoT-Servers/AIoT-Industrial-Solutions/Tinker-Board-Series/Tinker-Edge-T/">https://www.asus.com/us/Networking-IoT-Servers/AIoT-Industrial-Solutions/Tinker-Board-Series/Tinker-Edge-T/</a></li>
+</ul>
+<h2 id="getting-started">Getting started</h2>
+<p>If you haven't already become familiar with the Darcy AI platform terminology, check out this <a href="../terminology/">Terminology Guide</a> to get up to speed quickly.</p>
+<p>The best way to get started with Darcy is to see it in action. Start by trying out the Darcy AI Explorer application in the <a href="../darcy-ai-explorer/">Darcy Explorer Guide</a>.</p>
+<p>When you are ready to create, you can launch your Darcy AI developer journey with the <a href="../getting-started/">Getting Started Guide</a>.</p>
+<h2 id="building">Building</h2>
+<p>To prepare your Mac OS computer as a development environment for building Darcy AI applications, follow the <a href="../macos-setup/">Mac OS X Environment Setup Guide</a>.</p>
+<p>To prepare your Windows computer as a development environment for building Darcy AI applications, follow the <a href="../windows-setup/">Windows Environment Setup Guide</a>.</p>
+<p>Learn how to build and run a Darcy AI application using your favorite IDE with the <a href="../build/">Build Guide</a>.</p>
+<h2 id="packaging">Packaging</h2>
+<p>Learn how to package your Darcy AI application into a container that includes all of the dependencies needed to run on many different devices with the <a href="../package/">Packaging Guide</a>.</p>
+<h2 id="deploying">Deploying</h2>
+<p>Learn how to deploy your Darcy AI application to your edge devices using the Darcy Cloud in the <a href="../deploy/">Deployment Guide</a>.</p>
+<h2 id="documentation">Documentation</h2>
+<p>Open the Darcy AI technical documentation to search and browse the API with code examples. This is a local documentation site that will run directly in your browser. The documentation is specific to each version of the Darcy AI SDK so it's the best place to reference when building. To browse this document and all of the other documentation on a local web server, run the <a href="https://github.com/darcyai/darcyai/blob/main/apidocs.bash">apidocs.bash</a> script and then visit <a href="http://localhost:8000">http://localhost:8000</a>.</p>
+<p>If you prefer to access the latest Darcy AI developer documentation with an internet connection, use <a href="https://darcyai.github.io/darcyai-sdk/">Hosted Darcy AI Documentation</a>.</p>
+<h2 id="resources">Resources</h2>
+<h3 id="examples">Examples</h3>
+<p>The <a href="https://github.com/darcyai/darcyai/blob/main/src/examples">examples</a> folder contains a diverse set of sample applications that you can use as a reference or as a start of your own Darcy AI application. The code is commented to help you understand what to do and when to do it. Here are some short descriptions to help you understand what examples are available. Some example applications are stored in their own code repositories to make learning and building easier.</p>
+<ul>
+<li>
+<p>Darcy AI Explorer - this demo application is a rich showcase of what the Darcy AI system can do. Use the source code as a model for building a full-featured production application. <a href="https://github.com/darcyai/darcyai-explorer">https://github.com/darcyai/darcyai-explorer</a></p>
+</li>
+<li>
+<p>Real-time Audio Analysis - Build and deploy this Darcy AI demo application to learn how to add audio capabilities to Darcy and listen for important sounds. <a href="https://github.com/darcyai/darcyai/blob/main/src/examples/audio_analysis">Audio Analysis</a></p>
+</li>
+<li>
+<p>Basic Darcy AI <a href="../terminology/#pipeline">Pipeline</a> - Use this demo application to learn the basics of creating a Darcy AI Pipeline. <a href="https://github.com/darcyai/darcyai/blob/main/src/examples/basic_pipeline">Basic Pipeline</a></p>
+</li>
+<li>
+<p>Sample <a href="../terminology/#output-stream">Output Stream</a> - Learn how to create a Darcy AI Output Stream by adding this example to your application. The example sends your Darcy AI output to an Amazon Web Services S3 bucket. <a href="https://github.com/darcyai/darcyai/blob/main/src/examples/output_streams">Output Stream</a></p>
+</li>
+<li>
+<p>Sample <a href="../terminology/#perceptor">Perceptors</a> - Learn how to build your own Darcy AI Perceptors with the examples in this directory. There is a basic mock perceptor that you can use as a template. There is a face detector perceptor that uses an <a href="../terminology/#ai-model">AI model</a> to find faces. There is also a face mask detector perceptor that checks a person's face for a mask. <a href="https://github.com/darcyai/darcyai/blob/main/src/examples/perceptors">Perceptors</a></p>
+</li>
+<li>
+<p>Heart Rate Demo - this demo application is a good example of how to build an edge application that is made of multiple microservices that communicate with each other. <a href="https://github.com/darcyai/heart-rate-demo">https://github.com/darcyai/heart-rate-demo</a></p>
+</li>
+<li>
+<p>Sample Build Files - Get a sample Dockerfile in this folder so you don't have to create one from scratch. <a href="https://github.com/darcyai/darcyai/blob/main/src/examples/build">Build Files</a></p>
+</li>
+<li>
+<p>Sample Deployment Files - Get a sample application YAML file in this folder so you can just replace the default values and deploy your edge AI application easily. <a href="https://github.com/darcyai/darcyai/blob/main/src/examples/deploy">Deployment Files</a></p>
+</li>
+</ul>
+<h3 id="getting-help">Getting help</h3>
+<ul>
+<li>Get help from the other Darcy AI developers, the Darcy team, and the whole Darcy community on the Darcy AI Forum at <a href="https://discuss.darcy.ai/c/darcy-ai/">https://discuss.darcy.ai/c/darcy-ai/</a></li>
+<li>Report and track bugs in the Darcy AI platform and SDK using Github issues <a href="https://github.com/darcyai/darcyai/issues">https://github.com/darcyai/darcyai/issues</a></li>
+</ul>
+<h3 id="python-packages-for-darcy-ai">Python packages for Darcy AI</h3>
+<ul>
+<li>Darcy AI package <a href="https://pypi.org/project/darcyai/">https://pypi.org/project/darcyai/</a></li>
+</ul>
+<h3 id="darcy-cloud">Darcy Cloud</h3>
+<p>Deploy and manage edge applications including Darcy AI applications with the Darcy Cloud. Create an account for free at <a href="https://cloud.darcy.ai">https://cloud.darcy.ai</a></p>
+<h3 id="other-helpful-links">Other helpful links</h3>
+<ul>
+<li>Company website for Edgeworx, the providers of the Darcy AI platform <a href="https://darcy.ai">https://darcy.ai</a></li>
+<li>Official website for the Tensorflow AI project <a href="https://www.tensorflow.org">https://www.tensorflow.org</a></li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="getting-started/" class="btn btn-neutral float-right" title="Getting Started">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+      <span><a href="getting-started/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme_extra.js" defer></script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.2.3
+Build Date UTC : 2022-06-03 04:03:54.911279+00:00
+-->

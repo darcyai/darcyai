@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Windows Setup - Darcy AI</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Windows Setup";
+    var mkdocs_page_input_path = "windows-setup.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Darcy AI</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../terminology/">Terminology</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../darcy-ai-explorer/">Darcy AI Explorer</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../raspberry-pi-setup/">Raspberry Pi Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../jetson-nano-setup/">Jetson Nano Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../macos-setup/">macOS Setup</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Windows Setup</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-you-will-need">What you will need</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-python-369-or-greater">Install Python 3.6.9 or greater</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-opencv">Install OpenCV</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-the-pillow-library">Install the Pillow library</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#install-the-numpy-library">Install the Numpy library</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#install-the-imutils-library">Install the Imutils library</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-the-darcyai-library">Install the DarcyAI library</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-docker-for-windows">Install Docker for Windows</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-tensorflow">Install TensorFlow</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#start-building-your-ai-applications-with-darcy">Start building your AI applications with Darcy</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../build/">Build</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../package/">Packaging</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../deploy/">Deploy</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../pipeline/">Pipeline</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../streamdata/">StreamData</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../serializable/">Serializable</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Pipeline Config</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../pipeline-config/config/">Config</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../pipeline-config/rgb/">RGB</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Input Streams</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/inputstream/">InputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/inputmultistream/">InputMultiStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/camerastream/">CameraStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/videofilestream/">VideoFileStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/videostreamdata/">VideoStreamData</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Output Streams</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/outputstream/">OutputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/livefeedstream/">LiveFeedStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/restapistream/">RestApiStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/csvoutputstream/">CSVOutputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/jsonoutputstream/">JSONOutputStream</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Perceptors</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptor/">Perceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptionobjectmodel/">PerceptionObjectModel</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/class/">Class</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/object/">Object</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/peoplepom/">PeoplePOM</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/peopleperceptor/">PeoplePerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptor-utils/">Perceptor Utils</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="#">Coral Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/coralperceptorbase/">CoralPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="#">CPU Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/cpuperceptorbase/">CpuPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Darcy AI</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Windows Setup</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="setting-up-your-windows-environment-for-darcy-ai-development">Setting up your Windows environment for Darcy AI development</h1>
+<p>You can use any Windows computer to build Darcy AI applications. After you finish setting up your computer as a development environment, you will be able to write, test, and debug your Darcy AI apps. Then you can package your code and deploy the applications to any edge device!</p>
+<h2 id="what-you-will-need">What you will need</h2>
+<ul>
+<li>Windows laptop or desktop</li>
+<li>A video camera that you want to use (a built-in webcam or USB webcam works very well for this purpose)</li>
+<li>5GB or more of free disk space to accommodate code libraries and application container images</li>
+<li>Any IDE software that will allow you to write and debug Python (use your favorite IDE)</li>
+</ul>
+<h2 id="install-python-369-or-greater">Install Python 3.6.9 or greater</h2>
+<p>If you do not already have Python version 3.6.9 or greater, you will need to install it now. Darcy AI requires this version of Python or higher. Note that Python 2.x versions are also not compatible with Darcy AI. You need Python 3 and the <code>darcyai</code> library will not install with versions below 3.6.9.</p>
+<p>Download and install the latest or your preferred version of Python3 from Python.org directly <a href="https://www.python.org/downloads/windows/">https://www.python.org/downloads/windows/</a>.</p>
+<p>If you have both Python 2.x versions and Python 3.x versions on your Windows machine, you may need to use <code>python3</code> and <code>pip3</code> for all of the commands instead of just <code>python</code> and <code>pip</code>. You can make adjustments to how Python gets launched on your Windows computer if you want by following this guide <a href="https://docs.python.org/3/using/windows.html#python-launcher-for-windows">https://docs.python.org/3/using/windows.html#python-launcher-for-windows</a>.</p>
+<h2 id="install-opencv">Install OpenCV</h2>
+<p>Install the OpenCV package for Python with the command <code>py -m pip install opencv-python</code></p>
+<h2 id="install-the-pillow-library">Install the Pillow library</h2>
+<p>Install the Pillow package for Python with the command <code>py -m pip install Pillow</code>.</p>
+<h3 id="install-the-numpy-library">Install the Numpy library</h3>
+<p>Install the numpy package for Python with the command <code>py -m pip install numpy</code>.</p>
+<h3 id="install-the-imutils-library">Install the Imutils library</h3>
+<p>Install the imutils package for Python with the command <code>py -m pip install imutils</code>.</p>
+<h2 id="install-the-darcyai-library">Install the DarcyAI library</h2>
+<p>Install the Darcy AI library for Python with the command <code>py -m pip install darcyai</code>.</p>
+<h2 id="install-docker-for-windows">Install Docker for Windows</h2>
+<p>If you don't already have Docker on your Mac, install it now by following the official instructions <a href="https://docs.docker.com/desktop/windows/install/">https://docs.docker.com/desktop/windows/install/</a>.</p>
+<p>After you have installed Docker, you can use <code>docker</code> commands on the command line. You will be using these commands to package your Darcy AI applications for deployment, including deploying to edge devices that are a different CPU architecture than your Windows machine! To make sure you can use the latest Docker build commands like <code>buildx</code> you can enable experimental features using this guide <a href="https://docs.docker.com/desktop/windows/#command-line">https://docs.docker.com/desktop/windows/#command-line</a>. This will tell Docker to allow use of the latest tools which will save you a lot of time when packaging your apps!</p>
+<h2 id="install-tensorflow">Install TensorFlow</h2>
+<p>Install TensorFlow for Python with the command <code>py -m pip install tensorflow</code></p>
+<h2 id="start-building-your-ai-applications-with-darcy">Start building your AI applications with Darcy</h2>
+<p>Go to the <a href="../build/">Build Guide</a> and get started building with Darcy AI!</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../build/" class="btn btn-neutral float-right" title="Build">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../macos-setup/" class="btn btn-neutral" title="macOS Setup"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../macos-setup/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../build/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

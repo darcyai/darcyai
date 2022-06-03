@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Perceptor - Darcy AI</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Perceptor";
+    var mkdocs_page_input_path = "perceptors/perceptor.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Darcy AI</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../getting-started/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../terminology/">Terminology</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../darcy-ai-explorer/">Darcy AI Explorer</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../raspberry-pi-setup/">Raspberry Pi Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../jetson-nano-setup/">Jetson Nano Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../macos-setup/">macOS Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../windows-setup/">Windows Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../build/">Build</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../package/">Packaging</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../deploy/">Deploy</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../pipeline/">Pipeline</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../streamdata/">StreamData</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../serializable/">Serializable</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Pipeline Config</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../pipeline-config/config/">Config</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../pipeline-config/rgb/">RGB</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Input Streams</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../input-streams/inputstream/">InputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../input-streams/inputmultistream/">InputMultiStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../input-streams/camerastream/">CameraStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../input-streams/videofilestream/">VideoFileStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../input-streams/videostreamdata/">VideoStreamData</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Output Streams</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../output-streams/outputstream/">OutputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../output-streams/livefeedstream/">LiveFeedStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../output-streams/restapistream/">RestApiStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../output-streams/csvoutputstream/">CSVOutputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../output-streams/jsonoutputstream/">JSONOutputStream</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Perceptors</span></p>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Perceptor</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#perceptor-objects">Perceptor Objects</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#run">run</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#load">load</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#is_loaded">is_loaded</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#set_loaded">set_loaded</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#set_config_value">set_config_value</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_config_value">get_config_value</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#init_config_registry">init_config_registry</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptionobjectmodel/">PerceptionObjectModel</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../class/">Class</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../object/">Object</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../peoplepom/">PeoplePOM</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../peopleperceptor/">PeoplePerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptor-utils/">Perceptor Utils</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="#">Coral Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../coral-perceptors/coralperceptorbase/">CoralPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../coral-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../coral-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../coral-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="#">CPU Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../cpu-perceptors/cpuperceptorbase/">CpuPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../cpu-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../cpu-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../cpu-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Darcy AI</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Perceptors &raquo;</li>
+        
+      
+    
+    <li>Perceptor</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <p><a id="darcyai.perceptor.perceptor"></a></p>
+<h1 id="darcyaiperceptorperceptor">darcyai.perceptor.perceptor</h1>
+<p><a id="darcyai.perceptor.perceptor.Perceptor"></a></p>
+<h2 id="perceptor-objects">Perceptor Objects</h2>
+<pre><code class="language-python">class Perceptor(Configurable, EventEmitter)
+</code></pre>
+<p>The Perceptor class is the base class for all perceptors.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>model_path</strong> (<code>str</code>): The path to the model file.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.perceptor import Perceptor
+&gt;&gt;&gt; class MyPerceptor(Perceptor):
+&gt;&gt;&gt;     def __init__(self):
+...         Perceptor.__init__(self, &quot;path/to/model&quot;)
+
+&gt;&gt;&gt;     def run(self, input_data):
+...         return input_data.data
+
+&gt;&gt;&gt;     def load(self):
+...         pass
+</code></pre>
+<p><a id="darcyai.perceptor.perceptor.Perceptor.run"></a></p>
+<h4 id="run">run</h4>
+<pre><code class="language-python">def run(input_data: Any, config: ConfigRegistry = None) -&gt; Any
+</code></pre>
+<p>Runs the perceptor on the input data.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>input_data</strong> (<code>StreamData</code>): The input data to run the perceptor on.</li>
+<li><strong>config</strong> (<code>ConfigRegistry</code>): The configuration for the perceptor. Defaults to <code>None</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p><code>Any</code>: The output of the perceptor.</p>
+<p><a id="darcyai.perceptor.perceptor.Perceptor.load"></a></p>
+<h4 id="load">load</h4>
+<pre><code class="language-python">def load(accelerator_idx: Union[int, None] = None) -&gt; None
+</code></pre>
+<p>Loads the perceptor.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>accelerator_idx</strong> (<code>int, None</code>): The index of the accelerator to load
+    the perceptor on. Defaults to <code>None</code>.</li>
+</ul>
+<p><a id="darcyai.perceptor.perceptor.Perceptor.is_loaded"></a></p>
+<h4 id="is_loaded">is_loaded</h4>
+<pre><code class="language-python">def is_loaded() -&gt; bool
+</code></pre>
+<p>Checks if the perceptor is loaded.</p>
+<p><strong>Returns</strong></p>
+<p><code>bool</code>: True if the perceptor is loaded, False otherwise.</p>
+<p><a id="darcyai.perceptor.perceptor.Perceptor.set_loaded"></a></p>
+<h4 id="set_loaded">set_loaded</h4>
+<pre><code class="language-python">def set_loaded(loaded: bool) -&gt; None
+</code></pre>
+<p>Sets the perceptor loaded state.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>loaded</strong> (<code>bool</code>): The loaded state.</li>
+</ul>
+<p><a id="darcyai.perceptor.perceptor.Perceptor.set_config_value"></a></p>
+<h4 id="set_config_value">set_config_value</h4>
+<pre><code class="language-python">def set_config_value(key: str, value: Any)
+</code></pre>
+<p>Sets a config value.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>key</strong> (<code>str</code>): The key of the config.</li>
+<li><strong>value</strong> (<code>Any</code>): The value to set.</li>
+</ul>
+<p><a id="darcyai.perceptor.perceptor.Perceptor.get_config_value"></a></p>
+<h4 id="get_config_value">get_config_value</h4>
+<pre><code class="language-python">def get_config_value(key: str) -&gt; Any
+</code></pre>
+<p>Gets a config value.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>key</strong> (<code>str</code>): The key of the config.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p><code>Any</code>: The value of the config.</p>
+<p><a id="darcyai.perceptor.perceptor.Perceptor.init_config_registry"></a></p>
+<h4 id="init_config_registry">init_config_registry</h4>
+<pre><code class="language-python">def init_config_registry()
+</code></pre>
+<p>Initializes the config registry.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../perceptionobjectmodel/" class="btn btn-neutral float-right" title="PerceptionObjectModel">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../output-streams/jsonoutputstream/" class="btn btn-neutral" title="JSONOutputStream"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../output-streams/jsonoutputstream/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../perceptionobjectmodel/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

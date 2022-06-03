@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Jetson Nano Setup - Darcy AI</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Jetson Nano Setup";
+    var mkdocs_page_input_path = "jetson-nano-setup.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Darcy AI</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting Started</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../terminology/">Terminology</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../darcy-ai-explorer/">Darcy AI Explorer</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../raspberry-pi-setup/">Raspberry Pi Setup</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Jetson Nano Setup</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#hardware-you-will-need">Hardware you will need</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#follow-the-nvidia-jetston-nano-guide-to-setup-your-board">Follow the Nvidia Jetston Nano guide to setup your board</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#open-a-command-line-session">Open a command line session</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#linux-package-manager-update">Linux package manager update</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#install-curl">Install curl</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#install-jpeg-codec">Install JPEG codec</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-pip3-package-manager-for-python3">Install Pip3 package manager for Python3</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#edit-bashrc-file-to-use-python3-and-pip3">Edit .bashrc file to use Python3 and Pip3</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-pillow-python-library">Install Pillow Python library</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-imutils-python-library">Install imutils Python library</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-darcyai-python-library">Install DarcyAI Python library</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#add-your-user-to-the-docker-linux-group">Add your user to the Docker Linux group</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#install-google-coral-software-libraries">Install Google Coral software libraries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reboot-your-jetson-nano">Reboot your Jetson Nano</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#check-for-google-coral-usb-devices">Check for Google Coral USB device(s)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#run-the-system-check-script">Run the system check script</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#start-building-your-ai-applications-with-darcy">Start building your AI applications with Darcy</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../macos-setup/">macOS Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../windows-setup/">Windows Setup</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../build/">Build</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../package/">Packaging</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../deploy/">Deploy</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../pipeline/">Pipeline</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../streamdata/">StreamData</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../serializable/">Serializable</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Pipeline Config</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../pipeline-config/config/">Config</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../pipeline-config/rgb/">RGB</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Input Streams</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/inputstream/">InputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/inputmultistream/">InputMultiStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/camerastream/">CameraStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/videofilestream/">VideoFileStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../input-streams/videostreamdata/">VideoStreamData</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Output Streams</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/outputstream/">OutputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/livefeedstream/">LiveFeedStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/restapistream/">RestApiStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/csvoutputstream/">CSVOutputStream</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../output-streams/jsonoutputstream/">JSONOutputStream</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Perceptors</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptor/">Perceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptionobjectmodel/">PerceptionObjectModel</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/class/">Class</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/object/">Object</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/peoplepom/">PeoplePOM</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/peopleperceptor/">PeoplePerceptor</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptor-utils/">Perceptor Utils</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="#">Coral Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/coralperceptorbase/">CoralPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="#">CPU Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/cpuperceptorbase/">CpuPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Darcy AI</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Jetson Nano Setup</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="setting-up-your-jetson-nano-for-darcy-ai-development">Setting up your Jetson Nano for Darcy AI development</h1>
+<p>Nvidia Jetson Nano boards are excellent for building and running Darcy AI applications. This guide will show you how to get your Nano ready for Darcy AI development so you can run and debug your applications.</p>
+<p>Note that you will be using a Google Coral AI accelerator attached to your Jetson Nano. Although the Jetson Nano board contains an Nvidia GPU, the Darcy AI platform currently requires a Google Coral accelerator in order to operate. New editions of Darcy AI that take advantage of the Nvidia GPU will be available soon.</p>
+<h2 id="hardware-you-will-need">Hardware you will need</h2>
+<ul>
+<li>Nvidia Jetson Nano board (Nano developer kit version with 4GB of RAM recommended)</li>
+<li>Video camera attached to the camera port (any camera compatible with Raspberry Pi or any USB camera will work)</li>
+<li>Google Coral edge TPU (USB version attached to USB 3.0 port)</li>
+<li>Micro SD card with 32GB+ capacity and UHS-1 speed rating or faster</li>
+<li>Power supply with 5.5mm barrel plug at 5 Volts DC with at least 3 Amps output</li>
+<li>Jumper for power pins on Nano board (alternative hardware suggested below)</li>
+</ul>
+<h2 id="follow-the-nvidia-jetston-nano-guide-to-setup-your-board">Follow the Nvidia Jetston Nano guide to setup your board</h2>
+<p>You will need to flash your SD card with the operating system and developer tools provided by Nvidia. Then your Jetson Nano will boot to the operating system and allow you to SSH into the board. Nvidia provides an excellent guide for getting started. It includes instructions for users on Windows, Mac OS, and Linux computers.</p>
+<p>If you are using the "headless" setup approach, you will need to put a jumper on your Nano board on pin header J48. You can use a standard 2-pin motherboard jumper but you can also use any approach that will make an electrical connection between these two pins. One approach is to use one end of an aligator clip by attaching the jaws across both pins.</p>
+<p>Follow the official Jetson Nano guide here:
+<a href="https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit">https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit</a></p>
+<h2 id="open-a-command-line-session">Open a command line session</h2>
+<p>The goal of the prior step is to get your Jetson Nano set up with JetPack and an operating system so it will boot. If you accomplished the prior step successfully, you should be able to use SSH, terminal session over USB, or an attached keyboard, monitor, and mouse to open a command line session. No matter which approach you used to setup your Jetson Nano (headless or attached monitor), you should now be able to log in and see a command line prompt.</p>
+<h2 id="linux-package-manager-update">Linux package manager update</h2>
+<p>Next you will be installing a set of software packages. Some of them are Python packages and some are Linux packages. Start by updating the Ubuntu package manager with the following command. It may take a minute or two.</p>
+<pre><code>sudo apt-get update
+</code></pre>
+<h3 id="install-curl">Install curl</h3>
+<p>Curl is a very useful package for downloading files from the command line. You will use it later when installing the Google Coral software. Install it now with the following command.</p>
+<pre><code>sudo apt-get install curl
+</code></pre>
+<h3 id="install-jpeg-codec">Install JPEG codec</h3>
+<p>In order for some Python packages to work, your Jetson Nano needs to have a JPEG image codec available. A JPEG library is not installed by default with the JetPack software. Install one with this command.</p>
+<pre><code>sudo apt-get install libjpeg-dev
+</code></pre>
+<h2 id="install-pip3-package-manager-for-python3">Install Pip3 package manager for Python3</h2>
+<p>By default, the JetPack software installs Python 3.6.9 and also a version of Python 2.7. The package manager for Python, called Pip, is only installed for the Python 2.7 version. You need to install Pip3 which is a Python3 package manager. Use the following command to install Pip3.</p>
+<pre><code>sudo apt-get install python3-pip
+</code></pre>
+<h2 id="edit-bashrc-file-to-use-python3-and-pip3">Edit .bashrc file to use Python3 and Pip3</h2>
+<p>Now that Pip3 has been installed, you need to edit a file that will make Python3 your default so you can just use the word <code>python</code> in your commands instead of <code>python3</code>. You will also be able to just use <code>pip</code> for installing Pip3 packages after you make this edit.</p>
+<p>You can use the <code>vi</code> editor as in the example here or you can use any other text editor you prefer. Use this command to begin editing your <code>.bashrc</code> file.</p>
+<pre><code>vi ~/.bashrc
+</code></pre>
+<p>Navigate to the bottom of the file. You will add two lines to the very end of the file. Add the following lines.</p>
+<pre><code>alias python=python3
+alias pip=pip3
+</code></pre>
+<p>Save the file and exit the editor. If you are using the <code>vi</code> editor you can do this by pressing the <code>esc</code> key and then typing <code>:wq</code> and pressing <code>enter</code>.</p>
+<p>Now that you have edited the file, it will take effect every time you log in. And now when you use <code>python</code> in a command, it will use Python3 and every time you use <code>pip</code> in a command it will use Pip3.</p>
+<p>Activate the edited <code>.bashrc</code> file now so you don't have to wait until the next login. Use the following command.</p>
+<pre><code>source ~/.bashrc
+</code></pre>
+<h2 id="install-pillow-python-library">Install Pillow Python library</h2>
+<p>Install the imutils package for Python with the command <code>pip install Pillow</code>.</p>
+<h2 id="install-imutils-python-library">Install imutils Python library</h2>
+<p>Install the imutils package for Python with the command <code>pip install imutils</code>.</p>
+<h2 id="install-darcyai-python-library">Install DarcyAI Python library</h2>
+<p>Install the DarcyAI pacakge for Python with the command <code>pip install darcyai</code>.</p>
+<h2 id="add-your-user-to-the-docker-linux-group">Add your user to the Docker Linux group</h2>
+<p>Docker is installed by default on your Jetson Nano when you use the JetPack software package from Nvidia. You need to add your Ubuntu Linux user to the <code>docker</code> group so you can execute Docker commands without using <code>sudo</code>. Your username is the login name you chose during the Jetson Nano setup process at the start of this guide. Replace the word YOURUSER shown below with your actual user such as <code>darcydev</code></p>
+<pre><code>sudo usermod -aG docker YOURUSER
+</code></pre>
+<h2 id="install-google-coral-software-libraries">Install Google Coral software libraries</h2>
+<p>You need the PyCoral and Edge TPU runtime software libraries installed on your Jetson Nano. Follow the guide provided by Google and use the sections marked as "on Linux".</p>
+<p><a href="https://coral.ai/docs/accelerator/get-started/#requirements">https://coral.ai/docs/accelerator/get-started/#requirements</a></p>
+<h2 id="reboot-your-jetson-nano">Reboot your Jetson Nano</h2>
+<p>You will need to reboot your Jetson Nano after finishing all of these installation steps. Make sure your camera and your Google Coral USB device are attached to your Nano board when you reboot.</p>
+<pre><code>sudo reboot
+</code></pre>
+<h2 id="check-for-google-coral-usb-devices">Check for Google Coral USB device(s)</h2>
+<p>You can see which devices are attached to your Jetson Nano using the command <code>lsusb</code>. This will display a list of devices. Look for an item that shows <code>Global Unichip Corp.</code>. You will have more than one of these items if you have more than one Google Coral USB device attached.</p>
+<p>You will notice that once you start running a Darcy AI application, the value shown by <code>lsusb</code> will change to <code>Google, Inc.</code>. This is normal and expected and whenever you reboot your Nano board it will return to <code>Global Unichip Corp.</code> temporarily.</p>
+<h2 id="run-the-system-check-script">Run the system check script</h2>
+<p>Run the script called <code>check.bash</code> to scan your Jetson Nano and make sure everything is looking good. If you receive an error, use the error message to pinpoint which step needs to be completed or fixed. If you receive a message that everything is looking good, then you are ready to build with Darcy AI!</p>
+<h2 id="start-building-your-ai-applications-with-darcy">Start building your AI applications with Darcy</h2>
+<p>Go to the <a href="../build/">Build Guide</a> and get started building with Darcy AI!</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../macos-setup/" class="btn btn-neutral float-right" title="macOS Setup">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../raspberry-pi-setup/" class="btn btn-neutral" title="Raspberry Pi Setup"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../raspberry-pi-setup/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../macos-setup/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
