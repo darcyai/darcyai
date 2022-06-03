@@ -1,5 +1,5 @@
-include src/darcyai/swagger/*
-include src/darcyai/swagger/static/*
+exclude src/examples/*
+
 include src/darcyai/swagger/static/css/*
 include src/darcyai/swagger/static/img/*
 include src/darcyai/swagger/static/js/*
@@ -8,20 +8,15 @@ include src/darcyai/swagger/templates/*
 include src/darcyai/perceptor/coral/models/*
 include src/darcyai/perceptor/cpu/models/*
 
-include src/darcyai/perceptor/posenet_lib/aarch64/*
 include src/darcyai/perceptor/posenet_lib/aarch64/linux/*
 
-include src/darcyai/perceptor/posenet_lib/arm64/*
 include src/darcyai/perceptor/posenet_lib/arm64/darwin/*
 include src/darcyai/perceptor/posenet_lib/arm64/linux/*
 
-include src/darcyai/perceptor/posenet_lib/armv7a/*
 include src/darcyai/perceptor/posenet_lib/armv7a/linux/*
 
-include src/darcyai/perceptor/posenet_lib/armv7l/*
 include src/darcyai/perceptor/posenet_lib/armv7l/linux/*
 
-include src/darcyai/perceptor/posenet_lib/x86_64/*
 include src/darcyai/perceptor/posenet_lib/x86_64/darwin/*
 include src/darcyai/perceptor/posenet_lib/x86_64/linux/*
 include src/darcyai/perceptor/posenet_lib/x86_64/windows/*

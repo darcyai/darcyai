@@ -1,0 +1,20 @@
+kind: Application
+apiVersion: iofog.org/v3
+metadata:
+  name: your-application-name
+spec:
+  microservices:
+    - name: your-microservice-name
+      agent:
+        name: your-darcy-cloud-node-name
+      images:
+        arm: 'YOUR_ORGANIZATION/YOUR_APP:tag.goes.here'
+        x86: 'YOUR_ORGANIZATION/YOUR_APP:tag.goes.here'
+      container:
+        rootHostAccess: true
+        ports: []
+        volumes:
+          - containerDestination: /dev
+            hostDestination: /dev
+            type: bind
+            accessMode: rw

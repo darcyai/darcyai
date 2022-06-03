@@ -65,6 +65,7 @@ stages:
           displayName: 'Publish code coverage'
 
         - script: |
+            rm -rf docs
             bash ./apidocs.bash --generate
           displayName: 'Generate documentation'
           condition: eq(variables['tagged'], true)
@@ -73,15 +74,9 @@ stages:
             git config --global user.email "info@darcy.ai"
             git config --global user.name "darcyai"
 
-            git clone https://x-access-token:$(githubpat)@github.com/darcyai/darcyai-sdk.git
-            rm -rf darcyai-sdk/docs
-            mv docs darcyai-sdk/docs
-            pushd darcyai-sdk > /dev/null
             git add -A
             git commit -m "Update docs"
             git push
-            popd > /dev/null
-            rm -rf darcyai-sdk
 
             git config --global user.email ""
             git config --global user.name ""

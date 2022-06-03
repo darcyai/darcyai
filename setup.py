@@ -24,26 +24,14 @@ setuptools.setup(
     package_data={
         "darcyai": [
             "src/darcyai/swagger/*",
-            "src/darcyai/swagger/static/*",
-            "src/darcyai/swagger/static/css/*",
-            "src/darcyai/swagger/static/img/*",
-            "src/darcyai/swagger/static/js/*",
-            "src/darcyai/swagger/templates/*",
             "src/darcyai/perceptor/coral/models/*",
             "src/darcyai/perceptor/cpu/models/*",
-            "src/darcyai/perceptor/posenet_lib/aarch64/*",
-            "src/darcyai/perceptor/posenet_lib/aarch64/linux/*",
-            "src/darcyai/perceptor/posenet_lib/arm64/*",
-            "src/darcyai/perceptor/posenet_lib/arm64/darwin/*",
-            "src/darcyai/perceptor/posenet_lib/arm64/linux/*",
-            "src/darcyai/perceptor/posenet_lib/armv7a/*",
-            "src/darcyai/perceptor/posenet_lib/armv7a/linux/*",
-            "src/darcyai/perceptor/posenet_lib/armv7l/*",
-            "src/darcyai/perceptor/posenet_lib/armv7l/linux/*",
-            "src/darcyai/perceptor/posenet_lib/x86_64/*"
-            "src/darcyai/perceptor/posenet_lib/x86_64/darwin/*"
-            "src/darcyai/perceptor/posenet_lib/x86_64/linux/*"
-            "src/darcyai/perceptor/posenet_lib/x86_64/windows/*"
+            "src/darcyai/perceptor/posenet_lib/*",
+        ]
+    },
+    exclude_package_data={
+        "darcyai": [
+            "src/examples/*"
         ]
     },
     package_dir={"": "src"},
