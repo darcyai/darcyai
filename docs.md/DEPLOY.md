@@ -79,4 +79,4 @@ You have accomplished a great amount at this point. Congratulations! You have de
 
 ## Next steps
 
-Now that you have all of these foundation Darcy AI developer skills, you are ready to build full solutions. Use the [Technical Documentation](https://darcyai.github.io/darcyai-sdk/) to learn more about what Darcy AI can do and take your skills to the next level.
+Now that you have all of these foundation Darcy AI developer skills, you are ready to build full solutions. Use the [Technical Documentation](https://darcyai.github.io/darcyai/) to learn more about what Darcy AI can do and take your skills to the next level.

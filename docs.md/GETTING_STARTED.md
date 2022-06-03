@@ -1,6 +1,6 @@
 # Getting started with Darcy AI
 
-The Darcy AI SDK offers a rich set of features that Darcy AI application developers can use to easily build complex AI processing chains. This makes developing rich real-time applications possible in a shorter timeframe and with a much more standardized approach.
+Darcy AI offers a rich set of features that Darcy AI application developers can use to easily build complex AI processing chains. This makes developing rich real-time applications possible in a shorter timeframe and with a much more standardized approach.
 
 If you have not yet read the overview of Darcy AI terminology, it is recommended that you do that first. You can find it here [Darcy AI Terminology Guide](../terminology/).
 
@@ -31,7 +31,7 @@ Every application has a main processing loop that defines the code structure. Ev
 
 The first stage of every pipeline cycle (also called a [frame or pulse](../terminology/#frame-cycle-or-pulse)) is the unprocessed data coming from the [Input Stream](../terminology/#input-stream) that you have chosen for your application. Choose an Input Stream that provides the sensor data that you want Darcy to process. This may be audio, video, LiDAR, thermal video, or just about anything you can imagine.
 
-A good example of an Input Stream is the CameraStream class that comes built-in with the Darcy AI SDK. This Input Stream allows you to specify the device path for a video camera. It will read the video camera feed and bring it into Darcy at the frame rate and resolution you specify.
+A good example of an Input Stream is the CameraStream class that comes built-in with Darcy AI. This Input Stream allows you to specify the device path for a video camera. It will read the video camera feed and bring it into Darcy at the frame rate and resolution you specify.
 
 Instantiate the CameraStream object and set some of its parameters like this:
 ```
@@ -44,7 +44,7 @@ camera = CameraStream(video_device="/dev/video0", fps=20)
 
 The main processing of the Darcy AI Pipeline is found in the [Perceptors](../terminology/#perceptor). Adding a Perceptor is easy. You just instantiate the Perceptor class, perform any initial operations to set it up, and then add it to the Pipeline in whatever position you desire. Each Perceptor offers different configuration options and produces different results. Perceptors also offer events to which you can subscribe.
 
-A good example of a powerful Perceptor is the People Perceptor that is built-in with the Darcy AI SDK. This Perceptor is focused on detecting and processing people so you, as the developer, can simply work with semantic data results.
+A good example of a powerful Perceptor is the People Perceptor that is built-in with Darcy AI. This Perceptor is focused on detecting and processing people so you, as the developer, can simply work with semantic data results.
 
 Here is an example of creating a People Perceptor instance and adding it to the Pipeline:
 ```
@@ -72,7 +72,7 @@ def my_callback(pom, input_data):
 
 The last stage of every pipeline cycle is the set of Output Streams that you have added to the pipeline. Any number of Output Streams can be added, giving you the power to put data in many places or perform complex operations such as storing it locally, sending it upstream to a cloud environment, and also displaying a UI at the same time. Output Streams provide a callback which allows you, as the developer, to prepare the data that will be processed by the Output Stream. This is very useful if you want to format data before sending upstream, filter data before storing it on disk, or edit a video frame before you display it.
 
-A good example of an Output Stream is the LiveFeedStream class that comes built-in with the Darcy AI SDK. This Output Stream allows you to configure network host and port information and it will open a video feed that you can view with any web browser.
+A good example of an Output Stream is the LiveFeedStream class that comes built-in with Darcy AI. This Output Stream allows you to configure network host and port information and it will open a video feed that you can view with any web browser.
 
 Instantiate the LiveFeed output stream object and set some of its parameters like this:
 ```

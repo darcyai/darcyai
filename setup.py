@@ -13,12 +13,12 @@ setuptools.setup(
     keywords="darcy, darcyai",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/darcyai/darcyai-sdk",
+    url="https://github.com/darcyai/darcyai",
     project_urls={
-        "Documentation": "https://darcyai.github.io/darcyai-sdk/",
+        "Documentation": "https://darcyai.github.io/darcyai/",
         "Bug Reports":
-        "https://github.com/darcyai/darcyai-sdk/issues",
-        "Source Code": "https://github.com/darcyai/darcyai-sdk"
+        "https://github.com/darcyai/darcyai/issues",
+        "Source Code": "https://github.com/darcyai/darcyai"
     },
     include_package_data=True,
     package_data={

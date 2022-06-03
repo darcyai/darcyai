@@ -1,10 +1,10 @@
 # Darcy AI platform terminology guide
 
-Before you begin building with the Darcy AI SDK or testing its functionality, you need to understand the terminology and basic architecture. This document will give you an understanding quickly.
+Before you begin building with Darcy AI or testing its functionality, you need to understand the terminology and basic architecture. This document will give you an understanding quickly.
 
 ## Engine
 
-The Darcy AI engine is the part that runs the AI computations and manages the system resources such as memory and CPU threads. It can be considered the core “backend code” of the Darcy AI SDK. As a developer, you do not need to interact with the engine directly. You only need to use the provided interfaces in the API as described in the documentation.
+The Darcy AI engine is the part that runs the AI computations and manages the system resources such as memory and CPU threads. It can be considered the core “backend code” of Darcy AI. As a developer, you do not need to interact with the engine directly. You only need to use the provided interfaces in the API as described in the documentation.
 
 ## Pipeline
 

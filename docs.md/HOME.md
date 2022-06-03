@@ -1,6 +1,4 @@
-# Darcy AI SDK
-
-This is the official software development kit (SDK) for building on the Darcy AI platform.
+# Darcy AI
 
 To browse this document and all of the other documentation on a local web server, run the [apidocs.bash](https://github.com/darcyai/darcyai/blob/main/apidocs.bash) script and then visit [http://localhost:8000](http://localhost:8000).
 
@@ -8,11 +6,11 @@ To browse this document and all of the other documentation on a local web server
 
 Darcy is an artificial intelligence (AI) that is focused on real-time interactions with the world. It has a variety of senses, such as vision and hearing, that allow it to perceive the local environment. You can give Darcy additional senses, such as LiDAR or thermal vision, to expand its capabilities. Darcy is present in every device where a Darcy AI application is running. It runs entirely in each device. No data needs to leave the device and no computation is done in the cloud.
 
-Darcy was designed to bring AI technology into the real world while keeping privacy and security as top priorities. Building real-time AI applications is very challenging. The Darcy AI SDK is a developer platform for computer vision and other applications which handles all of the most difficult and repetitive problems for you so you can focus on building amazing solutions.
+Darcy was designed to bring AI technology into the real world while keeping privacy and security as top priorities. Building real-time AI applications is very challenging. Darcy AI is a library for computer vision and other applications developers which handles all of the most difficult and repetitive problems for you so you can focus on building amazing solutions.
 
-With the Darcy AI SDK, you get everything you need to build real-time AI applications. If you can write web applications with Node.js or you have moderate Python experience, then you can develop a fully functioning AI app with Darcy. The SDK comes with documentation, build instructions, example applications, and more.
+With Darcy AI, you get everything you need to build real-time AI applications. If you can write web applications with Node.js or you have moderate Python experience, then you can develop a fully functioning AI app with Darcy. The library comes with documentation, build instructions, example applications, and more.
 
-## How to use this SDK
+## How to use this library
 
 Use this document and the other markdown files in this directory to learn about the Darcy AI platform and to get started. The guide documents will take you from an absolute beginner to building and deploying your own Darcy AI applications. The [docs](https://github.com/darcyai/darcyai/blob/main/docs) folder contains the full technical Darcy AI programming documentation.
 
@@ -77,9 +75,9 @@ Learn how to deploy your Darcy AI application to your edge devices using the Dar
 
 ## Documentation
 
-Open the Darcy AI technical documentation to search and browse the API with code examples. This is a local documentation site that will run directly in your browser. The documentation is specific to each version of the Darcy AI SDK so it's the best place to reference when building. To browse this document and all of the other documentation on a local web server, run the [apidocs.bash](https://github.com/darcyai/darcyai/blob/main/apidocs.bash) script and then visit [http://localhost:8000](http://localhost:8000).
+Open the Darcy AI technical documentation to search and browse the API with code examples. This is a local documentation site that will run directly in your browser. The documentation is specific to each version of Darcy AI so it's the best place to reference when building. To browse this document and all of the other documentation on a local web server, run the [apidocs.bash](https://github.com/darcyai/darcyai/blob/main/apidocs.bash) script and then visit [http://localhost:8000](http://localhost:8000).
 
-If you prefer to access the latest Darcy AI developer documentation with an internet connection, use [Hosted Darcy AI Documentation](https://darcyai.github.io/darcyai-sdk/).
+If you prefer to access the latest Darcy AI developer documentation with an internet connection, use [Hosted Darcy AI Documentation](https://darcyai.github.io/darcyai/).
 
 ## Resources
 
@@ -106,7 +104,7 @@ The [examples](https://github.com/darcyai/darcyai/blob/main/src/examples) folder
 ### Getting help
 
 - Get help from the other Darcy AI developers, the Darcy team, and the whole Darcy community on the Darcy AI Forum at [https://discuss.darcy.ai/c/darcy-ai/](https://discuss.darcy.ai/c/darcy-ai/)
-- Report and track bugs in the Darcy AI platform and SDK using Github issues [https://github.com/darcyai/darcyai/issues](https://github.com/darcyai/darcyai/issues)
+- Report and track bugs in the Darcy AI platform using Github issues [https://github.com/darcyai/darcyai/issues](https://github.com/darcyai/darcyai/issues)
 
 ### Python packages for Darcy AI
 - Darcy AI package [https://pypi.org/project/darcyai/](https://pypi.org/project/darcyai/)
