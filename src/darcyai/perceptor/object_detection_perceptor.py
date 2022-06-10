@@ -27,12 +27,11 @@ class ObjectDetectionPerceptor(MultiPlatformPerceptorBase):
     object detection.
     """
 
-
     def __init__(self,
-                 processor_preference:dict,
-                 threshold:float,
-                 quantized:bool=True,
-                 num_cpu_threads:int=1):
+                 processor_preference: dict,
+                 threshold: float,
+                 quantized: bool = True,
+                 num_cpu_threads: int = 1):
         """
         # Arguments
         processor_preference: A dictionary of processor preference.

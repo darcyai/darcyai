@@ -19,12 +19,17 @@ from sample_output_stream import SampleOutputStream
 
 
 class SingleStreamDemo():
+    """
+    Example of a pipeline with one input streams.
+    """
+
     def __init__(self):
         ping = SampleInputStream()
         output_stream = SampleOutputStream()
 
         self.__pipeline = Pipeline(input_stream=ping,
-                                   input_stream_error_handler_callback=self.__input_stream_error_handler_callback,
+                                   input_stream_error_handler_callback=
+                                   self.__input_stream_error_handler_callback,
                                    universal_rest_api=True,
                                    rest_api_base_path="/pipeline",
                                    rest_api_host="0.0.0.0",
@@ -33,21 +38,23 @@ class SingleStreamDemo():
         self.__pipeline.add_output_stream("output", self.__output_stream_callback, output_stream)
 
         p1 = PerceptorMock(sleep=0.05)
-        self.__pipeline.add_perceptor("p1", p1, accelerator_idx=0, input_callback=self.__perceptor_input_callback)
-
+        self.__pipeline.add_perceptor("p1",
+                                      p1,
+                                      accelerator_idx=0,
+                                      input_callback=self.__perceptor_input_callback)
 
     def run(self):
         self.__pipeline.run()
 
-
+    # pylint: disable=unused-argument
     def __perceptor_input_callback(self, input_data, pom, config):
         return input_data
 
-
+    # pylint: disable=unused-argument
     def __output_stream_callback(self, pom, input_data):
         print(pom.p1)
 
-
+    # pylint: disable=unused-argument
     def __input_stream_error_handler_callback(self, exception):
         pass
 

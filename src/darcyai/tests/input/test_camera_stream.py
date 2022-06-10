@@ -25,6 +25,7 @@ class TestCameraStream:
     """
     CameraStream tests.
     """
+
     def test_init(self):
         camera_stream = CameraStream(video_device="/dev/video0")
         assert camera_stream is not None

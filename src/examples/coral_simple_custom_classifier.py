@@ -21,6 +21,8 @@ from darcyai.input.camera_stream import CameraStream
 from darcyai.output.live_feed_stream import LiveFeedStream
 from darcyai.pipeline import Pipeline
 
+
+# pylint: disable=unused-argument
 def mask_check_input_callback(input_data, pom, config):
     frame = input_data.data.copy()
     crop_face = frame[200:280, 280:360]
@@ -30,6 +32,9 @@ def mask_check_input_callback(input_data, pom, config):
 
 
 def live_feed_callback(pom, input_data):
+    """
+    Callback to prepare frame for live feed.
+    """
     frame = input_data.data.copy()
 
     if len(pom.mask_check[1]) > 0:
@@ -57,7 +62,10 @@ labels = {
     0: "No Mask",
     1: "Mask",
 }
-image_classification = ImageClassificationPerceptor(model_path=model_file, threshold=0.85, top_k=1, labels=labels)
+image_classification = ImageClassificationPerceptor(model_path=model_file,
+                                                    threshold=0.85,
+                                                    top_k=1,
+                                                    labels=labels)
 
 pipeline.add_perceptor("mask_check", image_classification, input_callback=mask_check_input_callback)
 

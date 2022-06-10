@@ -21,6 +21,7 @@ class TestPerceptor:
     """
     Perceptor tests.
     """
+
     def test_init_happy_path(self):
         perceptor = Perceptor(model_path="model.tflite")
         assert perceptor is not None

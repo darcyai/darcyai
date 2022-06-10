@@ -23,6 +23,7 @@ class TestObjectDetectionPerceptor:
     """
     Tests for the ObjectDetectionPerceptor class.
     """
+
     def test_init_happy_path(self):
         mock_list_edge_tpus = Mock()
         mock_list_edge_tpus.return_value = ["a_coral"]
@@ -30,7 +31,6 @@ class TestObjectDetectionPerceptor:
             perceptor = ObjectDetectionPerceptor(threshold=0.5, model_path="model.tflite")
 
         assert perceptor is not None
-
 
     def test_constructor_fails_if_threshold_is_none(self):
         mock_list_edge_tpus = Mock()
@@ -41,7 +41,6 @@ class TestObjectDetectionPerceptor:
 
         assert "threshold is required" in str(context.value)
 
-
     def test_constructor_fails_if_threshold_is_not_a_number(self):
         mock_list_edge_tpus = Mock()
         mock_list_edge_tpus.return_value = ["a_coral"]
@@ -50,7 +49,6 @@ class TestObjectDetectionPerceptor:
                 ObjectDetectionPerceptor(threshold="0.5", model_path="model.tflite")
 
         assert "threshold must be a number" in str(context.value)
-
 
     def test_constructor_fails_if_threshold_is_out_of_range(self):
         mock_list_edge_tpus = Mock()
@@ -61,7 +59,6 @@ class TestObjectDetectionPerceptor:
 
         assert "threshold must be between 0 and 1" in str(context.value)
 
-
     def test_constructor_fails_if_model_path_is_none(self):
         mock_list_edge_tpus = Mock()
         mock_list_edge_tpus.return_value = ["a_coral"]
@@ -70,7 +67,6 @@ class TestObjectDetectionPerceptor:
                 ObjectDetectionPerceptor(threshold=0.5, model_path=None)
 
         assert "model_path is required" in str(context.value)
-
 
     def test_constructor_fails_if_labels_file_is_not_string(self):
         mock_list_edge_tpus = Mock()
@@ -81,32 +77,29 @@ class TestObjectDetectionPerceptor:
 
         assert "labels_file must be a string" in str(context.value)
 
-
     def test_load_fails_when_accelerator_idx_is_not_number(self):
         mock_list_edge_tpus = Mock()
         mock_list_edge_tpus.return_value = ["a_coral"]
         with patch("darcyai.perceptor.coral.edgetpu.list_edge_tpus", mock_list_edge_tpus):
             perceptor = ObjectDetectionPerceptor(threshold=0.5,
-                                                model_path="model.tflite")
+                                                 model_path="model.tflite")
 
         with pytest.raises(Exception) as context:
             perceptor.load(accelerator_idx="1")
 
         assert "accelerator_idx must be an integer" in str(context.value)
 
-
     def test_load_fails_when_accelerator_idx_is_negative(self):
         mock_list_edge_tpus = Mock()
         mock_list_edge_tpus.return_value = ["a_coral"]
         with patch("darcyai.perceptor.coral.edgetpu.list_edge_tpus", mock_list_edge_tpus):
             perceptor = ObjectDetectionPerceptor(threshold=0.5,
-                                                model_path="model.tflite")
+                                                 model_path="model.tflite")
 
         with pytest.raises(Exception) as context:
             perceptor.load(accelerator_idx=-1)
 
         assert "accelerator_idx must be greater than or equal to 0" in str(context.value)
-
 
     def test_load_calls_make_interpreter_with_correct_args_when_accelerator_idx_is_given(self):
         mock_interpreter = Mock()
@@ -119,13 +112,12 @@ class TestObjectDetectionPerceptor:
         mock_list_edge_tpus.return_value = ["a_coral"]
         with patch("darcyai.perceptor.coral.edgetpu.list_edge_tpus", mock_list_edge_tpus):
             perceptor = ObjectDetectionPerceptor(threshold=0.5,
-                                                model_path="model.tflite")
+                                                 model_path="model.tflite")
 
         with patch("darcyai.perceptor.coral.edgetpu.make_interpreter", mock_make_interpreter):
             perceptor.load(accelerator_idx=1)
 
         mock_make_interpreter.assert_called_once_with("model.tflite", device=":1")
-
 
     def test_load_calls_make_interpreter_with_correct_args_when_accelerator_idx_is_none(self):
         mock_interpreter = Mock()
@@ -138,13 +130,12 @@ class TestObjectDetectionPerceptor:
         mock_list_edge_tpus.return_value = ["a_coral"]
         with patch("darcyai.perceptor.coral.edgetpu.list_edge_tpus", mock_list_edge_tpus):
             perceptor = ObjectDetectionPerceptor(threshold=0.5,
-                                                model_path="model.tflite")
+                                                 model_path="model.tflite")
 
         with patch("darcyai.perceptor.coral.edgetpu.make_interpreter", mock_make_interpreter):
             perceptor.load(accelerator_idx=None)
 
         mock_make_interpreter.assert_called_once_with("model.tflite")
-
 
     def test_load_parses_labels_when_labels_file_provided(self):
         mock_interpreter = Mock()

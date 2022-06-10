@@ -40,14 +40,13 @@ class ImageClassificationPerceptor(CpuPerceptorBase):
         Defaults to 1.
     """
 
-
     def __init__(self,
-                 threshold:float,
-                 top_k:int=None,
-                 labels_file:str=None,
-                 labels:dict=None,
-                 quantized:bool=True,
-                 num_cpu_threads:int=1,
+                 threshold: float,
+                 top_k: int = None,
+                 labels_file: str = None,
+                 labels: dict = None,
+                 quantized: bool = True,
+                 num_cpu_threads: int = 1,
                  **kwargs):
         super().__init__(num_cpu_threads=num_cpu_threads, **kwargs)
 
@@ -77,8 +76,7 @@ class ImageClassificationPerceptor(CpuPerceptorBase):
         self.__quantized = quantized
         self.__input_details = None
 
-
-    def run(self, input_data:Any, config:ConfigRegistry=None) -> List[Class]:
+    def run(self, input_data: Any, config: ConfigRegistry = None) -> List[Class]:
         """
         Runs the image classification model.
 
@@ -121,9 +119,8 @@ class ImageClassificationPerceptor(CpuPerceptorBase):
 
         return result
 
-
     # pylint: disable=unused-argument
-    def load(self, accelerator_idx:[int, None]) -> None:
+    def load(self, accelerator_idx: [int, None]) -> None:
         """
         Loads the image classification model.
 

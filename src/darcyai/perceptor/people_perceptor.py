@@ -17,6 +17,7 @@ from darcyai.perceptor.coral.people_perceptor import PeoplePerceptor as CoralPeo
 from darcyai.perceptor.cpu.people_perceptor import PeoplePerceptor as CPUPeoplePerceptor
 from darcyai.perceptor.processor import Processor
 
+
 class PeoplePerceptor(MultiPlatformPerceptorBase):
     """
     Perceptor for detecting people in an image.
@@ -241,7 +242,8 @@ class PeoplePerceptor(MultiPlatformPerceptorBase):
         person_count_fell_below_maximum
         person_occluded
     """
-    def __init__(self, processor_preference:list=None, num_cpu_threads:int=1, **kwargs):
+
+    def __init__(self, processor_preference: list = None, num_cpu_threads: int = 1, **kwargs):
         """
         # Arguments
         processor_preference: The order of processors to use.

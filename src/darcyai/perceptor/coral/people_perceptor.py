@@ -21,6 +21,7 @@ from darcyai.utils import validate_type, validate
 from darcyai.perceptor.coral.coral_perceptor_base import CoralPerceptorBase
 from darcyai.perceptor.people_perceptor_base import PeoplePerceptorBase, PoseEngine
 
+
 class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
     """
     Perceptor for detecting people in an image.
@@ -242,6 +243,7 @@ class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
         person_count_fell_below_maximum
         person_occluded
     """
+
     def __init__(self, **kwargs):
         CoralPerceptorBase.__init__(self, **kwargs)
 
@@ -249,18 +251,18 @@ class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
 
     def run(self, input_data, config):
         return PeoplePerceptorBase.run(self, input_data, config, self.__primary_pose_engine)
-    
-    def load(self, accelerator_idx:[int, None]) -> None:
+
+    def load(self, accelerator_idx: [int, None]) -> None:
         script_dir = pathlib.Path(__file__).parent.absolute()
         model_file = os.path.join(script_dir, "models/posenet.tflite")
-        
+
         if accelerator_idx is None:
             self.__primary_pose_engine = PoseEngine(model_file)
         else:
             validate_type(accelerator_idx, int, "accelerator_idx must be an integer")
             validate(accelerator_idx >= 0, "accelerator_idx must be greater than or equal to 0")
 
-            #TODO: implement accelerator index pass-through to PoseEngine class above
+            # TODO: implement accelerator index pass-through to PoseEngine class above
             self.__primary_pose_engine = PoseEngine(model_file, tpu=True)
-        
-        super().set_loaded(True)        
+
+        super().set_loaded(True)

@@ -27,6 +27,7 @@ class PerceptorMock(Perceptor):
         mock (Mock): Mock object to be used for testing.
         sleep (float): Sleep time in seconds.
     """
+
     def __init__(self, sleep=None, mock=None, **kwargs):
         super().__init__(model_path="models/p1.tflite", **kwargs)
 

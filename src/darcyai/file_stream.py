@@ -16,6 +16,7 @@ import threading
 
 from darcyai.utils import validate_not_none, validate_type, validate
 
+
 class FileStream:
     """
     A class that represents a stream of data from a file.
@@ -37,6 +38,7 @@ class FileStream:
     ...                          flush_interval=5)
     ```
     """
+
     def __init__(self,
                  path: str,
                  append: bool = False,
@@ -64,7 +66,7 @@ class FileStream:
         validate_type(flush_interval, int, "flush_interval must be an integer")
         validate(flush_interval >= 0, "flush_interval must be greater than or equal to 0")
 
-        #pylint: disable=consider-using-with
+        # pylint: disable=consider-using-with
         self.__file = open(file=path,
                            mode="ab" if append else "wb",
                            buffering=buffer_size)
@@ -72,7 +74,6 @@ class FileStream:
         self.__flush_interval = flush_interval
 
         self.__flush()
-
 
     def close(self):
         """
@@ -140,4 +141,3 @@ class FileStream:
         finally:
             if self.__flush_interval > 0:
                 threading.Timer(interval=self.__flush_interval, function=self.__flush).start()
-

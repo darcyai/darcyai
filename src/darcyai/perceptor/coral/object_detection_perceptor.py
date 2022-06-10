@@ -33,8 +33,7 @@ class ObjectDetectionPerceptor(CoralPerceptorBase):
     labels (dict): A dictionary of labels.
     """
 
-
-    def __init__(self, threshold:float, labels_file:str=None, labels:dict=None, **kwargs):
+    def __init__(self, threshold: float, labels_file: str = None, labels: dict = None, **kwargs):
         super().__init__(**kwargs)
 
         dataset = import_module("pycoral.utils.dataset")
@@ -58,7 +57,7 @@ class ObjectDetectionPerceptor(CoralPerceptorBase):
         self.__threshold = threshold
 
     # pylint: disable=unused-argument
-    def run(self, input_data:Any, config:ConfigRegistry=None) -> List[Object]:
+    def run(self, input_data: Any, config: ConfigRegistry = None) -> List[Object]:
         """
         Runs the object detection model on the input data.
 
@@ -95,8 +94,7 @@ class ObjectDetectionPerceptor(CoralPerceptorBase):
 
         return result
 
-
-    def load(self, accelerator_idx:[int, None]) -> None:
+    def load(self, accelerator_idx: [int, None]) -> None:
         """
         Loads the object detection model.
 

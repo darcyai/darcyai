@@ -22,6 +22,7 @@ class VideoStreamData(StreamData):
     """
     StreamData representation of video frames
     """
+
     def serialize(self) -> dict:
         """
         Serialize the data to a dict

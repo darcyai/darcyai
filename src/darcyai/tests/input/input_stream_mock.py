@@ -22,6 +22,7 @@ class InputStreamMock(InputStream):
     """
     This class is used to mock the input stream.
     """
+
     def __init__(self, iter, mock=None):
         self.__iter = iter
         self.__mock = mock

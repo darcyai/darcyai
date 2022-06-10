@@ -19,6 +19,9 @@ from sample_output_stream import SampleOutputStream
 
 
 class MultiPerceptorDemo():
+    """
+    Example of a pipeline with multiple perceptors.
+    """
     def __init__(self):
         camera = CameraStream(video_device="/dev/video0", fps=20)
         output_stream = SampleOutputStream()
@@ -50,32 +53,73 @@ class MultiPerceptorDemo():
             "config_1": "value_1",
             "config_2": 2,
         }
-        self.__pipeline.add_perceptor("p1", p1, parent=None, multi=False, accelerator_idx=0, input_callback=self.__input_callback, output_callback=self.__output_callback, default_config=default_config)
-        self.__pipeline.add_perceptor("p2", p2, parent=None, multi=False, accelerator_idx=1, input_callback=self.__input_callback)
-        self.__pipeline.add_perceptor("p3", p3, parent=None, multi=False, accelerator_idx=1, input_callback=self.__input_callback)
-        self.__pipeline.add_perceptor("p11", p11, parent="p1", multi=False, accelerator_idx=0, input_callback=self.__input_callback)
-        self.__pipeline.add_perceptor("p12", p12, parent="p1", multi=False, accelerator_idx=1, input_callback=self.__input_callback)
-        self.__pipeline.add_perceptor("p21", p21, parent="p2", multi=False, accelerator_idx=0, input_callback=self.__input_callback)
-        self.__pipeline.add_perceptor("p31", p31, parent="p3", multi=False, accelerator_idx=1, input_callback=self.__input_callback)
-        self.__pipeline.add_perceptor("p121", p121, parent="p12", multi=False, accelerator_idx=1, input_callback=self.__input_callback)
+        self.__pipeline.add_perceptor("p1",
+                                      p1,
+                                      parent=None,
+                                      multi=False,
+                                      accelerator_idx=0,
+                                      input_callback=self.__input_callback,
+                                      output_callback=self.__output_callback,
+                                      default_config=default_config)
+        self.__pipeline.add_perceptor("p2",
+                                      p2,
+                                      parent=None,
+                                      multi=False,
+                                      accelerator_idx=1,
+                                      input_callback=self.__input_callback)
+        self.__pipeline.add_perceptor("p3",
+                                      p3,
+                                      parent=None,
+                                      multi=False,
+                                      accelerator_idx=1,
+                                      input_callback=self.__input_callback)
+        self.__pipeline.add_perceptor("p11",
+                                      p11,
+                                      parent="p1",
+                                      multi=False,
+                                      accelerator_idx=0,
+                                      input_callback=self.__input_callback)
+        self.__pipeline.add_perceptor("p12",
+                                      p12,
+                                      parent="p1",
+                                      multi=False,
+                                      accelerator_idx=1,
+                                      input_callback=self.__input_callback)
+        self.__pipeline.add_perceptor("p21",
+                                      p21,
+                                      parent="p2",
+                                      multi=False,
+                                      accelerator_idx=0,
+                                      input_callback=self.__input_callback)
+        self.__pipeline.add_perceptor("p31",
+                                      p31,
+                                      parent="p3",
+                                      multi=False,
+                                      accelerator_idx=1,
+                                      input_callback=self.__input_callback)
+        self.__pipeline.add_perceptor("p121",
+                                      p121,
+                                      parent="p12",
+                                      multi=False,
+                                      accelerator_idx=1,
+                                      input_callback=self.__input_callback)
 
         self.__pipeline.set_perceptor_config("p1", "config_3", True)
 
         p1.on("event_1", self.__output_callback)
 
-
     def run(self):
         self.__pipeline.run()
 
-
+    # pylint: disable=unused-argument
     def __input_callback(self, data, pom, config):
         return data
 
-
+    # pylint: disable=unused-argument
     def __output_callback(self, data, pom):
         return data
 
-
+    # pylint: disable=unused-argument
     def __output_stream_callback(self, pom, input_data):
         pass
 

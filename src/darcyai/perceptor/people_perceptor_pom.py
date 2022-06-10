@@ -17,10 +17,12 @@ from collections import OrderedDict
 
 from darcyai.serializable import Serializable
 
+
 class PeoplePOM(Serializable):
     """
     People perceptor object model
     """
+
     def __init__(self):
         super().__init__()
         self.__people = OrderedDict()
@@ -35,7 +37,7 @@ class PeoplePOM(Serializable):
             frame (np.array): The annotated frame
         """
         self.__annotated_frame = frame
-    
+
     def set_raw_frame(self, frame):
         """
         Stores the frame with the people data
@@ -156,7 +158,7 @@ class PeoplePOM(Serializable):
     def bodyImage(self, person_id):
         """
         Returns the body image of the person with the given id
-        
+
         # Arguments
             person_id (str): The person id
 
@@ -325,7 +327,7 @@ class PeoplePOM(Serializable):
     def bodyPoseHistory(self, person_id):
         """
         Returns the PoseNet data history of the person with the given id
-            
+
         # Arguments
             person_id (str): The person id
 
@@ -357,7 +359,7 @@ class PeoplePOM(Serializable):
             int: The time in view
         """
         return 0
-    
+
     def recentlyDepartedPeople(self):
         """
         Returns the people that have recently departed
@@ -366,7 +368,7 @@ class PeoplePOM(Serializable):
             list: The people that have recently departed
         """
         return []
-    
+
     def occludedPeople(self):
         """
         Returns the people that are occluded

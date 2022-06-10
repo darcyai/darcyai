@@ -22,6 +22,10 @@ from sample_output_stream import SampleOutputStream
 
 
 class MultiStreamDemo():
+    """
+    Example of a pipeline with multiple input streams.
+    """
+
     def __init__(self):
         self.__last_frame = None
         self.__last_frame_timestamp = 0
@@ -30,7 +34,8 @@ class MultiStreamDemo():
         camera = CameraStream(video_device="/dev/video0")
         ping = SampleInputStream()
 
-        input_stream = InputMultiStream(callback=self.__input_stream_callback, aggregator=self.__input_aggregator)
+        input_stream = InputMultiStream(callback=self.__input_stream_callback,
+                                        aggregator=self.__input_aggregator)
         input_stream.add_stream("camera", camera)
         input_stream.add_stream("ping", ping)
 
@@ -41,12 +46,13 @@ class MultiStreamDemo():
         self.__pipeline.add_output_stream("output", self.__output_stream_callback, output_stream)
 
         p1 = PerceptorMock()
-        self.__pipeline.add_perceptor("p1", p1, accelerator_idx=0, input_callback=self.__perceptor_input_callback)
-
+        self.__pipeline.add_perceptor("p1",
+                                      p1,
+                                      accelerator_idx=0,
+                                      input_callback=self.__perceptor_input_callback)
 
     def run(self):
         self.__pipeline.run()
-
 
     def __input_stream_callback(self, stream_name, stream_data):
         if stream_name == "camera":
@@ -55,19 +61,17 @@ class MultiStreamDemo():
         elif stream_name == "ping":
             self.__send = True
 
-
     def __input_aggregator(self):
         while not self.__send:
             continue
 
         self.__send = False
-        
-        return StreamData({ "camera": self.__last_frame }, self.__last_frame_timestamp)
 
+        return StreamData({"camera": self.__last_frame}, self.__last_frame_timestamp)
 
+    # pylint: disable=unused-argument
     def __perceptor_input_callback(self, input_data, pom, config):
         return input_data
-
 
     def __output_stream_callback(self, pom, input_data):
         pass

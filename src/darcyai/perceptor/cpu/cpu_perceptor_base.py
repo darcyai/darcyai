@@ -17,11 +17,13 @@ import importlib.util
 from darcyai.perceptor.perceptor import Perceptor
 from darcyai.utils import import_module, validate_not_none, validate_type, validate
 
+
 class CpuPerceptorBase(Perceptor):
     """
     Base class for all CPU Perceptors.
     """
-    def __init__(self, num_cpu_threads:int=1, **kwargs):
+
+    def __init__(self, num_cpu_threads: int = 1, **kwargs):
         super().__init__(**kwargs)
 
         validate_not_none(num_cpu_threads, "num_cpu_threads is required")
@@ -47,7 +49,7 @@ class CpuPerceptorBase(Perceptor):
         super().set_loaded(True)
 
     @staticmethod
-    def read_label_file(filename:str, has_ids:bool=True, encoding:str="UTF-8") -> dict:
+    def read_label_file(filename: str, has_ids: bool = True, encoding: str = "UTF-8") -> dict:
         """
         Reads the labels file.
 

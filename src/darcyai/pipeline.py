@@ -98,6 +98,7 @@ class Pipeline():
     ...                     rest_api_host="localhost")
     ```
     """
+
     def __init__(self,
                  input_stream: InputStream,
                  input_data_history_len: int = 50,
@@ -218,7 +219,7 @@ class Pipeline():
             threading.Thread(target=self.__start_api_server).start()
 
         signals = [SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM]
-        #pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel
         if platform.system() == "Windows":
             from signal import SIGBREAK
             signals.append(SIGBREAK)
@@ -558,7 +559,7 @@ class Pipeline():
                       "name_to_insert_in_parallel_with must be a string")
         validate(
             name_to_insert_in_parallel_with in self.__perceptors,
-            f"perceptor with name '{name_to_insert_in_parallel_with}'" + \
+            f"perceptor with name '{name_to_insert_in_parallel_with}'" +
             "does not exist")
         validate(name_to_insert_in_parallel_with != name,
                  "name_to_insert_in_parallel_with cannot be the same as name")
@@ -778,7 +779,7 @@ class Pipeline():
                                 perceptor_name,
                                 input_data,
                                 pom),
-                            callback=self.__set_perceptor_result(perceptor_name, pom)) \
+                            callback=self.__set_perceptor_result(perceptor_name, pom))
                         for perceptor_name in perceptors]
                     _ = [async_call.get() for async_call in async_calls]
 
@@ -1390,7 +1391,7 @@ class Pipeline():
                              name: str,
                              perceptor: Perceptor,
                              input_callback:
-                                Callable[[StreamData, PerceptionObjectModel], Any] = None,
+                             Callable[[StreamData, PerceptionObjectModel], Any] = None,
                              output_callback: Callable[[Any, PerceptionObjectModel], Any] = None,
                              accelerator_idx: Union[int, None] = None,
                              default_config: dict = None) -> None:
@@ -1537,8 +1538,8 @@ class Pipeline():
         swagger_path = os.path.join(script_dir, "swagger")
         if self.__flask_app is None:
             self.__flask_app = Flask(__name__,
-                static_folder=os.path.join(swagger_path, "static"),
-                template_folder=os.path.join(swagger_path, "templates"))
+                                     static_folder=os.path.join(swagger_path, "static"),
+                                     template_folder=os.path.join(swagger_path, "templates"))
             ssl_context = None
             self.__setup_paths()
             self.__flask_app.json_encoder = CustomJSONEncoder
@@ -1899,6 +1900,7 @@ class Pipeline():
                      "perception_completion_callback must be a function")
 
         self.__perception_completion_callback = perception_completion_callback
+
 
 class CustomJSONEncoder(JSONEncoder):
     """

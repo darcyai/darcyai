@@ -22,6 +22,7 @@ class TestLiveFeedStream:
     """
     LiveFeedStream tests.
     """
+
     def test_constructor_validates_flask_app_type(self):
         with pytest.raises(Exception) as context:
             LiveFeedStream(path="/", flask_app=1)

@@ -21,6 +21,7 @@ class TestEventEmitter:
     """
     EventEmitter tests.
     """
+
     def test_constructor(self):
         emitter = EventEmitter()
         assert emitter is not None

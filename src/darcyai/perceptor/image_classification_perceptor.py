@@ -20,6 +20,7 @@ from darcyai.perceptor.cpu.image_classification_perceptor import \
 from darcyai.perceptor.coral.image_classification_perceptor import \
     ImageClassificationPerceptor as CoralImageClassificationPerceptor
 
+
 class ImageClassificationPerceptor(MultiPlatformPerceptorBase):
     """
     ImageClassificationPerceptor is a class that implements the Perceptor interface for
@@ -27,13 +28,13 @@ class ImageClassificationPerceptor(MultiPlatformPerceptorBase):
     """
 
     def __init__(self,
-                 processor_preference:dict,
-                 threshold:float,
-                 top_k:int=None,
-                 mean:float=128.0,
-                 std:float=128.0,
-                 quantized:bool=True,
-                 num_cpu_threads:int=1):
+                 processor_preference: dict,
+                 threshold: float,
+                 top_k: int = None,
+                 mean: float = 128.0,
+                 std: float = 128.0,
+                 quantized: bool = True,
+                 num_cpu_threads: int = 1):
         """
         # Arguments
         processor_preference: A dictionary of processor preference.

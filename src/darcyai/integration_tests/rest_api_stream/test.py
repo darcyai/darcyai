@@ -46,37 +46,29 @@ class Test():
         threading.Thread(target=self.__start_api_server).start()
         time.sleep(2)
 
-
     def act(self):
         self.__pipeline.run()
-
 
     def verify(self):
         assert len(self.__perception_results) == 1
         assert self.__perception_results[0] == 1
 
-
     def cleanup(self):
         pass
-
 
     def __perceptor_input_callback(self, input_data, pom, config):
         return input_data
 
-
     def __output_stream_callback(self, pom, input_data):
-        return { "perception_result": pom.perceptor.data }
-
+        return {"perception_result": pom.perceptor.data}
 
     def __input_stream_error_handler_callback(self, exception):
         pass
-
 
     def __post(self):
         data = json.loads(request.json)
         self.__perception_results.append(data["perception_result"])
         return Response(status=200)
-
 
     def __start_api_server(self) -> None:
         logging.getLogger("requests").setLevel(logging.ERROR)

@@ -22,6 +22,7 @@ class TestRestApiStream:
     """
     RestApiStream tests.
     """
+
     def test_constructor(self):
         stream = RestApiStream("http://localhost")
 

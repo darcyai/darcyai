@@ -14,6 +14,7 @@
 
 from typing import Dict, Any
 
+
 class Serializable:
     """
     Base class for all serializable objects.

@@ -76,7 +76,7 @@ class Test():
         response = requests.request(
             "PATCH",
             f"{base_url}/perceptors/config",
-            json=json.dumps({ "perceptor": { "bool_config": True } }),
+            json=json.dumps({"perceptor": {"bool_config": True}}),
             headers={'Content-Type': 'application/json'})
         json_response = response.json()
         assert response.status_code == 200
@@ -88,7 +88,7 @@ class Test():
         response = requests.request(
             "PATCH",
             f"{base_url}/perceptors/perceptor/config",
-            json=json.dumps({ "bool_config": True }),
+            json=json.dumps({"bool_config": True}),
             headers={'Content-Type': 'application/json'})
         json_response = response.json()
         assert response.status_code == 200
@@ -125,7 +125,7 @@ class Test():
         response = requests.request(
             "PATCH",
             f"{base_url}/outputs/config",
-            json=json.dumps({ "output": { "test": True } }),
+            json=json.dumps({"output": {"test": True}}),
             headers={'Content-Type': 'application/json'})
         json_response = response.json()
         assert response.status_code == 200
@@ -137,7 +137,7 @@ class Test():
         response = requests.request(
             "PATCH",
             f"{base_url}/outputs/output/config",
-            json=json.dumps({ "test": True }),
+            json=json.dumps({"test": True}),
             headers={'Content-Type': 'application/json'})
         json_response = response.json()
         assert response.status_code == 200

@@ -37,14 +37,13 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
     std (float): The standard deviation of the image.
     """
 
-
     def __init__(self,
-                 threshold:float,
-                 top_k:int=None,
-                 labels_file:str=None,
-                 labels:dict=None,
-                 mean:float=128.0,
-                 std:float=128.0,
+                 threshold: float,
+                 top_k: int = None,
+                 labels_file: str = None,
+                 labels: dict = None,
+                 mean: float = 128.0,
+                 std: float = 128.0,
                  **kwargs):
         super().__init__(**kwargs)
 
@@ -79,9 +78,8 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
         self.__std = std
         self.__inference_shape = None
 
-
     # pylint: disable=unused-argument
-    def run(self, input_data:Any, config:ConfigRegistry=None) -> List[Class]:
+    def run(self, input_data: Any, config: ConfigRegistry = None) -> List[Class]:
         """
         Runs the image classification model.
 
@@ -124,8 +122,7 @@ class ImageClassificationPerceptor(CoralPerceptorBase):
 
         return result
 
-
-    def load(self, accelerator_idx:[int, None]) -> None:
+    def load(self, accelerator_idx: [int, None]) -> None:
         """
         Loads the image classification model.
 

@@ -35,12 +35,10 @@ class SamplePerceptor(Perceptor):
             Config("str_config", "str config", "str", "Something", "String"),
         ])
 
-
     def run(self, input_data, config):
         time.sleep(self.__sleep)
 
         return input_data
 
-    
     def load(self, accelerator_idx=None):
-        super().set_loaded(True)        
+        super().set_loaded(True)

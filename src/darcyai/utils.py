@@ -18,6 +18,7 @@ from typing import Any
 
 imported_modules = {}
 
+
 def validate_not_none(value: Any, message: str) -> None:
     """
     Validates that the value is not None.
@@ -61,6 +62,7 @@ def timestamp() -> int:
     int: the current timestamp in milliseconds
     """
     return int(time.time() * 1000)
+
 
 def import_module(name: str) -> Any:
     """

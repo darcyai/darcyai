@@ -18,10 +18,12 @@ from typing import Union
 from darcyai.perceptor.perceptor import Perceptor
 from darcyai.utils import validate_type, validate, import_module
 
+
 class CoralPerceptorBase(Perceptor):
     """
     Base class for all Coral Perceptors.
     """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

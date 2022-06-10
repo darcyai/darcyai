@@ -14,6 +14,7 @@
 
 from enum import Enum
 
+
 class Processor(Enum):
     """
     Enum for the different processors

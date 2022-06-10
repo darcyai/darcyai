@@ -36,13 +36,12 @@ class ObjectDetectionPerceptor(CpuPerceptorBase):
         Defaults to 1.
     """
 
-
     def __init__(self,
-                 threshold:float,
-                 labels_file:str=None,
-                 labels:dict=None,
-                 quantized:bool=True,
-                 num_cpu_threads:int=1,
+                 threshold: float,
+                 labels_file: str = None,
+                 labels: dict = None,
+                 quantized: bool = True,
+                 num_cpu_threads: int = 1,
                  **kwargs):
         super().__init__(num_cpu_threads=num_cpu_threads, **kwargs)
 
@@ -68,7 +67,7 @@ class ObjectDetectionPerceptor(CpuPerceptorBase):
         self.__input_details = None
         self.__output_details = None
 
-    def run(self, input_data:Any, config:ConfigRegistry=None) -> List[Object]:
+    def run(self, input_data: Any, config: ConfigRegistry = None) -> List[Object]:
         """
         Runs the object detection model on the input data.
 
@@ -115,9 +114,8 @@ class ObjectDetectionPerceptor(CpuPerceptorBase):
 
         return result
 
-
     # pylint: disable=unused-argument
-    def load(self, accelerator_idx:[int, None]=None) -> None:
+    def load(self, accelerator_idx: [int, None] = None) -> None:
         """
         Loads the object detection model.
 

@@ -38,10 +38,8 @@ class Test():
         perceptor = SamplePerceptor(sleep=0.5)
         self.__pipeline.add_perceptor("perceptor", perceptor, input_callback=self.__perceptor_input_callback)
 
-
     def act(self):
         self.__pipeline.run()
-
 
     def verify(self):
         with open(self.__csv_file) as f:
@@ -53,14 +51,11 @@ class Test():
         if os.path.exists(self.__csv_file):
             os.remove(self.__csv_file)
 
-
     def __perceptor_input_callback(self, input_data, pom, config):
         return input_data
 
-
     def __output_stream_callback(self, pom, input_data):
         return [111, pom.perceptor.data]
-
 
     def __input_stream_error_handler_callback(self, exception):
         pass

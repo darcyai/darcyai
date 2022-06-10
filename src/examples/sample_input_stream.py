@@ -17,14 +17,18 @@ from darcyai.input.input_stream import InputStream
 from darcyai.stream_data import StreamData
 from darcyai.utils import timestamp
 
-class SampleInputStream(InputStream):
-    def __init__(self,):
-        self.__stopped = True
 
+class SampleInputStream(InputStream):
+    """
+    This is a sample input stream.
+    """
+
+    def __init__(self,):
+        super().__init__()
+        self.__stopped = True
 
     def stop(self):
         self.__stopped = True
-
 
     def stream(self):
         self.__stopped = False

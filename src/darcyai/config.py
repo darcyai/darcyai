@@ -53,7 +53,7 @@ class Config():
         validate_not_none(config_type, "config_type is required.")
         validate_type(config_type, str, "config_type must be a string.")
         validate(config_type in valid_types,
-            f"config_type must be one of: {', '.join(valid_types)}.")
+                 f"config_type must be one of: {', '.join(valid_types)}.")
         self.type = config_type
 
         validate_not_none(default_value, "default_value is required.")
@@ -112,6 +112,7 @@ class Config():
         else:
             return value
 
+
 class RGB():
     """
     Class to hold the configuration for the RGB.
@@ -167,7 +168,7 @@ class RGB():
         return f"#{self.__red:02x}{self.__green:02x}{self.__blue:02x}"
 
     @staticmethod
-    def from_string(rgb:str) -> "RGB":
+    def from_string(rgb: str) -> "RGB":
         """
         Creates an RGB object from a comma separated RGB string.
 
@@ -193,7 +194,7 @@ class RGB():
         return RGB(int(rgb[0].strip()), int(rgb[1].strip()), int(rgb[2].strip()))
 
     @staticmethod
-    def from_hex_string(hex_rgb:str) -> "RGB":
+    def from_hex_string(hex_rgb: str) -> "RGB":
         """
         Creates an RGB object from a hex RGB string.
 
@@ -210,6 +211,6 @@ class RGB():
         validate(len(hex_rgb) == 7, "hex_rgb must be a hex RGB string.")
         validate(hex_rgb.startswith("#"), "hex_rgb must start with #.")
 
-        (red, green, blue) = tuple(int(hex_rgb.lstrip("#")[i:i+2], 16) for i in (0, 2, 4))
+        (red, green, blue) = tuple(int(hex_rgb.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
 
         return RGB(red, green, blue)

@@ -27,6 +27,7 @@ class TestInputMultiStream:
     """
     InputMultiStream tests.
     """
+
     def test_init_happy_path(self):
         input_multi_stream = InputMultiStream(
             aggregator=lambda x: x, callback=lambda x: x)

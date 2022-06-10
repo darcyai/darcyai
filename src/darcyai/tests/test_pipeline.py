@@ -27,6 +27,7 @@ class TestPipeline:
     """
     Pipeline tests.
     """
+
     def test_constructor(self):
         pipeline = Pipeline(InputStream())
         assert pipeline is not None

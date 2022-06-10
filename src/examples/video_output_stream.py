@@ -20,10 +20,12 @@ from darcyai.tests.perceptor_mock import PerceptorMock
 from darcyai.pipeline import Pipeline
 
 
+# pylint: disable=unused-argument
 def perceptor_input_callback(input_data, pom, config):
     return input_data
 
 
+# pylint: disable=unused-argument
 def output_callback(pom, input_data):
     return input_data.data
 

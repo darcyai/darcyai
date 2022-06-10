@@ -21,6 +21,7 @@ from darcyai.utils import validate, validate_not_none, validate_type
 
 _supported_processors = None
 
+
 def get_supported_processors() -> dict:
     """
     Gets the list of supported processors.
@@ -44,15 +45,16 @@ def get_supported_processors() -> dict:
                 "coral_tpus": coral_tpus,
             },
             Processor.CPU: {
-                "is_available": importlib.util.find_spec("tensorflow") is not None \
-                    or importlib.util.find_spec("tflite_runtime") is not None,
+                "is_available": importlib.util.find_spec("tensorflow") is not None
+                or importlib.util.find_spec("tflite_runtime") is not None,
                 "cpu_count": multiprocessing.cpu_count(),
             },
         }
 
     return _supported_processors
 
-def get_perceptor_processor(processor_preference:list) -> Processor:
+
+def get_perceptor_processor(processor_preference: list) -> Processor:
     """
     Gets the processor for the perceptor.
 
@@ -75,11 +77,12 @@ def get_perceptor_processor(processor_preference:list) -> Processor:
     supported_processors = get_supported_processors()
     for processor in processor_preference:
         validate(processor in supported_processors,
-                    f"processor {processor} is not valid")
+                 f"processor {processor} is not valid")
         if supported_processors[processor]["is_available"]:
             return processor
 
     return None
+
 
 def validate_processor_preference(processor_preference, model_path_required=True):
     """
@@ -132,6 +135,7 @@ def validate_processor_preference(processor_preference, model_path_required=True
         if "labels_file" in processor_preference_dict:
             validate_type(
                 processor_preference_dict["labels_file"], str, "labels_file must be a string.")
+
 
 def validate_processor_list(processor_list):
     """

@@ -27,12 +27,10 @@ class SamplePerceptor(Perceptor):
         else:
             self.__sleep = int(random() * 4) + 1
 
-
     def run(self, input_data, config):
         time.sleep(self.__sleep)
 
         return input_data
 
-    
     def load(self, accelerator_idx=None):
-        super().set_loaded(True)        
+        super().set_loaded(True)

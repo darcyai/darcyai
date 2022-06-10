@@ -19,6 +19,7 @@ import pathlib
 from darcyai.perceptor.cpu.cpu_perceptor_base import CpuPerceptorBase
 from darcyai.perceptor.people_perceptor_base import PeoplePerceptorBase, PoseEngine
 
+
 class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
     """
     Perceptor for detecting people in an image.
@@ -240,7 +241,8 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
         person_count_fell_below_maximum
         person_occluded
     """
-    def __init__(self, num_cpu_threads:int=1, **kwargs):
+
+    def __init__(self, num_cpu_threads: int = 1, **kwargs):
         """
         # Arguments
         num_cpu_threads: Number of CPU threads to use.
@@ -252,13 +254,13 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
 
     def run(self, input_data, config):
         return PeoplePerceptorBase.run(self, input_data, config, self.__primary_pose_engine)
-    
-    def load(self, accelerator_idx:[int, None]) -> None:
+
+    def load(self, accelerator_idx: [int, None]) -> None:
         script_dir = pathlib.Path(__file__).parent.absolute()
         # posenet_mobilenet_v1_075_353_481_quant_decoder
         model_file = os.path.join(script_dir, "models/posenet.tflite")
-        
+
         self.__primary_pose_engine = \
             PoseEngine(model_file, tpu=False, num_cpu_threads=self.__num_cpu_threads)
-        
-        super().set_loaded(True)        
+
+        super().set_loaded(True)

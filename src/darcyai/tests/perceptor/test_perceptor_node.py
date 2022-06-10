@@ -25,6 +25,7 @@ class TestPerceptor:
     """
     PerceptorNode tests.
     """
+
     def test_init_happy_path(self):
         input_callback_mock = Mock()
         perceptor_mock = PerceptorMock(sleep=0)

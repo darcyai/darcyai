@@ -45,6 +45,7 @@ stages:
 
         - script: |
             pylint --rcfile=.pylintrc --output-format=colorized --reports=n --score=n src/darcyai/
+            pylint --rcfile=.pylintrc $(find ./src/examples -iname "*.py")
           displayName: 'Run pylint'
 
         - script: |

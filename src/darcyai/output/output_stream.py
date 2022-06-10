@@ -43,7 +43,6 @@ class OutputStream(Configurable):
     def __init__(self, ignore_none: bool = True, **kwargs):
         Configurable.__init__(self, **kwargs)
 
-
         validate_not_none(ignore_none, "ignore_none is required")
         validate_type(ignore_none, bool, "ignore_none must be a boolean")
         self.ignore_none = ignore_none

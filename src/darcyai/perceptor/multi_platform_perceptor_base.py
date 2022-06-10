@@ -20,12 +20,14 @@ from darcyai.perceptor.perceptor import Perceptor
 from darcyai.perceptor.perceptor_utils import get_perceptor_processor
 from darcyai.perceptor.processor import Processor
 
+
 class MultiPlatformPerceptorBase(Perceptor):
     """
     MultiPlatformPerceptorBase is a class that implements the Perceptor interface
     for multi-platform use.
     """
-    def __init__(self, processor_preference:list=None):
+
+    def __init__(self, processor_preference: list = None):
         super().__init__(model_path="")
 
         try:

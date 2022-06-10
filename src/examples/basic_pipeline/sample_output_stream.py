@@ -12,19 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#Add the DarcyAI components that we need, particularly the OutputStream
+# Add the DarcyAI components that we need, particularly the OutputStream
 from darcyai.output.output_stream import OutputStream
 
-#Define our own OutputStream class
-class SampleOutputStream(OutputStream):
-    def __init__(self):
-    	#Call init on the parent class
-        super().__init__()
+# Define our own OutputStream class
 
-    #Define our "write" method for the OutputStream class
+
+class SampleOutputStream(OutputStream):
+    """
+    This is a sample output stream.
+    """
+    # Define our "write" method for the OutputStream class
+
     def write(self, data):
         pass
 
-    #Define our "close" method for the OutputStream class
+    # Define our "close" method for the OutputStream class
     def close(self):
         pass
