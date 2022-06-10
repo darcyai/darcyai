@@ -43,26 +43,26 @@ steps:
   parameters:
     imageName: '$(imageName)-base'
     imageTag: $(imageTag)
-    dockerFile: 'base/Dockerfile'
+    dockerFile: 'docker/base/Dockerfile'
     step: base
 
 - template: ./docker-task-template.yml
   parameters:
     imageName: '$(imageName)-coral'
     imageTag: $(imageTag)
-    dockerFile: 'coral/Dockerfile'
+    dockerFile: 'docker/coral/Dockerfile'
     step: coral
 
 - template: ./docker-task-template.yml
   parameters:
     imageName: '$(imageName)-cpu'
     imageTag: $(imageTag)
-    dockerFile: 'cpu/Dockerfile'
+    dockerFile: 'docker/cpu/Dockerfile'
     step: cpu
 
 - template: ./docker-task-template.yml
   parameters:
     imageName: '$(imageName)'
     imageTag: $(imageTag)
-    dockerFile: 'universal/Dockerfile'
+    dockerFile: 'docker/universal/Dockerfile'
     step: universal
