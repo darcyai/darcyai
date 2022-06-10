@@ -7,10 +7,10 @@ trigger:
     - main
   paths:
     exclude:
-    - ./docker/*
-    - ./docs/*
-    - ./docs.md/*
-    - ./examples/*
+    - docker
+    - docs
+    - docs.md
+    - examples
     - README.md
     - CHANGELOG.md
 
