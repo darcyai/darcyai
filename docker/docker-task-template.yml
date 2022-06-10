@@ -23,7 +23,7 @@ steps:
 
   - script: |
       docker run --rm \
-        -v $(pwd)/tests:/src \
+        -v $(pwd)/docker/tests:/src \
         ${{ parameters.imageName }}:${{ parameters.imageTag }} \
         sh -c "cd /src && python3 -m pip install darcyai && python3 -u ${{ parameters.step }}.py"
     displayName: 'Test ${{ parameters.step }} docker image'
