@@ -1,0 +1,8 @@
+/.vscode
+__pycache__
+/build
+/dist
+
+.idea/*
+venv/*
+.pytest_cache
