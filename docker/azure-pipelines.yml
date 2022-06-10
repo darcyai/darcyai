@@ -7,10 +7,10 @@ trigger:
       - main
   paths:
     include:
-      - /docker/*
+      - docker
     exclude:
-      - README.md
-      - CHANGELOG.md
+      - docker/README.md
+      - docker/CHANGELOG.md
 pr: none
   
 pool: 'Azure Pipelines'
