@@ -98,5 +98,5 @@ stages:
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_armv7l'
-          poolImageName: 'RPi'
+          poolImageName: 'build-farm-rpi4'
           imageTag: 'dev'
