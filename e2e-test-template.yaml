@@ -25,6 +25,8 @@ jobs:
       - powershell: |
           cd $(System.DefaultWorkingDirectory)\src\darcyai\integration_tests
           python3 -m pip install -r requirements.txt --user
+          dir $(System.DefaultWorkingDirectory)\
+          dir $(System.DefaultWorkingDirectory)\dist\
           python3 -m pip install $(System.DefaultWorkingDirectory)\dist\darcyai*.whl --user
 
           python3 -u tests.py
