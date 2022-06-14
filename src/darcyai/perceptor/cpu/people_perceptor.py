@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# pylint: skip-file
 import os
 import pathlib
 
@@ -126,7 +125,8 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
             Default value: 1
 
         face_rectangle_y_factor (float):
-            Size adjustment factor for the height of the persons face, which can be used to make sure objects like hair and hats are captured
+            Size adjustment factor for the height of the persons face, which can be used to make
+            sure objects like hair and hats are captured
             Default value: 1.0
 
         show_centroid_dots (bool):
@@ -174,7 +174,8 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
             Default value: 0.25
 
         object_tracking_creation_m (int):
-            Minimum number of frames out of N frames that an object must be present in the field of view before it is tracked
+            Minimum number of frames out of N frames that an object must be present in the field
+            of view before it is tracked
             Default value: 10
 
         object_tracking_creation_n (int):
@@ -186,7 +187,8 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
             Default value: 20
 
         person_tracking_creation_m (int):
-            Total number of frames used to evaluate a tracked object before it is promoted to a person
+            Total number of frames used to evaluate a tracked object before it is promoted to a
+            person
             Default value: 16
 
         show_person_id (bool):
@@ -242,6 +244,7 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
         person_occluded
     """
 
+    # pylint: disable=super-init-not-called
     def __init__(self, num_cpu_threads: int = 1, **kwargs):
         """
         # Arguments
@@ -255,9 +258,8 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
     def run(self, input_data, config):
         return PeoplePerceptorBase.run(self, input_data, config, self.__primary_pose_engine)
 
-    def load(self, accelerator_idx: [int, None]) -> None:
+    def load(self, _) -> None:
         script_dir = pathlib.Path(__file__).parent.absolute()
-        # posenet_mobilenet_v1_075_353_481_quant_decoder
         model_file = os.path.join(script_dir, "models/posenet.tflite")
 
         self.__primary_pose_engine = \

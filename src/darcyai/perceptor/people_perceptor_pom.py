@@ -12,12 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# pylint: skip-file
 from collections import OrderedDict
 
 from darcyai.serializable import Serializable
 
 
+# pylint: disable=invalid-name
+# pylint: disable=unused-argument
 class PeoplePOM(Serializable):
     """
     People perceptor object model
@@ -140,17 +141,11 @@ class PeoplePOM(Serializable):
         frame_width = frame_copy.shape[1]
         frame_height = frame_copy.shape[0]
 
-        if x0 < 0:
-            x0 = 0
+        x0 = max(0, x0)
+        y0 = max(0, y0)
 
-        if y0 < 0:
-            y0 = 0
-
-        if x1 > frame_width:
-            x1 = frame_width
-
-        if y1 > frame_height:
-            y1 = frame_height
+        x1 = min(frame_width, x1)
+        y1 = min(frame_height, y1)
 
         face = frame_copy[y0:y1, x0:x1]
         return face
@@ -173,17 +168,11 @@ class PeoplePOM(Serializable):
         frame_width = frame_copy.shape[1]
         frame_height = frame_copy.shape[0]
 
-        if x0 < 0:
-            x0 = 0
+        x0 = max(0, x0)
+        y0 = max(0, y0)
 
-        if y0 < 0:
-            y0 = 0
-
-        if x1 > frame_width:
-            x1 = frame_width
-
-        if y1 > frame_height:
-            y1 = frame_height
+        x1 = min(frame_width, x1)
+        y1 = min(frame_height, y1)
 
         body = frame_copy[y0:y1, x0:x1]
         return body
@@ -207,54 +196,28 @@ class PeoplePOM(Serializable):
         frame_width = frame_copy.shape[1]
         frame_height = frame_copy.shape[0]
 
-        if bx0 < 0:
-            bx0 = 0
+        bx0 = max(0, bx0)
+        by0 = max(0, by0)
 
-        if by0 < 0:
-            by0 = 0
+        bx1 = min(frame_width, bx1)
+        by1 = min(frame_height, by1)
 
-        if bx1 > frame_width:
-            bx1 = frame_width
+        fx0 = max(0, fx0)
+        fy0 = max(0, fy0)
 
-        if by1 > frame_height:
-            by1 = frame_height
-
-        if fx0 < 0:
-            fx0 = 0
-
-        if fy0 < 0:
-            fy0 = 0
-
-        if fx1 > frame_width:
-            fx1 = frame_width
-
-        if fy1 > frame_height:
-            fy1 = frame_height
+        fx1 = min(frame_width, fx1)
+        fy1 = min(frame_height, fy1)
 
         x0 = 0
         x1 = 0
         y0 = 0
         y1 = 0
 
-        if bx0 < fx0:
-            x0 = bx0
-        else:
-            x0 = fx0
+        x0 = min(bx0, fx0)
+        y0 = min(by0, fy0)
 
-        if by0 < fy0:
-            y0 = by0
-        else:
-            y0 = fy0
-
-        if bx1 > fx1:
-            x1 = bx1
-        else:
-            x1 = fx1
-
-        if by1 > fy1:
-            y1 = by1
-        else:
-            y1 = fy1
+        x1 = max(bx1, fx1)
+        y1 = max(by1, fy1)
 
         image = frame_copy[y0:y1, x0:x1]
         return image
@@ -387,5 +350,5 @@ class PeoplePOM(Serializable):
         """
         return {
             "people_count": self.peopleCount(),
-            "people_on_current_frame": [person_id for person_id in self.__people],
+            "people_on_current_frame": list(self.__people),
         }
