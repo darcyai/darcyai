@@ -12,15 +12,25 @@ jobs:
           path: $(System.DefaultWorkingDirectory)/dist
           displayName: 'Download artifacts'
       - script: |
-          pushd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
-
           python3 -m pip install --upgrade pip --user
+        displayName: 'install dependencies'
+      - bash: |
+          cd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
           python3 -m pip install -r requirements.txt --user
           python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl --user
 
           python3 -u tests.py
-        displayName: 'e2e test'
-      - script: |
+        displayName: 'e2e test on macOS and Linux'
+        condition: ne( variables['Agent.OS'], 'Windows_NT' )
+      - powershell: |
+          cd $(System.DefaultWorkingDirectory)\src\darcyai\integration_tests
+          python3 -m pip install -r requirements.txt --user
+          python3 -m pip install $(System.DefaultWorkingDirectory)\dist\darcyai*.whl --user
+
+          python3 -u tests.py
+        displayName: 'e2e test on Windows'
+        condition: eq( variables['Agent.OS'], 'Windows_NT' )
+      - bash: |
           sudo find $(Build.Repository.LocalPath) -name "__pycache__" -type d -exec /bin/rm -rf {} +
-        displayName: 'cleanup'
-        condition: always()
+        displayName: 'cleanup on macOS and Linux'
+        condition: and(ne( variables['Agent.OS'], 'Windows_NT' ), always())

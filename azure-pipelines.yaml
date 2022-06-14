@@ -112,3 +112,10 @@ stages:
           poolImageName:
             vmImage: 'macOS-latest'
           imageTag: 'dev'
+
+      - template: e2e-test-template.yaml
+        parameters:
+          name: 'E2E_windows'
+          poolImageName:
+            vmImage: 'windows-2019'
+          imageTag: 'dev'
