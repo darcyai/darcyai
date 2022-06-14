@@ -12,11 +12,9 @@ jobs:
           path: $(System.DefaultWorkingDirectory)/dist
           displayName: 'Download artifacts'
       - script: |
-          docker run --rm \
-            -v $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests:/src \
-            -v $(System.DefaultWorkingDirectory)/dist:/whl \
-            darcyai/darcy-ai-base:${{ parameters.imageTag }} \
-            sh -c "cd /src && python3 -m pip install /whl/darcyai*.whl && python3 -u tests.py"
+          python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl
+          pushd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
+          python3 -u tests.py
         displayName: 'e2e test'
       - script: |
           sudo find $(Build.Repository.LocalPath) -name "__pycache__" -type d -exec /bin/rm -rf {} +
