@@ -23,3 +23,4 @@ jobs:
       - script: |
           sudo find $(Build.Repository.LocalPath) -name "__pycache__" -type d -exec /bin/rm -rf {} +
         displayName: 'cleanup'
+        condition: always()
