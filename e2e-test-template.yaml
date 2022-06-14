@@ -14,9 +14,9 @@ jobs:
       - script: |
           pushd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
 
-          python3 -m pip install --upgrade pip
-          python3 -m pip install -r requirements.txt
-          python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl
+          python3 -m pip install --upgrade pip --user
+          python3 -m pip install -r requirements.txt --user
+          python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl --user
 
           python3 -u tests.py
         displayName: 'e2e test'
