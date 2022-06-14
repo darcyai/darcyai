@@ -12,8 +12,12 @@ jobs:
           path: $(System.DefaultWorkingDirectory)/dist
           displayName: 'Download artifacts'
       - script: |
-          python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl
           pushd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
+
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+          python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl
+
           python3 -u tests.py
         displayName: 'e2e test'
       - script: |
