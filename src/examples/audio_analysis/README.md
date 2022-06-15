@@ -1,17 +1,15 @@
-# Darcy AI Examples
+# Audio Analysis Sample Application
 
-This directory contains several examples that show how to use [Darcy AI](https://docs.darcy.ai).
+This sample application is a good example of a custom input stream and a custom perceptor working together to extend Darcy AI to process audio in real time.
 
-## Run the examples
+## Run the example
 
-1.  Set up your development environment:
+Use this command to run the main Python file which is the application code:
 
-    * If you need to setup your macOS as a Darcy AI development environment, follow the [macOS Environment Setup Guide](https://docs.darcy.ai/docs/ai/local-setup/setup-macos/).
-
-2.  Then run this command for each `.py` file in the `examples` folder to run
-the code:
 ```
-python3 -u FILENAME.py
+python3 -u audio_analysis.py
 ```
+
+The other files are the TensorFlow AI model, custom Perceptor, and custom Input Stream that make the application possible.
 
 For more information about building with Darcy AI, see the [Build Guide](https://docs.darcy.ai/docs/guides/build/).
