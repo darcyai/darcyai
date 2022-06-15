@@ -1,5 +1,5 @@
 ARG BASE_IMAGE_TAG=dev
-FROM darcyai/darcy-ai-base:$BASE_IMAGE_TAG
+FROM darcyai/darcyai-base:$BASE_IMAGE_TAG
 
 RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | tee /etc/apt/sources.list.d/coral-edgetpu.list
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
