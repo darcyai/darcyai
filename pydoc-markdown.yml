@@ -11,37 +11,7 @@ renderer:
   pages:
     - title: Home
       name: index
-      source: docs.md/HOME.md
-    - title: Getting Started
-      name: getting-started
-      source: docs.md/GETTING_STARTED.md
-    - title: Terminology
-      name: terminology
-      source: docs.md/TERMINOLOGY.md
-    - title: Darcy AI Explorer
-      name: darcy-ai-explorer
-      source: docs.md/DARCY_EXPLORER.md
-    - title: Raspberry Pi Setup
-      name: raspberry-pi-setup
-      source: docs.md/SETUP_RPI.md
-    - title: Jetson Nano Setup
-      name: jetson-nano-setup
-      source: docs.md/SETUP_JETSON.md
-    - title: macOS Setup
-      name: macos-setup
-      source: docs.md/SETUP_MACOS.md
-    - title: Windows Setup
-      name: windows-setup
-      source: docs.md/SETUP_WINDOWS.md
-    - title: Build
-      name: build
-      source: docs.md/BUILD.md
-    - title: Packaging
-      name: package
-      source: docs.md/PACKAGE.md
-    - title: Deploy
-      name: deploy
-      source: docs.md/DEPLOY.md
+      source: README.md
     - title: Pipeline
       contents:
         - darcyai.pipeline.Pipeline

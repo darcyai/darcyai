@@ -17,7 +17,7 @@ pool: 'Azure Pipelines'
 
 variables:
   DOCKER_CLI_EXPERIMENTAL: enabled
-  imageName: 'darcyai/darcy-ai'
+  imageName: 'darcyai/darcyai'
   imageTag: 'dev'
 
 steps:

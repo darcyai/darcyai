@@ -1,4 +1,4 @@
-FROM darcyai/darcy-ai-base:dev
+FROM darcyai/darcyai-base:dev
 
 
 WORKDIR /src
