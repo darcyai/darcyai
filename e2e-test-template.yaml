@@ -12,12 +12,30 @@ jobs:
           path: $(System.DefaultWorkingDirectory)/dist
           displayName: 'Download artifacts'
       - script: |
-          docker run --rm \
-            -v $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests:/src \
-            -v $(System.DefaultWorkingDirectory)/dist:/whl \
-            darcyai/darcy-ai-base:${{ parameters.imageTag }} \
-            sh -c "cd /src && python3 -m pip install /whl/darcyai*.whl && python3 -u tests.py"
-        displayName: 'e2e test'
-      - script: |
+          python3 -m pip install --upgrade pip --user
+        displayName: 'install dependencies'
+      - bash: |
+          cd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
+          python3 -m pip install -r requirements.txt --user
+          python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl --user
+
+          python3 -u tests.py
+        displayName: 'e2e test on macOS and Linux'
+        condition: ne( variables['Agent.OS'], 'Windows_NT' )
+      - powershell: |
+          $matches = Get-Content setup.cfg -ErrorAction SilentlyContinue | Select-String '^current_version = (.*)'
+          $version = $matches[0].Matches.Groups[1].Value
+          Write-Host "Version: $version"
+
+          cd $(System.DefaultWorkingDirectory)\src\darcyai\integration_tests
+          python3 -m pip install -r requirements.txt --user
+
+          python3 -m pip install $(System.DefaultWorkingDirectory)\dist\darcyai-$version-py3-none-any.whl --user
+
+          python3 -u tests.py
+        displayName: 'e2e test on Windows'
+        condition: eq( variables['Agent.OS'], 'Windows_NT' )
+      - bash: |
           sudo find $(Build.Repository.LocalPath) -name "__pycache__" -type d -exec /bin/rm -rf {} +
-        displayName: 'cleanup'
+        displayName: 'cleanup on macOS and Linux'
+        condition: and(ne( variables['Agent.OS'], 'Windows_NT' ), always())

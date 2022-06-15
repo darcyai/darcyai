@@ -50,8 +50,11 @@ class Test():
             assert data[0] == "111,1\n"
 
     def cleanup(self):
-        if os.path.exists(self.__csv_file):
-            os.remove(self.__csv_file)
+        try:
+            if os.path.exists(self.__csv_file):
+                os.remove(self.__csv_file)
+        except Exception:
+            pass
 
 
     def __perceptor_input_callback(self, input_data, pom, config):

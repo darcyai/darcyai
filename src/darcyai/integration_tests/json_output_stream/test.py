@@ -50,8 +50,11 @@ class Test():
             assert data[0] == "{\"perception_result\": 1}"
 
     def cleanup(self):
-        if os.path.exists(self.__json_file):
-            os.remove(self.__json_file)
+        try:
+            if os.path.exists(self.__json_file):
+                os.remove(self.__json_file)
+        except Exception:
+            pass
 
 
     def __perceptor_input_callback(self, input_data, pom, config):

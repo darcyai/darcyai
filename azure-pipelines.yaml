@@ -96,6 +96,26 @@ stages:
 
       - template: e2e-test-template.yaml
         parameters:
-          name: 'E2E_armv7l'
-          poolImageName: 'RPi'
+          name: 'E2E_arm32'
+          poolImageName: 'build-farm-rpi4'
           imageTag: 'dev'
+
+      - template: e2e-test-template.yaml
+        parameters:
+          name: 'E2E_arm64'
+          poolImageName: 'build-farm-coral'
+          imageTag: 'dev'
+
+      - template: e2e-test-template.yaml
+        parameters:
+          name: 'E2E_macOS'
+          poolImageName:
+            vmImage: 'macOS-latest'
+          imageTag: 'dev'
+
+      # - template: e2e-test-template.yaml
+      #   parameters:
+      #     name: 'E2E_windows'
+      #     poolImageName:
+      #       vmImage: 'windows-2019'
+      #     imageTag: 'dev'
