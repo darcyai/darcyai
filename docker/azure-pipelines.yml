@@ -19,6 +19,7 @@ variables:
   DOCKER_CLI_EXPERIMENTAL: enabled
   imageName: 'darcyai/darcyai'
   imageTag: 'dev'
+  latestTag: ''
 
 steps:
 - script: |
