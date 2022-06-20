@@ -1,12 +1,8 @@
-# darcyai
+# Darcy AI Engine
 
+Darcy AI Engine is a Python library that makes building AI apps as easy as building any
+other type of app. AI Engine exposes high-level constructs (`InputStream`, `OutputStream`, `Perceptor`, `Callback`)
+that you assemble in a `Pipeline` with a few lines of Python.
 
-## Generating documentation
-
-Follow these steps to get some automatically generated code documentation
-
-```console
-$ pip install pydoc-markdown>=4.0.0,<5.0.0 mkdocs
-$ ./apidocs.bash                # (to run live docs on localhost:8000)
-$ ./apidocs.bash --generate     # (to output the docs to docs directory)
-```
+To get started, see the [Build Guide](https://docs.darcy.ai/docs/guides/build/), or
+the [Python reference docs](https://darcyai.github.io/darcyai/).
