@@ -3,8 +3,7 @@
 ![AI Engine Pipeline](.assets/pipeline-example-visual@2x-100.jpg)
 
 Darcy AI Engine is a Python library that makes building AI apps as easy as building any other type
-of app. AI Engine exposes high-level constructs (`InputStream`, `OutputStream`, `Perceptor`
-, `Callback`)
+of app. AI Engine exposes high-level constructs (`InputStream`, `Perceptor`, `Callback`, `OutputStream`)
 that you assemble in a `Pipeline` with a few lines of Python.
 
 To get started, see the [Build Guide](https://docs.darcy.ai/docs/guides/build/), or
