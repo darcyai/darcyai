@@ -14,7 +14,7 @@ the [Python reference docs](https://darcyai.github.io/darcyai/).
 
 ## Example
 
-This code (from [basic.py](./blob/main/src/examples/basic_pipeline/basic.py)) shows how easy it
+This code (from [basic.py](./src/examples/basic_pipeline/basic.py)) shows how easy it
 is to create a minimal AI Engine pipeline:
 
 ```python
