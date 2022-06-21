@@ -8,7 +8,8 @@ of app. AI Engine exposes high-level constructs ([`InputStream`](https://darcyai
 [`OutputStream`](https://darcyai.github.io/darcyai/output-streams/outputstream/))
 that you assemble in a `Pipeline` with a few lines of Python.
 
-To get started, see the [Build Guide](https://docs.darcy.ai/docs/guides/build/), or
+To get started, see the [Build Guide](https://docs.darcy.ai/docs/guides/build/), look
+at the [examples](./src/examples), and consult
 the [Python reference docs](https://darcyai.github.io/darcyai/).
 
 ## Issues, Contributing, Discussion
