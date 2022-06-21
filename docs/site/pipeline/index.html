@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Pipeline - Darcy AI</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Pipeline";
+        var mkdocs_page_input_path = "pipeline.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Darcy AI
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Pipeline</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#pipeline-objects">Pipeline Objects</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#num_of_edge_tpus">num_of_edge_tpus</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#add_perceptor">add_perceptor</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#add_perceptor_before">add_perceptor_before</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#add_perceptor_after">add_perceptor_after</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#add_parallel_perceptor">add_parallel_perceptor</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#update_input_stream">update_input_stream</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#remove_output_stream">remove_output_stream</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#stop">stop</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#run">run</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_pom">get_pom</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_current_pulse_number">get_current_pulse_number</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_latest_input">get_latest_input</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_historical_input">get_historical_input</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_input_history">get_input_history</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_historical_pom">get_historical_pom</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_pom_history">get_pom_history</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#run_perceptor">run_perceptor</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_graph">get_graph</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_all_performance_metrics">get_all_performance_metrics</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_pulse_performance_metrics">get_pulse_performance_metrics</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_perceptor_performance_metrics">get_perceptor_performance_metrics</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#set_perceptor_config">set_perceptor_config</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_perceptor_config">get_perceptor_config</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#set_output_stream_config">set_output_stream_config</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get_output_stream_config">get_output_stream_config</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../streamdata/">StreamData</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../serializable/">Serializable</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline Config</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipeline-config/config/">Config</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pipeline-config/rgb/">RGB</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Input Streams</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../input-streams/inputstream/">InputStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../input-streams/inputmultistream/">InputMultiStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../input-streams/camerastream/">CameraStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../input-streams/videofilestream/">VideoFileStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../input-streams/videostreamdata/">VideoStreamData</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Output Streams</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../output-streams/outputstream/">OutputStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../output-streams/livefeedstream/">LiveFeedStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../output-streams/restapistream/">RestApiStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../output-streams/csvoutputstream/">CSVOutputStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../output-streams/jsonoutputstream/">JSONOutputStream</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Perceptors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptor/">Perceptor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptionobjectmodel/">PerceptionObjectModel</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../perceptors/class/">Class</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../perceptors/object/">Object</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../perceptors/peoplepom/">PeoplePOM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../perceptors/peopleperceptor/">PeoplePerceptor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../perceptors/perceptor-utils/">Perceptor Utils</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Coral Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/coralperceptorbase/">CoralPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/coral-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">CPU Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/cpuperceptorbase/">CpuPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../perceptors/cpu-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Darcy AI</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li><li>Pipeline</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p><a id="darcyai.pipeline"></a></p>
+<h1 id="darcyaipipeline">darcyai.pipeline</h1>
+<p><a id="darcyai.pipeline.Pipeline"></a></p>
+<h2 id="pipeline-objects">Pipeline Objects</h2>
+<pre><code class="language-python">class Pipeline()
+</code></pre>
+<p>The Pipeline class is the main class of the darcyai package.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>input_stream</strong> (<code>InputStream</code>): The input stream to be used by the pipeline.</li>
+<li><strong>input_data_history_len</strong> (<code>int</code>): The number of input data items to be
+    stored in the history. Defaults to <code>1</code>.</li>
+<li><strong>pom_history_len</strong> (<code>int</code>): The number of POM items to be stored in the
+    history. Defaults to <code>1</code>.</li>
+<li><strong>metrics_history_len</strong> (<code>int</code>): The number of metrics items to be stored in
+    the history. Defaults to <code>1</code>.</li>
+<li><strong>num_of_edge_tpus</strong> (<code>int</code>): The number of Edge TPUs. Defaults to <code>1</code>.</li>
+<li><strong>perceptor_error_handler_callback</strong> (<code>Callable[[str, Exception], None]</code>): The
+    callback function to be called when a Perceptor throws
+    an exception. Defaults to <code>None</code>.</li>
+<li><strong>output_stream_error_handler_callback</strong> (<code>Callable[[str, Exception], None]</code>): The
+    callback function to be called when an OutputStream
+    throws an exception. Defaults to <code>None</code>.</li>
+<li><strong>input_stream_error_handler_callback</strong> (<code>Callable[[Exception], None]</code>): The
+    callback function to be called when an InputStream throws
+    an exception. Defaults to <code>None</code>.</li>
+<li><strong>perception_completion_callback</strong> (<code>Callable[[PerceptionObjectModel], None]</code>): The
+    callback function to be called when all the perceptors have completed
+    processing. Defaults to <code>None</code>.</li>
+<li><strong>universal_rest_api</strong> (<code>bool</code>): Whether or not to use the universal
+    REST API. Defaults to <code>False</code>.</li>
+<li><strong>rest_api_base_path</strong> (<code>str</code>): The base path of the REST API. Defaults to <code>/</code>.</li>
+<li><strong>rest_api_flask_app</strong> (<code>Flask</code>): The Flask application to be used by
+    the REST API. Defaults to <code>None</code>.</li>
+<li><strong>rest_api_port</strong> (<code>int</code>): The port of the REST API. Defaults to <code>5000</code>.</li>
+<li><strong>rest_api_host</strong> (<code>str</code>): The host of the REST API. Defaults to <code>localhost</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera,
+...                     input_data_history_len=10,
+...                     pom_history_len=10,
+...                     metrics_history_len=10,
+...                     num_of_edge_tpus=1,
+...                     perceptor_error_handler_callback=None,
+...                     output_stream_error_handler_callback=None,
+...                     input_stream_error_handler_callback=None,
+...                     perception_completion_callback=None,
+...                     pulse_completion_callback=None,
+...                     universal_rest_api=True,
+...                     rest_api_base_path=&quot;/&quot;,
+...                     rest_api_flask_app=None,
+...                     rest_api_port=5000,
+...                     rest_api_host=&quot;localhost&quot;)
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.num_of_edge_tpus"></a></p>
+<h4 id="num_of_edge_tpus">num_of_edge_tpus</h4>
+<pre><code class="language-python">def num_of_edge_tpus() -&gt; int
+</code></pre>
+<p>Gets the number of Edge TPUs in the pipeline.</p>
+<p><strong>Returns</strong></p>
+<p><code>int</code>: The number of Edge TPUs in the pipeline.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.num_of_edge_tpus()
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.add_perceptor"></a></p>
+<h4 id="add_perceptor">add_perceptor</h4>
+<pre><code class="language-python">def add_perceptor(name: str,
+                  perceptor: Perceptor,
+                  input_callback: Callable[
+                      [StreamData, PerceptionObjectModel, ConfigRegistry],
+                      Any] = None,
+                  output_callback: Callable[
+                      [Any, PerceptionObjectModel, ConfigRegistry],
+                      Any] = None,
+                  parent: str = None,
+                  multi: bool = False,
+                  accelerator_idx: int = 0,
+                  default_config: Dict[str, Any] = None) -&gt; None
+</code></pre>
+<p>Adds a new Perceptor to the pipeline.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>name</strong> (<code>str</code>): The name of the Perceptor (must be a valid variable name).</li>
+<li><strong>perceptor</strong> (<code>Perceptor</code>): The Perceptor to be added.</li>
+<li><strong>input_callback</strong> (<code>Callable[[StreamData, PerceptionObjectModel, ConfigRegistry], Any]</code>): The
+    callback function to be called when the Perceptor receives input data.
+    Defaults to <code>None</code>.</li>
+<li><strong>output_callback</strong> (<code>Callable[[Any, PerceptionObjectModel, ConfigRegistry], Any]</code>): The
+    callback function to be called when the Perceptor produces output data.
+    Defaults to <code>None</code>.</li>
+<li><strong>parent</strong> (<code>str</code>): The name of the parent Perceptor. Defaults to <code>None</code>.</li>
+<li><strong>multi</strong> (<code>bool</code>): Whether or not to run the perceptor for each item in input data.
+    Defaults to <code>False</code>.</li>
+<li><strong>accelerator_idx</strong> (<code>int</code>): The index of the Edge TPU to be used by the Perceptor.
+    Defaults to <code>0</code>.</li>
+<li><strong>default_config</strong> (<code>Dict[str, Any]</code>): The default configuration for the Perceptor.
+    Defaults to <code>None</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.add_perceptor(name=&quot;perceptor&quot;,
+...                        perceptor=MyPerceptor(),
+...                        input_callback=None,
+...                        output_callback=None,
+...                        parent=&quot;input_stream&quot;,
+...                        multi=True,
+...                        accelerator_idx=0,
+...                        default_config={&quot;key&quot;: &quot;value&quot;})
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.add_perceptor_before"></a></p>
+<h4 id="add_perceptor_before">add_perceptor_before</h4>
+<pre><code class="language-python">def add_perceptor_before(
+        name_to_insert_before: str,
+        name: str,
+        perceptor: Perceptor,
+        input_callback: Callable[
+            [StreamData, PerceptionObjectModel, ConfigRegistry], Any] = None,
+        output_callback: Callable[[Any, PerceptionObjectModel, ConfigRegistry],
+                                  Any] = None,
+        multi: bool = False,
+        accelerator_idx: int = 0,
+        default_config: dict = None) -&gt; None
+</code></pre>
+<p>Adds a new Perceptor to the pipeline.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>name_to_insert_before</strong> (<code>str</code>): The name of the Perceptor to insert the new Perceptor
+    before.</li>
+<li><strong>name</strong> (<code>str</code>): The name of the Perceptor.</li>
+<li><strong>perceptor</strong> (<code>Perceptor</code>): The Perceptor to be added.</li>
+<li><strong>input_callback</strong> (<code>Callable[[StreamData, PerceptionObjectModel, ConfigRegistry], Any]</code>): The
+    callback function to be called when the Perceptor receives input data.
+    Defaults to <code>None</code>.</li>
+<li><strong>output_callback</strong> (<code>Callable[[Any, PerceptionObjectModel, ConfigRegistry], Any]</code>): The
+    callback function to be called when the Perceptor produces output data.
+    Defaults to <code>None</code>.</li>
+<li><strong>multi</strong> (<code>bool</code>): Whether or not to run the perceptor for each item in input data.
+    Defaults to <code>False</code>.</li>
+<li><strong>accelerator_idx</strong> (<code>int</code>): The index of the Edge TPU to be used by the Perceptor.
+    Defaults to <code>0</code>.</li>
+<li><strong>default_config</strong> (<code>dict</code>): The default configuration for the Perceptor.
+    Defaults to <code>None</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.add_perceptor_before(name=&quot;perceptor&quot;,
+...                               name_to_insert_before=&quot;child_input_stream&quot;,
+...                               perceptor=MyPerceptor(),
+...                               input_callback=None,
+...                               output_callback=None,
+...                               multi=True,
+...                               accelerator_idx=0,
+...                               default_config={&quot;key&quot;: &quot;value&quot;})
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.add_perceptor_after"></a></p>
+<h4 id="add_perceptor_after">add_perceptor_after</h4>
+<pre><code class="language-python">def add_perceptor_after(
+        name_to_insert_after: str,
+        name: str,
+        perceptor: Perceptor,
+        input_callback: Callable[
+            [StreamData, PerceptionObjectModel, ConfigRegistry], Any] = None,
+        output_callback: Callable[[Any, PerceptionObjectModel, ConfigRegistry],
+                                  Any] = None,
+        multi: bool = False,
+        accelerator_idx: int = 0,
+        default_config: dict = None) -&gt; None
+</code></pre>
+<p>Adds a new Perceptor to the pipeline.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>name_to_insert_after</strong> (<code>str</code>): The name of the Perceptor to insert the new Perceptor
+    after.</li>
+<li><strong>name</strong> (<code>str</code>): The name of the Perceptor.</li>
+<li><strong>perceptor</strong> (<code>Perceptor</code>): The Perceptor to be added.</li>
+<li><strong>input_callback</strong> (<code>Callable[[StreamData, PerceptionObjectModel, Any], ConfigRegistry]</code>): The
+    callback function to be called when the Perceptor receives input data.
+    Defaults to <code>None</code>.</li>
+<li><strong>output_callback</strong> (<code>Callable[[Any, PerceptionObjectModel, ConfigRegistry], Any]</code>): The
+    callback function to be called when the Perceptor produces output data.
+    Defaults to <code>None</code>.</li>
+<li><strong>multi</strong> (<code>bool</code>): Whether or not to run the perceptor for each item in input data.
+    Defaults to <code>False</code>.</li>
+<li><strong>accelerator_idx</strong> (<code>int</code>): The index of the Edge TPU to be used by the Perceptor.
+    Defaults to <code>0</code>.</li>
+<li><strong>default_config</strong> (<code>dict</code>): The default configuration for the Perceptor.
+    Defaults to <code>None</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.add_perceptor_after(name=&quot;perceptor&quot;,
+...                               name_to_insert_after=&quot;parent_input_stream&quot;,
+...                               perceptor=MyPerceptor(),
+...                               input_callback=None,
+...                               output_callback=None,
+...                               multi=True,
+...                               accelerator_idx=0,
+...                               default_config={&quot;key&quot;: &quot;value&quot;})
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.add_parallel_perceptor"></a></p>
+<h4 id="add_parallel_perceptor">add_parallel_perceptor</h4>
+<pre><code class="language-python">def add_parallel_perceptor(
+        name_to_insert_in_parallel_with: str,
+        name: str,
+        perceptor: Perceptor,
+        input_callback: Callable[
+            [StreamData, PerceptionObjectModel, ConfigRegistry], Any] = None,
+        output_callback: Callable[[Any, PerceptionObjectModel, ConfigRegistry],
+                                  Any] = None,
+        multi: bool = False,
+        accelerator_idx: int = 0,
+        default_config: dict = None) -&gt; None
+</code></pre>
+<p>Adds a new Perceptor to the pipeline.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>name_to_insert_in_parallel_with</strong> (<code>str</code>): The name of the Perceptor to insert the
+    new Perceptor in parallel with.</li>
+<li><strong>name</strong> (<code>str</code>): The name of the Perceptor.</li>
+<li><strong>perceptor</strong> (<code>Perceptor</code>): The Perceptor to be added.</li>
+<li><strong>input_callback</strong> (<code>Callable[[StreamData, PerceptionObjectModel, ConfigRegistry], Any]</code>): The
+    callback function to be called when the Perceptor receives input data.
+    Defaults to <code>None</code>.</li>
+<li><strong>output_callback</strong> (<code>Callable[[Any, PerceptionObjectModel, ConfigRegistry], Any]</code>): The
+    callback function to be called when the Perceptor produces output data.
+    Defaults to <code>None</code>.</li>
+<li><strong>multi</strong> (<code>bool</code>): Whether or not to run the perceptor for each item in input data.
+    Defaults to <code>False</code>.</li>
+<li><strong>accelerator_idx</strong> (<code>int</code>): The index of the Edge TPU to be used by the Perceptor.
+    Defaults to <code>None</code>.</li>
+<li><strong>default_config</strong> (<code>dict</code>): The default configuration for the Perceptor.
+    Defaults to <code>None</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.add_parallel_perceptor(name=&quot;perceptor&quot;,
+...                                 name_to_insert_in_parallel_with=&quot;parallel_input_stream&quot;,
+...                                 perceptor=MyPerceptor(),
+...                                 input_callback=None,
+...                                 output_callback=None,
+...                                 multi=True,
+...                                 accelerator_idx=0,
+...                                 default_config={&quot;key&quot;: &quot;value&quot;})
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.update_input_stream"></a></p>
+<h4 id="update_input_stream">update_input_stream</h4>
+<pre><code class="language-python">def update_input_stream(input_stream: InputStream) -&gt; None
+</code></pre>
+<p>Updates the input stream of the pipeline.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>input_stream</strong> (<code>InputStream</code>): The input stream to be added.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.update_input_stream(camera)
+
+&lt;a id=&quot;darcyai.pipeline.Pipeline.add_output_stream&quot;&gt;&lt;/a&gt;
+
+#### add\_output\_stream
+
+```python
+def add_output_stream(name: str,
+                      callback: Callable[[PerceptionObjectModel, StreamData],
+                                         Any],
+                      output_stream: OutputStream,
+                      default_config: dict = None) -&gt; None
+</code></pre>
+<p>Adds an OutputStream to the pipeline.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>name</strong> (<code>str</code>): The name of the OutputStream.</li>
+<li><strong>callback</strong> (<code>Callable[[PerceptionObjectModel, StreamData], Any]</code>): A callback function
+    that is called whith PerceptionObjectModel object and returns the data that
+    the output stream must process.</li>
+<li><strong>output_stream</strong> (<code>OutputStream</code>): The OutputStream to be added.</li>
+<li><strong>default_config</strong> (<code>dict</code>): The default configuration for the OutputStream.
+    Defaults to <code>None</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.add_output_stream(name=&quot;output_stream&quot;,
+...                            callback=None,
+...                            output_stream=MyOutputStream(),
+...                            default_config={&quot;key&quot;: &quot;value&quot;})
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.remove_output_stream"></a></p>
+<h4 id="remove_output_stream">remove_output_stream</h4>
+<pre><code class="language-python">def remove_output_stream(name: str) -&gt; None
+</code></pre>
+<p>Removes an OutputStream from the pipeline.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>name</strong> (<code>str</code>): The name of the OutputStream to be removed.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)\
+&gt;&gt;&gt; pipeline.add_output_stream(name=&quot;output_stream&quot;,
+...                            callback=None,
+...                            output_stream=MyOutputStream(),
+...                            default_config={&quot;key&quot;: &quot;value&quot;})
+&gt;&gt;&gt; pipeline.remove_output_stream(name=&quot;output_stream&quot;)
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.stop"></a></p>
+<h4 id="stop">stop</h4>
+<pre><code class="language-python">def stop() -&gt; None
+</code></pre>
+<p>Stops the pipeline.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.stop()
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.run"></a></p>
+<h4 id="run">run</h4>
+<pre><code class="language-python">def run() -&gt; None
+</code></pre>
+<p>Runs the pipeline.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.run()
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_pom"></a></p>
+<h4 id="get_pom">get_pom</h4>
+<pre><code class="language-python">def get_pom() -&gt; PerceptionObjectModel
+</code></pre>
+<p>Gets the Perception Object Model.</p>
+<p><strong>Returns</strong></p>
+<p><code>PerceptionObjectModel</code>: The Perception Object Model.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pom = pipeline.get_pom()
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_current_pulse_number"></a></p>
+<h4 id="get_current_pulse_number">get_current_pulse_number</h4>
+<pre><code class="language-python">def get_current_pulse_number() -&gt; int
+</code></pre>
+<p>Gets the current pulse number.</p>
+<p><strong>Returns</strong></p>
+<p><code>int</code>: The current pulse number.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pulse_number = pipeline.get_current_pulse_number()
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_latest_input"></a></p>
+<h4 id="get_latest_input">get_latest_input</h4>
+<pre><code class="language-python">def get_latest_input() -&gt; StreamData
+</code></pre>
+<p>Gets the latest input data.</p>
+<p><strong>Returns</strong></p>
+<p><code>StreamData</code>: The latest input data.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; latest_input = pipeline.get_latest_input()
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_historical_input"></a></p>
+<h4 id="get_historical_input">get_historical_input</h4>
+<pre><code class="language-python">def get_historical_input(pulse_number: int) -&gt; StreamData
+</code></pre>
+<p>Gets the input data from the history.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>pulse_number</strong> (<code>int</code>): The pulse number.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p><code>StreamData</code>: The input data from the history.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; historical_input = pipeline.get_historical_input(pulse_number=1)
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_input_history"></a></p>
+<h4 id="get_input_history">get_input_history</h4>
+<pre><code class="language-python">def get_input_history() -&gt; Dict[int, StreamData]
+</code></pre>
+<p>Gets the input data history.</p>
+<p><strong>Returns</strong></p>
+<p><code>Dict[int, StreamData]</code> - The input data history.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; input_history = pipeline.get_input_history()
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_historical_pom"></a></p>
+<h4 id="get_historical_pom">get_historical_pom</h4>
+<pre><code class="language-python">def get_historical_pom(pulse_number: int) -&gt; PerceptionObjectModel
+</code></pre>
+<p>Gets the POM from the history.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>pulse_number</strong> (<code>int</code>): The pulse number.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p><code>PerceptionObjectModel</code>: The POM from the history.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; historical_pom = pipeline.get_historical_pom(pulse_number=1)
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_pom_history"></a></p>
+<h4 id="get_pom_history">get_pom_history</h4>
+<pre><code class="language-python">def get_pom_history() -&gt; Dict[int, PerceptionObjectModel]
+</code></pre>
+<p>Gets the POM history.</p>
+<p><strong>Returns</strong></p>
+<p><code>Dict[int, PerceptionObjectModel]</code> - The POM history.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pom_history = pipeline.get_pom_history()
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.run_perceptor"></a></p>
+<h4 id="run_perceptor">run_perceptor</h4>
+<pre><code class="language-python">def run_perceptor(perceptor: Perceptor,
+                  input_data: Any,
+                  multi: bool = False) -&gt; Any
+</code></pre>
+<p>Runs the Perceptor.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>perceptor</strong> (<code>Perceptor</code>): The Perceptor to be run.</li>
+<li><strong>input_data</strong> (<code>Any</code>): The input data.</li>
+<li><strong>multi</strong> (<code>bool</code>): Whether or not to run the perceptor for each item in input data.
+    Defaults to <code>False</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p><code>Any</code>: The result of running the Perceptor.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; result = pipeline.run_perceptor(perceptor=Perceptor(), input_data=None, multi=True)
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_graph"></a></p>
+<h4 id="get_graph">get_graph</h4>
+<pre><code class="language-python">def get_graph() -&gt; Any
+</code></pre>
+<p>Gets the graph of the perceptors.</p>
+<p><strong>Returns</strong></p>
+<p><code>Any</code>: The graph of the perceptors.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; graph = pipeline.get_graph()
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_all_performance_metrics"></a></p>
+<h4 id="get_all_performance_metrics">get_all_performance_metrics</h4>
+<pre><code class="language-python">def get_all_performance_metrics() -&gt; Dict[str, Any]
+</code></pre>
+<p>Gets the performance metrics of the pipeline.</p>
+<p><strong>Returns</strong></p>
+<p><code>Dict[str, Any]</code> - The performance metrics of the pipeline.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; metrics = pipeline.get_all_performance_metrics()
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_pulse_performance_metrics"></a></p>
+<h4 id="get_pulse_performance_metrics">get_pulse_performance_metrics</h4>
+<pre><code class="language-python">def get_pulse_performance_metrics(
+        pulse_number: Union[int, None] = None) -&gt; Dict[str, Any]
+</code></pre>
+<p>Gets the performance metrics of the pipeline for specific pulse.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>pulse_number</strong> (<code>int</code>): The pulse number of the pulse. Defaults to current pulse.
+    Defaults to <code>None</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p><code>Dict[str, Any]</code> - The performance metrics of the pipeline for specific pulse.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; metrics = pipeline.get_pulse_performance_metrics(pulse_number=1)
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_perceptor_performance_metrics"></a></p>
+<h4 id="get_perceptor_performance_metrics">get_perceptor_performance_metrics</h4>
+<pre><code class="language-python">def get_perceptor_performance_metrics(name: str,
+                                      pulse_number: Union[int, None] = None
+                                      ) -&gt; Dict[str, Any]
+</code></pre>
+<p>Gets the performance metrics of the pipeline for specific perceptor.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>name</strong> (<code>str</code>): The name of the perceptor.</li>
+<li><strong>pulse_number</strong> (<code>int</code>): The pulse number of the pulse. Defaults to current pulse.
+    Defaults to <code>None</code>.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p><code>Dict[str, Any]</code> - The performance metrics of the pipeline for specific perceptor.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; metrics = pipeline.get_perceptor_performance_metrics(name=&quot;perceptor_name&quot;,
+...                                                      pulse_number=1)
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.set_perceptor_config"></a></p>
+<h4 id="set_perceptor_config">set_perceptor_config</h4>
+<pre><code class="language-python">def set_perceptor_config(perceptor_name: str, name: str, value: Any) -&gt; None
+</code></pre>
+<p>Sets the config of the pipeline.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>perceptor_name</strong> (<code>str</code>): The name of the perceptor.</li>
+<li><strong>name</strong> (<code>str</code>): The name of the config.</li>
+<li><strong>value</strong> (<code>Any</code>): The value of the config.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.set_perceptor_config(perceptor_name=&quot;perceptor_name&quot;,
+...                               name=&quot;config_name&quot;,
+...                               value=1)
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_perceptor_config"></a></p>
+<h4 id="get_perceptor_config">get_perceptor_config</h4>
+<pre><code class="language-python">def get_perceptor_config(perceptor_name: str) -&gt; Dict[str, Tuple[Any, Config]]
+</code></pre>
+<p>Gets the config of the perceptor.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>perceptor_name</strong> (<code>str</code>): The name of the perceptor.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p><code>Dict[str, Tuple[Any, Config]]</code> - The config of the perceptor.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; config = pipeline.get_perceptor_config(perceptor_name=&quot;perceptor_name&quot;)
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.set_output_stream_config"></a></p>
+<h4 id="set_output_stream_config">set_output_stream_config</h4>
+<pre><code class="language-python">def set_output_stream_config(name: str, config_name: str, value: Any) -&gt; None
+</code></pre>
+<p>Sets the config of the output stream.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>name</strong> (<code>str</code>): The name of the output stream.</li>
+<li><strong>config_name</strong> (<code>str</code>): The name of the config.</li>
+<li><strong>value</strong> (<code>Any</code>): The value of the config.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; pipeline.set_output_stream_config(name=&quot;output_stream_name&quot;,
+...                                   config_name=&quot;config_name&quot;,
+...                                   value=1)
+</code></pre>
+<p><a id="darcyai.pipeline.Pipeline.get_output_stream_config"></a></p>
+<h4 id="get_output_stream_config">get_output_stream_config</h4>
+<pre><code class="language-python">def get_output_stream_config(name: str) -&gt; Dict[str, Tuple[Any, Config]]
+</code></pre>
+<p>Gets the config of the output stream.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>name</strong> (<code>str</code>): The name of the output stream.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p><code>Dict[str, Tuple[Any, Config]]</code> - The config of the output stream.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.input.camera_stream import CameraStream
+&gt;&gt;&gt; from darcyai.pipeline import Pipeline
+
+&gt;&gt;&gt; camera = CameraStream(video_device=&quot;/dev/video0&quot;)
+&gt;&gt;&gt; pipeline = Pipeline(input_stream=camera)
+&gt;&gt;&gt; config = pipeline.get_output_stream_config(name=&quot;output_stream_name&quot;)
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../streamdata/" class="btn btn-neutral float-right" title="StreamData">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../streamdata/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>CSVOutputStream - Darcy AI</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "CSVOutputStream";
+        var mkdocs_page_input_path = "output-streams/csvoutputstream.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Darcy AI
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../pipeline/">Pipeline</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../streamdata/">StreamData</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../serializable/">Serializable</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Pipeline Config</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pipeline-config/config/">Config</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../pipeline-config/rgb/">RGB</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Input Streams</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../input-streams/inputstream/">InputStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../input-streams/inputmultistream/">InputMultiStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../input-streams/camerastream/">CameraStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../input-streams/videofilestream/">VideoFileStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../input-streams/videostreamdata/">VideoStreamData</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Output Streams</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../outputstream/">OutputStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../livefeedstream/">LiveFeedStream</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../restapistream/">RestApiStream</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">CSVOutputStream</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#csvoutputstream-objects">CSVOutputStream Objects</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#write">write</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#close">close</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../jsonoutputstream/">JSONOutputStream</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Perceptors</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../perceptors/perceptor/">Perceptor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../perceptors/perceptionobjectmodel/">PerceptionObjectModel</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../perceptors/class/">Class</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../perceptors/object/">Object</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../perceptors/peoplepom/">PeoplePOM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../perceptors/peopleperceptor/">PeoplePerceptor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../perceptors/perceptor-utils/">Perceptor Utils</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Coral Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../perceptors/coral-perceptors/coralperceptorbase/">CoralPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../perceptors/coral-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../perceptors/coral-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../perceptors/coral-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">CPU Perceptors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../perceptors/cpu-perceptors/cpuperceptorbase/">CpuPerceptorBase</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../perceptors/cpu-perceptors/imageclassificationperceptor/">ImageClassificationPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../perceptors/cpu-perceptors/objectdetectionperceptor/">ObjectDetectionPerceptor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../perceptors/cpu-perceptors/peopleperceptor/">PeoplePerceptor</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Darcy AI</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Output Streams &raquo;</li><li>CSVOutputStream</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p><a id="darcyai.output.csv_output_stream"></a></p>
+<h1 id="darcyaioutputcsv_output_stream">darcyai.output.csv_output_stream</h1>
+<p><a id="darcyai.output.csv_output_stream.CSVOutputStream"></a></p>
+<h2 id="csvoutputstream-objects">CSVOutputStream Objects</h2>
+<pre><code class="language-python">class CSVOutputStream(OutputStream)
+</code></pre>
+<p>OutputStream implementation that writes to a CSV file.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>file_path</strong> (<code>str</code>): The path to the CSV file to write to.</li>
+<li><strong>delimiter</strong> (<code>str</code>): The delimiter to use in the CSV file. Defaults to <code>,</code>.</li>
+<li><strong>quotechar</strong> (<code>str</code>): The quote character to use in the CSV file. Defaults to <code>|</code>.</li>
+<li><strong>buffer_size</strong> (<code>int</code>): The size of the buffer to use when writing to theCSV file.
+    Defaults to <code>0</code>.</li>
+<li><strong>flush_interval</strong> (<code>int</code>): The number of seconds before flushing the buffer to disk.
+    Defaults to <code>0</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.output.csv_output_stream import CSVOutputStream
+&gt;&gt;&gt; csv_output_stream = CSVOutputStream(file_path=&quot;output.csv&quot;,
+                                        delimiter=&quot;,&quot;,
+                                        quotechar=&quot;|&quot;,
+                                        buffer_size=1024*1024,
+                                        flush_interval=0)
+</code></pre>
+<p><a id="darcyai.output.csv_output_stream.CSVOutputStream.write"></a></p>
+<h4 id="write">write</h4>
+<pre><code class="language-python">def write(data: list) -&gt; None
+</code></pre>
+<p>Writes the given data to the CSV file.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>data</strong> (<code>list</code>): The data to write to the CSV file.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.output.csv_output_stream import CSVOutputStream
+&gt;&gt;&gt; csv_output_stream = CSVOutputStream(file_path=&quot;output.csv&quot;,
+                                        delimiter=&quot;,&quot;,
+                                        quotechar=&quot;|&quot;,
+                                        buffer_size=1024*1024,
+                                        flush_interval=0)
+&gt;&gt;&gt; csv_output_stream.write([[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;], [&quot;d&quot;, &quot;e&quot;, &quot;f&quot;]])
+</code></pre>
+<p><a id="darcyai.output.csv_output_stream.CSVOutputStream.close"></a></p>
+<h4 id="close">close</h4>
+<pre><code class="language-python">def close() -&gt; None
+</code></pre>
+<p>Closes the CSV file.</p>
+<p><strong>Examples</strong></p>
+<pre><code class="language-python">&gt;&gt;&gt; from darcyai.output.csv_output_stream import CSVOutputStream
+&gt;&gt;&gt; csv_output_stream = CSVOutputStream(file_path=&quot;output.csv&quot;,
+                                        delimiter=&quot;,&quot;,
+                                        quotechar=&quot;|&quot;,
+                                        buffer_size=1024*1024,
+                                        flush_interval=0)
+&gt;&gt;&gt; csv_output_stream.close()
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../restapistream/" class="btn btn-neutral float-left" title="RestApiStream"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../jsonoutputstream/" class="btn btn-neutral float-right" title="JSONOutputStream">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../restapistream/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../jsonoutputstream/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

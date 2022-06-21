@@ -1,6 +1,6 @@
 # Darcy AI Engine
 
-![AI Engine Pipeline](.assets/pipeline-example-visual@2x-100.jpg)
+![AI Engine Pipeline](https://github.com/darcyai/darcyai/raw/main/.assets/pipeline-example-visual%402x-100.jpg)
 
 Darcy AI Engine is a Python library that makes building AI apps as easy as building any other type
 of app. AI Engine exposes high-level constructs ([`InputStream`](https://darcyai.github.io/darcyai/input-streams/inputstream/),
@@ -9,12 +9,12 @@ of app. AI Engine exposes high-level constructs ([`InputStream`](https://darcyai
 that you assemble in a `Pipeline` with a few lines of Python.
 
 To get started, see the [Build Guide](https://docs.darcy.ai/docs/guides/build/), look
-at the [examples](./src/examples), and consult
+at the [examples](https://github.com/darcyai/darcyai/tree/main/src/examples), and consult
 the [Python reference docs](https://darcyai.github.io/darcyai/).
 
 ## Example
 
-This code (from [basic.py](./src/examples/basic_pipeline/basic.py)) shows how easy it
+This code (from [basic.py](https://github.com/darcyai/darcyai/tree/main/src/examples/basic_pipeline/basic.py)) shows how easy it
 is to create a minimal AI Engine pipeline:
 
 ```python
