@@ -61,11 +61,6 @@ Pose = collections.namedtuple('Pose', ['keypoints', 'score'])
 
 class PoseEngine():
     """Engine used for pose tasks."""
-    __EDGETPU_SHARED_LIB = {
-        'Linux': 'libedgetpu.so.1',
-        'Darwin': 'libedgetpu.1.dylib',
-        'Windows': 'edgetpu.dll'
-        }[platform.system()]
     __POSENET_SHARED_LIB = {
         'Linux': 'posenet_decoder.so',
         'Darwin': 'posenet_decoder.so',
@@ -115,7 +110,7 @@ class PoseEngine():
 
         if tpu:
             self.__edgetpu = import_module("pycoral.utils.edgetpu")
-            edgetpu_delegate = load_delegate(PoseEngine.__EDGETPU_SHARED_LIB)
+            edgetpu_delegate = load_delegate(Perceptor.EDGETPU_SHARED_LIB)
             delegates.append(edgetpu_delegate)
 
         self._interpreter = Interpreter(

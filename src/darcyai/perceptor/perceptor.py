@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import platform
 from typing import Any, Union
 
 from darcyai.config_registry import ConfigRegistry
@@ -41,6 +42,11 @@ class Perceptor(Configurable, EventEmitter):
     ...         pass
     ```
     """
+    EDGETPU_SHARED_LIB = {
+        'Linux': 'libedgetpu.so.1',
+        'Darwin': 'libedgetpu.1.dylib',
+        'Windows': 'edgetpu.dll'
+        }[platform.system()]
 
     def __init__(self, model_path: str, **kwargs):
         Configurable.__init__(self, **kwargs)
