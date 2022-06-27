@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+while read refname new remoteref old; do
+   tag="${refname#refs/tags/}"
+   if [ "$tag" != "$refname" ]; then
+      # refname is a tag
+      [[ $tag =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]
+      versionNumber="${BASH_REMATCH[0]}"
+      if [ "$versionNumber" == "$tag" ]; then
+         # it's a release tag, generate the docs
+         rm -rf docs
+         ./apidocs.bash --generate
+         git add docs
+         git commit -m "Update docs"
+         git tag -d "$tag"
+         git tag "$tag"
+      fi
+   fi
+done

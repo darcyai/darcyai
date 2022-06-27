@@ -184,7 +184,7 @@ class CameraStream(InputStream):
             if counter == 10:
                 raise Exception("Could not initialize video stream")
 
-            # Give the camera unit a few seconds to start
+            #Give the camera unit a few seconds to start
             self.__logger.debug("Waiting for camera unit to start...")
             counter += 1
             time.sleep(1)
