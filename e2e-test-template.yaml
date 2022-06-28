@@ -1,6 +1,5 @@
 jobs:
   - job: ${{ parameters.name }}
-    dependsOn: DarcyAI
     workspace:
       clean: all
     pool: ${{ parameters.poolImageName }}
