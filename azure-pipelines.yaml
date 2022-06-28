@@ -20,7 +20,7 @@ variables:
 stages:
   - stage: DarcyAI
     jobs:
-      - job: DarcyAI
+      - job: Build
         pool:
           vmImage: 'ubuntu-latest'
         strategy:
@@ -88,6 +88,45 @@ stages:
             publishLocation: 'Container'
           displayName: 'Publish build artifacts'
 
+  - stage: E2E_Tests
+    dependsOn: DarcyAI
+    jobs:
+      - template: e2e-test-template.yaml
+        parameters:
+          name: 'E2E_x86'
+          poolImageName: 'Azure Pipelines'
+          imageTag: 'dev'
+
+      - template: e2e-test-template.yaml
+        parameters:
+          name: 'E2E_arm32'
+          poolImageName: 'build-farm-rpi4'
+          imageTag: 'dev'
+
+      - template: e2e-test-template.yaml
+        parameters:
+          name: 'E2E_arm64'
+          poolImageName: 'build-farm-coral'
+          imageTag: 'dev'
+
+      - template: e2e-test-template.yaml
+        parameters:
+          name: 'E2E_macOS'
+          poolImageName:
+            vmImage: 'macOS-latest'
+          imageTag: 'dev'
+
+      # - template: e2e-test-template.yaml
+      #   parameters:
+      #     name: 'E2E_windows'
+      #     poolImageName:
+      #       vmImage: 'windows-2019'
+      #     imageTag: 'dev'
+
+  - stage: Release
+    dependsOn: E2E_Tests
+    condition: eq(variables['tagged'], true)
+    jobs:
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_x86'
