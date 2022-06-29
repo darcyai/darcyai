@@ -54,7 +54,7 @@ if __name__ == "__main__":
     failed = False
     if len(sys.argv) > 1:
         tests_dir = sys.argv[1]
-        failed = failed or run_tests(tests_dir)
+        failed = run_tests(tests_dir)
     else:
         for test_folder in os.scandir("."):
             if not test_folder.is_dir() or str.startswith(test_folder.name, "__"):

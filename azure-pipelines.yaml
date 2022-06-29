@@ -16,11 +16,15 @@ trigger:
 
 variables:
   tagged: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
+  mainBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  version: ''
 
 stages:
   - stage: DarcyAI
     jobs:
       - job: DarcyAI
+        workspace:
+          clean: all
         pool:
           vmImage: 'ubuntu-latest'
         strategy:
@@ -73,6 +77,23 @@ stages:
           displayName: 'Publish code coverage'
 
         - script: |
+            LATEST_TAG=$(git for-each-ref refs/tags --sort=-taggerdate --format='%(refname)' | tail -n1 | sed "s|refs/tags/||")
+            MAJOR=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|(.)\..\..|\1|g")
+            MINOR=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\.(.)\..|\1|g")
+            PATCH=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\..\.(.)|\1|g")
+            SUFFIX="-dev$(Build.BuildNumber)"
+            VERSION="$MAJOR.$MINOR.$PATCH$SUFFIX"
+            echo "VERSION: $VERSION"
+
+            git config --global user.email "info@edgeworx.io"
+            git config --global user.name "Edgeworx"
+            bump2version build --new-version $VERSION
+            git config --global user.email ""
+            git config --global user.name ""
+          displayName: 'Change version'
+          condition: eq(variables['mainBranch'], true)
+
+        - script: |
             python3 -m build
           displayName: 'Artifact creation'
 
@@ -88,6 +109,9 @@ stages:
             publishLocation: 'Container'
           displayName: 'Publish build artifacts'
 
+  - stage: E2E_Tests
+    dependsOn: DarcyAI
+    jobs:
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_x86'
@@ -119,3 +143,38 @@ stages:
       #     poolImageName:
       #       vmImage: 'windows-2019'
       #     imageTag: 'dev'
+
+  - stage: Release
+    dependsOn: E2E_Tests
+    condition: or(eq(variables['tagged'], true), eq(variables['mainBranch'], true))
+    jobs:
+      - job: Release
+        workspace:
+          clean: all
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          matrix:
+            Build:
+              python.version: '3.7'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: dist
+              patterns: '**/*.whl'
+              path: $(System.DefaultWorkingDirectory)/dist
+            displayName: 'Download artifacts'
+
+          - script: |
+              python3 -m pip install --upgrade pip --user
+              python3 -m pip install --upgrade twine --user
+            displayName: 'Install dependencies'
+
+          - task: TwineAuthenticate@1
+            inputs:
+              pythonUploadServiceConnection: 'PyPI'
+            displayName: 'Authenticate to PyPI'
+
+          - script: |
+              python3 -m twine upload -r pypi --config-file $(PYPIRC_PATH) ./dist/*.whl --verbose
+            displayName: 'Publish to PyPI'
