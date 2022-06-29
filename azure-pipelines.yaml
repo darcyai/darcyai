@@ -85,7 +85,7 @@ stages:
 
             git config --global user.email "info@edgeworx.io"
             git config --global user.name "Edgeworx"
-            ./bump_version.bash $VERSION
+            bump2version build --new-version $VERSION
             git config --global user.email ""
             git config --global user.name ""
           displayName: 'Change version'
