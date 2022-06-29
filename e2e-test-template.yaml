@@ -9,18 +9,21 @@ jobs:
           artifact: dist
           patterns: '**/*.whl'
           path: $(System.DefaultWorkingDirectory)/dist
-          displayName: 'Download artifacts'
+        displayName: 'Download artifacts'
+
       - script: |
           python3 -m pip install --upgrade pip --user
-        displayName: 'install dependencies'
+        displayName: 'Install dependencies'
+
       - bash: |
           cd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
           python3 -m pip install -r requirements.txt --user
           python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl --user
 
           python3 -u tests.py
-        displayName: 'e2e test on macOS and Linux'
+        displayName: 'E2E test on macOS and Linux'
         condition: ne( variables['Agent.OS'], 'Windows_NT' )
+
       - powershell: |
           $matches = Get-Content setup.cfg -ErrorAction SilentlyContinue | Select-String '^current_version = (.*)'
           $version = $matches[0].Matches.Groups[1].Value
@@ -32,9 +35,10 @@ jobs:
           python3 -m pip install $(System.DefaultWorkingDirectory)\dist\darcyai-$version-py3-none-any.whl --user
 
           python3 -u tests.py
-        displayName: 'e2e test on Windows'
+        displayName: 'E2E test on Windows'
         condition: eq( variables['Agent.OS'], 'Windows_NT' )
+
       - bash: |
           sudo find $(Build.Repository.LocalPath) -name "__pycache__" -type d -exec /bin/rm -rf {} +
-        displayName: 'cleanup on macOS and Linux'
+        displayName: 'Cleanup on macOS and Linux'
         condition: and(ne( variables['Agent.OS'], 'Windows_NT' ), always())

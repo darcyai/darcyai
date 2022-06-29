@@ -23,6 +23,8 @@ stages:
   - stage: DarcyAI
     jobs:
       - job: DarcyAI
+        workspace:
+          clean: all
         pool:
           vmImage: 'ubuntu-latest'
         strategy:
@@ -89,7 +91,7 @@ stages:
             git config --global user.email ""
             git config --global user.name ""
           displayName: 'Change version'
-          condition: ne(variables['mainBranch'], true)
+          condition: eq(variables['mainBranch'], true)
 
         - script: |
             python3 -m build
@@ -146,8 +148,33 @@ stages:
     dependsOn: E2E_Tests
     condition: or(eq(variables['tagged'], true), eq(variables['mainBranch'], true))
     jobs:
-      - template: e2e-test-template.yaml
-        parameters:
-          name: 'E2E_x86'
-          poolImageName: 'Azure Pipelines'
-          imageTag: 'dev'
+      - job: Release
+        workspace:
+          clean: all
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          matrix:
+            Build:
+              python.version: '3.7'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: dist
+              patterns: '**/*.whl'
+              path: $(System.DefaultWorkingDirectory)/dist
+            displayName: 'Download artifacts'
+
+          - script: |
+              python3 -m pip install --upgrade pip --user
+              python3 -m pip install --upgrade twine --user
+            displayName: 'Install dependencies'
+
+          - task: TwineAuthenticate@1
+            inputs:
+              pythonUploadServiceConnection: 'PyPI'
+            displayName: 'Authenticate to PyPI'
+
+          - script: |
+              python3 -m twine upload -r pypi --config-file $(PYPIRC_PATH) ./dist/*.whl --verbose
+            displayName: 'Publish to PyPI'
