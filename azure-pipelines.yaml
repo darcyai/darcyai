@@ -61,9 +61,14 @@ stages:
             SUFFIX="-dev$(Build.BuildNumber)"
             VERSION="$MAJOR.$MINOR.$PATCH$SUFFIX"
             echo "VERSION: $VERSION"
+
+            git config --global user.email "info@edgeworx.io"
+            git config --global user.name "Edgeworx"
             ./bump_version.bash $VERSION
             cat setup.cfg
             cat src/darcyai/__init__.py
+            git config --global user.email ""
+            git config --global user.name ""
           displayName: 'Change version'
           condition: ne(variables['mainBranch'], true)
 
