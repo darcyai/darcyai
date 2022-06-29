@@ -54,25 +54,6 @@ stages:
           displayName: 'Install dependencies'
 
         - script: |
-            LATEST_TAG=$(git for-each-ref refs/tags --sort=-taggerdate --format='%(refname)' | tail -n1 | sed "s|refs/tags/||")
-            MAJOR=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|(.)\..\..|\1|g")
-            MINOR=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\.(.)\..|\1|g")
-            PATCH=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\..\.(.)|\1|g")
-            SUFFIX="-dev$(Build.BuildNumber)"
-            VERSION="$MAJOR.$MINOR.$PATCH$SUFFIX"
-            echo "VERSION: $VERSION"
-
-            git config --global user.email "info@edgeworx.io"
-            git config --global user.name "Edgeworx"
-            ./bump_version.bash $VERSION
-            cat setup.cfg
-            cat src/darcyai/__init__.py
-            git config --global user.email ""
-            git config --global user.name ""
-          displayName: 'Change version'
-          condition: ne(variables['mainBranch'], true)
-
-        - script: |
             pylint --rcfile=.pylintrc --output-format=colorized --reports=n --score=n src/darcyai/
           displayName: 'Run pylint'
 
@@ -92,6 +73,23 @@ stages:
             codeCoverageTool: Cobertura
             summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
           displayName: 'Publish code coverage'
+
+        - script: |
+            LATEST_TAG=$(git for-each-ref refs/tags --sort=-taggerdate --format='%(refname)' | tail -n1 | sed "s|refs/tags/||")
+            MAJOR=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|(.)\..\..|\1|g")
+            MINOR=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\.(.)\..|\1|g")
+            PATCH=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\..\.(.)|\1|g")
+            SUFFIX="-dev$(Build.BuildNumber)"
+            VERSION="$MAJOR.$MINOR.$PATCH$SUFFIX"
+            echo "VERSION: $VERSION"
+
+            git config --global user.email "info@edgeworx.io"
+            git config --global user.name "Edgeworx"
+            ./bump_version.bash $VERSION
+            git config --global user.email ""
+            git config --global user.name ""
+          displayName: 'Change version'
+          condition: ne(variables['mainBranch'], true)
 
         - script: |
             python3 -m build
