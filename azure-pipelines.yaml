@@ -16,7 +16,7 @@ trigger:
 
 variables:
   tagged: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
-  mainBranch: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  releaseDev: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   version: ''
 
 stages:
@@ -77,10 +77,10 @@ stages:
           displayName: 'Publish code coverage'
 
         - script: |
-            LATEST_TAG=$(git for-each-ref refs/tags --sort=-taggerdate --format='%(refname)' | tail -n1 | sed "s|refs/tags/||")
-            MAJOR=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|(.)\..\..|\1|g")
-            MINOR=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\.(.)\..|\1|g")
-            PATCH=$(echo "$LATEST_TAG" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\..\.(.)|\1|g")
+            NEXT_VERSION=$(cat next_version)
+            MAJOR=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|(.)\..\..|\1|g")
+            MINOR=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\.(.)\..|\1|g")
+            PATCH=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\..\.(.)|\1|g")
             SUFFIX="-dev$(Build.BuildNumber)"
             VERSION="$MAJOR.$MINOR.$PATCH$SUFFIX"
             echo "VERSION: $VERSION"
@@ -91,7 +91,7 @@ stages:
             git config --global user.email ""
             git config --global user.name ""
           displayName: 'Change version'
-          condition: eq(variables['mainBranch'], true)
+          condition: eq(variables['releaseDev'], true)
 
         - script: |
             python3 -m build
@@ -146,7 +146,7 @@ stages:
 
   - stage: Release
     dependsOn: E2E_Tests
-    condition: or(eq(variables['tagged'], true), eq(variables['mainBranch'], true))
+    condition: or(eq(variables['tagged'], true), eq(variables['releaseDev'], true))
     jobs:
       - job: Release
         workspace:
