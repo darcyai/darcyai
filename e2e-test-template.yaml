@@ -16,6 +16,16 @@ jobs:
         displayName: 'Install dependencies'
 
       - bash: |
+          python3 -m pip install tflite-runtime==2.9.1 --user
+        displayName: 'Install tensorflow on Linux'
+        condition: ne( variables['Agent.OS'], 'Linux' )
+
+      - bash: |
+          python3 -m pip install tensorflow-macos==2.9.2 --user
+        displayName: 'Install tensorflow on macOS'
+        condition: ne( variables['Agent.OS'], 'Darwin' )
+
+      - bash: |
           cd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
           python3 -m pip install -r requirements.txt --user
           python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl --user
