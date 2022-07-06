@@ -6,13 +6,8 @@ trigger:
     include:
     - main
   paths:
-    exclude:
-    - docker
-    - docs
-    - docs.md
-    - examples
-    - README.md
-    - CHANGELOG.md
+    include:
+      - src
 
 variables:
   tagged: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]

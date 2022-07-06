@@ -1,0 +1,2 @@
+# Add the People Perceptor instance to the Pipeline and use the input callback from above as the input preparation handler
+pipeline.add_perceptor("peeps", people_ai, input_callback=people_input_callback)

@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+import pathlib
 import sys
 import traceback
 from importlib import import_module
@@ -51,12 +52,13 @@ def run_tests(test_dir: str) -> bool:
 
 if __name__ == "__main__":
     #pylint: disable=protected-access
+    script_dir = pathlib.Path(__file__).parent.absolute()
     failed = False
     if len(sys.argv) > 1:
         tests_dir = sys.argv[1]
         failed = run_tests(tests_dir)
     else:
-        for test_folder in os.scandir("."):
+        for test_folder in os.scandir(script_dir):
             if not test_folder.is_dir() or str.startswith(test_folder.name, "__"):
                 continue
 
