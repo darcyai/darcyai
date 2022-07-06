@@ -18,12 +18,12 @@ jobs:
       - bash: |
           python3 -m pip install tflite-runtime==2.9.1 --user
         displayName: 'Install tensorflow on Linux'
-        condition: ne( variables['Agent.OS'], 'Linux' )
+        condition: eq( variables['Agent.OS'], 'Linux' )
 
       - bash: |
           python3 -m pip install tensorflow-macos==2.9.2 --user
         displayName: 'Install tensorflow on macOS'
-        condition: ne( variables['Agent.OS'], 'Darwin' )
+        condition: eq( variables['Agent.OS'], 'Darwin' )
 
       - bash: |
           cd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
