@@ -15,6 +15,7 @@
 import cv2
 import os
 import pathlib
+import random
 
 class Test():
     __SNIPPETS = [
@@ -39,13 +40,13 @@ class Test():
                 demo += f.read()
                 demo += "\n\n"
 
+        port = random.randint(10000, 20000)
+        demo = demo.replace("port=3456", f"port={port}")
+
         # save demo file
         self.__demo_file = os.path.join(script_dir, "demo.py")
         with open(self.__demo_file, "w") as f:
             f.write(demo)
-
-        self.__result = ""
-
 
     def act(self):
         exec(open(self.__demo_file).read())
