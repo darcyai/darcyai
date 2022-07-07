@@ -20,8 +20,7 @@ class Test():
     __SNIPPETS = [
         "1_imports.py",
         "test_2_1_initialize_input.py",
-        "test_2_2_initialize_pipeline.py",
-        "2_3_initialize_output.py",
+        "2_2_initialize_pipeline_output.py",
         "3_output_callback.py",
         "4_init_perceptor.py",
         "5_add_perceptor.py",
