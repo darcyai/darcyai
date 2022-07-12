@@ -82,20 +82,17 @@ stages:
             MAJOR=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|(.)\..\..|\1|g")
             MINOR=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\.(.)\..|\1|g")
             PATCH=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\..\.(.)|\1|g")
-            SUFFIX="-dev$(Build.BuildNumber)"
-            VERSION="$MAJOR.$MINOR.$PATCH$SUFFIX"
+            SUFFIX="dev$(Build.BuildNumber)"
+            VERSION="$NEXT_VERSION-$SUFFIX"
             echo "VERSION: $VERSION"
             echo "##vso[task.setvariable variable=version]$VERSION"
-          displayName: 'Set version'
 
-        - script: |
             git config --global user.email "info@edgeworx.io"
             git config --global user.name "Edgeworx"
             bump2version build --new-version $(version)
             git config --global user.email ""
             git config --global user.name ""
           displayName: 'Change version'
-          condition: eq(variables['releaseDev'], true)
 
         - script: |
             python3 -m build
