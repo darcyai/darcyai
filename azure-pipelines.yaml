@@ -78,6 +78,8 @@ stages:
           displayName: 'Publish code coverage'
 
         - script: |
+            set -e
+
             NEXT_VERSION=$(cat next_version)
             MAJOR=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|(.)\..\..|\1|g")
             MINOR=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\.(.)\..|\1|g")
@@ -85,11 +87,10 @@ stages:
             SUFFIX="dev$(Build.BuildNumber)"
             VERSION="$NEXT_VERSION-$SUFFIX"
             echo "VERSION: $VERSION"
-            echo "##vso[task.setvariable variable=version]$VERSION"
 
             git config --global user.email "info@edgeworx.io"
             git config --global user.name "Edgeworx"
-            bump2version build --new-version $(version)
+            bump2version build --new-version $VERSION
             git config --global user.email ""
             git config --global user.name ""
           displayName: 'Change version'
