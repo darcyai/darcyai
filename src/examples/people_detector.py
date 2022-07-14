@@ -70,7 +70,7 @@ def new_person_callback(person_id):
 
 
 # Instantiate an Camera Stream input stream object
-camera = CameraStream(video_device="/dev/video0", fps=20)
+camera = CameraStream(video_device=0, fps=20)
 
 # Instantiate the Pipeline object and pass it the Camera Stream object as its input stream source
 pipeline = Pipeline(input_stream=camera)
