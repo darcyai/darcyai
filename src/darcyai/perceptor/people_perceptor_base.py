@@ -87,14 +87,9 @@ class PoseEngine():
         if arch == "AMD64":
             arch = "x86_64"
 
+        self.__is_windows = platform.system() == "Windows"
+
         script_dir = os.path.dirname(os.path.realpath(__file__))
-
-        sysname = platform.uname().system.lower()
-        posenet_shared_lib = os.path.join(
-            script_dir, "posenet_lib", arch, sysname, PoseEngine.__POSENET_SHARED_LIB)
-
-        if not os.path.exists(posenet_shared_lib):
-            raise ValueError("Posenet library not found at %s" % posenet_shared_lib)
 
         if importlib.util.find_spec("tflite_runtime") is not None:
             tf = import_module("tflite_runtime.interpreter")
@@ -105,17 +100,29 @@ class PoseEngine():
             load_delegate = tf.lite.experimental.load_delegate
             Interpreter = tf.lite.Interpreter
 
-        posenet_decoder_delegate = load_delegate(posenet_shared_lib)
-        delegates = [posenet_decoder_delegate]
+        if self.__is_windows:
+            model_path = os.path.join(script_dir, "cpu", "models", "movenet_multipose.tflite")
+            self._interpreter = Interpreter(model_path, num_threads=num_cpu_threads)
+            self._interpreter.allocate_tensors()
+        else:
+            sysname = platform.uname().system.lower()
+            posenet_shared_lib = os.path.join(
+                script_dir, "posenet_lib", arch, sysname, PoseEngine.__POSENET_SHARED_LIB)
 
-        if tpu:
-            self.__edgetpu = import_module("pycoral.utils.edgetpu")
-            edgetpu_delegate = load_delegate(Perceptor.EDGETPU_SHARED_LIB)
-            delegates.append(edgetpu_delegate)
+            if not os.path.exists(posenet_shared_lib):
+                raise ValueError("Posenet library not found at %s" % posenet_shared_lib)
 
-        self._interpreter = Interpreter(
-            model_path, experimental_delegates=delegates, num_threads=num_cpu_threads)
-        self._interpreter.allocate_tensors()
+            posenet_decoder_delegate = load_delegate(posenet_shared_lib)
+            delegates = [posenet_decoder_delegate]
+
+            if tpu:
+                self.__edgetpu = import_module("pycoral.utils.edgetpu")
+                edgetpu_delegate = load_delegate(Perceptor.EDGETPU_SHARED_LIB)
+                delegates.append(edgetpu_delegate)
+
+            self._interpreter = Interpreter(
+                model_path, experimental_delegates=delegates, num_threads=num_cpu_threads)
+            self._interpreter.allocate_tensors()
 
         self._mirror = mirror
 
@@ -128,8 +135,10 @@ class PoseEngine():
                  " This model has {}.".format(self._input_tensor_shape)))
         _, self._input_height, self._input_width, self._input_depth = self.get_input_tensor_shape()
         self._input_type = self._interpreter.get_input_details()[0]['dtype']
+        self._input_details = self._interpreter.get_input_details()
+        self._output_details = self._interpreter.get_output_details()
         self._inf_time = 0
-        self.__tpu = tpu
+        self.__tpu = tpu and not self.__is_windows
 
     def run_inference(self, input_data):
         """
@@ -144,7 +153,7 @@ class PoseEngine():
         self._inf_time = time.monotonic() - start
         return (self._inf_time * 1000)
 
-    def DetectPosesInImage(self, img):
+    def DetectPosesInImage(self, input_image):
         """
         Detects poses in a given image.
         For ideal results make sure the image fed to this function is close to the
@@ -154,22 +163,24 @@ class PoseEngine():
         # Arguments
         img: numpy array containing image
         """
+        if self.__is_windows:
+            return self.DetectPosesInImageWindows(input_image)
 
         # Extend or crop the input to match the input shape of the network.
-        if img.shape[0] < self._input_height or img.shape[1] < self._input_width:
-            img = np.pad(img, [[0, max(0, self._input_height - img.shape[0])],
-                               [0, max(0, self._input_width - img.shape[1])], [0, 0]],
+        if input_image.shape[0] < self._input_height or input_image.shape[1] < self._input_width:
+            input_image = np.pad(input_image, [[0, max(0, self._input_height - input_image.shape[0])],
+                               [0, max(0, self._input_width - input_image.shape[1])], [0, 0]],
                          mode='constant')
-        img = img[0:self._input_height, 0:self._input_width]
-        assert (img.shape == tuple(self._input_tensor_shape[1:]))
+        input_image = input_image[0:self._input_height, 0:self._input_width]
+        assert (input_image.shape == tuple(self._input_tensor_shape[1:]))
 
-        input_data = np.expand_dims(img, axis=0)
+        input_data = np.expand_dims(input_image, axis=0)
         if self._input_type is np.float32:
             # Floating point versions of posenet take image data in [-1,1] range.
-            input_data = np.float32(img) / 128.0 - 1.0
+            input_data = np.float32(input_image) / 128.0 - 1.0
         else:
             # Assuming to be uint8
-            input_data = np.asarray(img)
+            input_data = np.asarray(input_image)
 
         if not self.__tpu:
             input_data = np.expand_dims(input_data, axis=0)
@@ -179,6 +190,47 @@ class PoseEngine():
         self.run_inference(input_data)
     
         return self.ParseOutput()
+
+    def DetectPosesInImageWindows(self, input_image):
+        """
+        Detects poses in a given image.
+        For ideal results make sure the image fed to this function is close to the
+        expected input size - it is the caller's responsibility to resize the
+        image accordingly.
+
+        # Arguments
+        img: numpy array containing image
+        """
+        if not self.__is_windows:
+            return self.DetectPosesInImage(input_image)
+
+        is_dynamic_shape_model = self._input_details[0]['shape_signature'][2] == -1
+        # Resize and pad the image to keep the aspect ratio and fit the expected
+        # size.
+        if is_dynamic_shape_model:
+            resized_image, _ = self.__keep_aspect_ratio_resizer(
+                input_image, 256)
+            input_tensor = np.expand_dims(resized_image, axis=0)
+            self._interpreter.resize_tensor_input(
+                self._input_details[0]['index'], input_tensor.shape, strict=True)
+        else:
+            resized_image = cv2.resize(input_image,
+                                        (self._input_width, self._input_height))
+            input_tensor = np.expand_dims(resized_image, axis=0)
+        self._interpreter.allocate_tensors()
+
+        # Run inference with the MoveNet MultiPose model.
+        self._interpreter.set_tensor(self._input_details[0]['index'],
+                                    input_tensor.astype(self._input_type))
+        self._interpreter.invoke()
+
+        # Get the model output
+        model_output = self._interpreter.get_tensor(
+            self._output_details[0]['index'])
+
+        image_height, image_width, _ = input_image.shape
+    
+        return self.ParseOutputWindows(model_output, image_height, image_width)
 
     def get_input_tensor_shape(self):
         """Returns input tensor shape."""
@@ -207,6 +259,65 @@ class PoseEngine():
                     Point(x, y), keypoint_scores[i, j])
             poses.append(Pose(pose_keypoints, pose_score))
         return poses, self._inf_time
+
+    def ParseOutputWindows(self, keypoints_with_scores, image_height, image_width):
+        """Parses interpreter output tensors and returns decoded poses."""
+        _, num_instances, _ = keypoints_with_scores.shape
+        poses = []
+
+        for idx in range(num_instances):
+            pose_score = keypoints_with_scores[0, idx, 55]
+            kpts_y = keypoints_with_scores[0, idx, range(0, 51, 3)]
+            kpts_x = keypoints_with_scores[0, idx, range(1, 51, 3)]
+            scores = keypoints_with_scores[0, idx, range(2, 51, 3)]
+    
+            pose_keypoints = {}
+            for i in range(scores.shape[0]):
+                x = int(kpts_x[i] * image_width)
+                y = int(kpts_y[i] * image_height)
+                pose_keypoints[KeypointType(i)] = Keypoint(
+                    Point(x, y), scores[i])
+            poses.append(Pose(pose_keypoints, pose_score))
+
+        return poses, self._inf_time
+
+    def __keep_aspect_ratio_resizer(self, image, target_size):
+        """Resizes the image.
+        The function resizes the image such that its longer side matches the required
+        target_size while keeping the image aspect ratio. Note that the resizes image
+        is padded such that both height and width are a multiple of 32, which is
+        required by the model. See
+        https://tfhub.dev/google/tfjs-model/movenet/multipose/lightning/1 for more
+        detail.
+        Args:
+            image: The input RGB image as a numpy array of shape [height, width, 3].
+            target_size: Desired size that the image should be resize to.
+        Returns:
+            image: The resized image.
+            (target_height, target_width): The actual image size after resize.
+        """
+        height, width, _ = image.shape
+        if height > width:
+            scale = float(target_size / height)
+            target_height = target_size
+            scaled_width = math.ceil(width * scale)
+            image = cv2.resize(image, (scaled_width, target_height))
+            target_width = int(math.ceil(scaled_width / 32) * 32)
+        else:
+            scale = float(target_size / width)
+            target_width = target_size
+            scaled_height = math.ceil(height * scale)
+            image = cv2.resize(image, (target_width, scaled_height))
+            target_height = int(math.ceil(scaled_height / 32) * 32)
+
+        padding_top, padding_left = 0, 0
+        padding_bottom = target_height - image.shape[0]
+        padding_right = target_width - image.shape[1]
+        # add padding to image
+        image = cv2.copyMakeBorder(image, padding_top, padding_bottom, padding_left,
+                                    padding_right, cv2.BORDER_CONSTANT)
+        return image, (target_height, target_width)
+
 
 class PeoplePerceptorBase(Perceptor):
     def __init__(self):
