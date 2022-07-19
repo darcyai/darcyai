@@ -253,14 +253,19 @@ class PeoplePerceptor(CoralPerceptorBase, PeoplePerceptorBase):
     def load(self, accelerator_idx:[int, None]) -> None:
         script_dir = pathlib.Path(__file__).parent.absolute()
         model_file = os.path.join(script_dir, "models/posenet.tflite")
+
+        minimum_body_threshold = self.get_config_value("minimum_body_threshold")
         
         if accelerator_idx is None:
-            self.__primary_pose_engine = PoseEngine(model_file)
+            self.__primary_pose_engine = PoseEngine(model_file,
+                                                    minimum_pose_threshold=minimum_body_threshold)
         else:
             validate_type(accelerator_idx, int, "accelerator_idx must be an integer")
             validate(accelerator_idx >= 0, "accelerator_idx must be greater than or equal to 0")
 
             #TODO: implement accelerator index pass-through to PoseEngine class above
-            self.__primary_pose_engine = PoseEngine(model_file, tpu=True)
+            self.__primary_pose_engine = PoseEngine(model_file,
+                                                    tpu=True,
+                                                    minimum_pose_threshold=minimum_body_threshold)
         
         super().set_loaded(True)        

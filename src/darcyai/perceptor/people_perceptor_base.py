@@ -72,7 +72,8 @@ class PoseEngine():
                  mirror=False,
                  arch=platform.uname().machine,
                  tpu:bool=True,
-                 num_cpu_threads:int=1):
+                 num_cpu_threads:int=1,
+                 minimum_pose_threshold:float=0.2):
         """
         Creates a PoseEngine with given model.
         
@@ -139,6 +140,7 @@ class PoseEngine():
         self._output_details = self._interpreter.get_output_details()
         self._inf_time = 0
         self.__tpu = tpu and not self.__is_windows
+        self.__minimum_pose_threshold = minimum_pose_threshold
 
     def run_inference(self, input_data):
         """
@@ -267,6 +269,9 @@ class PoseEngine():
 
         for idx in range(num_instances):
             pose_score = keypoints_with_scores[0, idx, 55]
+            if pose_score < 0.3: # self.__minimum_pose_threshold:
+                continue
+
             kpts_y = keypoints_with_scores[0, idx, range(0, 51, 3)]
             kpts_x = keypoints_with_scores[0, idx, range(1, 51, 3)]
             scores = keypoints_with_scores[0, idx, range(2, 51, 3)]
