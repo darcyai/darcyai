@@ -5,8 +5,6 @@ __pycache__
 /html
 /pydocs
 *.egg-info
-*.mp4
-
 
 .idea/*
 venv/*
