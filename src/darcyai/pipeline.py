@@ -767,7 +767,11 @@ class Pipeline():
 
             # Get number of corals
             supported_processors = get_supported_processors()
-            nb_corals = len(supported_processors.get(Processor.CORAL_EDGE_TPU, {}).get("coral_tpus", []))
+            nb_corals = len(
+                supported_processors
+                    .get(Processor.CORAL_EDGE_TPU, {})
+                    .get("coral_tpus", [])
+            )
 
             # Check if there are some parallel perceptors
             has_parallel_perceptors = False

@@ -46,7 +46,7 @@ class PipelineEndEvent(PipelineBaseEvent):
     machine_id (str): machine id of the machine where the pipeline is running
     pipeline_config_hash (str): hash of the pipeline configuration
     pipeline_run_uuid (str): unique id of the pipeline run
-    pipeline_config_api_call_count (int): number of API calls made to the pipeline configuration service
+    pipeline_config_api_call_count (int): nb of API calls made to the pipeline config service
     """
     def __init__(self,
                  machine_id: str,
@@ -59,13 +59,14 @@ class PipelineEndEvent(PipelineBaseEvent):
 
 class PipelineHeartbeatEvent(PipelineBaseEvent):
     """
-    The PipelineHeartbeatEvent class is the event signaling that the pipeline is still alive and running.
+    The PipelineHeartbeatEvent class is the event signaling
+    that the pipeline is still alive and running.
 
     # Arguments
     machine_id (str): machine id of the machine where the pipeline is running
     pipeline_config_hash (str): hash of the pipeline configuration
     pipeline_run_uuid (str): unique id of the pipeline run
-    pipeline_config_api_call_count (int): number of API calls made to the pipeline configuration service
+    pipeline_config_api_call_count (int): nb of API calls made to the pipeline config service
     """
     def __init__(self,
                  machine_id: str,
@@ -114,7 +115,7 @@ class PipelineBeginEvent(PipelineBaseEvent):
     containerized (bool): whether the pipeline is running in a container or not
     using_iofog (bool): whether the pipeline is running in an iofog container or not
     cpu_count (int): number of CPUs on the machine where the pipeline is running
-    google_coral_count (int): number of Google Coral instances on the machine where the pipeline is running
+    google_coral_count (int): nb of Google Coral instances detected on the machine
     darcy_ai_engine_version (str): version of the Darcy AI engine
     python_version (str): version of the Python interpreter
     pipeline_input_stream_count (int): number of input streams in the pipeline
@@ -167,34 +168,6 @@ class PipelineBeginEvent(PipelineBaseEvent):
         self.pipeline_api_call_count = pipeline_api_call_count
 
 ## Reporter definition
-
-def __get_etc_hostnames():
-    """
-    Parses /etc/hosts file and returns all the hostnames in a list.
-    """
-    hosts = []
-    if not os.path.exists('/etc/hosts'):
-        return hosts
-    with open('/etc/hosts', 'r') as f:
-        hostlines = f.readlines()
-    hostlines = [line.strip() for line in hostlines
-                if not line.startswith('#') and line.strip() != '']
-    hosts = []
-    for line in hostlines:
-        hostnames = line.split('#')[0].split()[1:]
-        hosts.extend(hostnames)
-    return hosts
-
-def __is_using_iofog(self):
-    """
-    Verifies if iofog is present as an extra host
-    """
-    hosts = __get_etc_hostnames()
-    for host in hosts:
-        if host.startswith('iofog'):
-            return True
-    return False
-
 class AnalyticsReporter():
     """
     The AnalyticsReporter class is Responsible for communicating with the analytics service.
@@ -226,13 +199,40 @@ class AnalyticsReporter():
         self.__cpu_count = multiprocessing.cpu_count()
         in_docker_env = os.getenv(IN_DOCKER_ENV_NAME)
         self.__containerized = in_docker_env is not None and in_docker_env != ''
-        self.__using_iofog = self.__containerized and __is_using_iofog()
+        self.__using_iofog = self.__containerized and self.__is_using_iofog()
         self.__darcyai_engine_version = darcyai_engine_version
         self.__python_version = platform.python_version()
 
         self.__analytics.on_error = self.__on_analytics_error
         self.__analytics.identify(self.__machine_id)
         self.__pipeline_run_uuid = ''
+
+    def __get_etc_hostnames():
+        """
+        Parses /etc/hosts file and returns all the hostnames in a list.
+        """
+        hosts = []
+        if not os.path.exists('/etc/hosts'):
+            return hosts
+        with open('/etc/hosts', 'r') as f:
+            hostlines = f.readlines()
+        hostlines = [line.strip() for line in hostlines
+                    if not line.startswith('#') and line.strip() != '']
+        hosts = []
+        for line in hostlines:
+            hostnames = line.split('#')[0].split()[1:]
+            hosts.extend(hostnames)
+        return hosts
+
+    def __is_using_iofog(self):
+        """
+        Verifies if iofog is present as an extra host
+        """
+        hosts = self.__get_etc_hostnames()
+        for host in hosts:
+            if host.startswith('iofog'):
+                return True
+        return False
 
     def __cancel_heartbeat(self):
         try:
