@@ -6,6 +6,7 @@ import platform
 import uuid
 import time
 import threading
+from typing import List
 
 from darcyai.input.input_stream import InputStream
 
@@ -143,9 +144,9 @@ class PipelineBeginEvent(PipelineBaseEvent):
                 pipeline_input_stream_count: int,
                 pipeline_output_stream_count: int,
                 pipeline_perceptor_count: int,
-                pipeline_input_stream_names: list[str],
-                pipeline_output_stream_names: list[str],
-                pipeline_perceptor_names: list[str],
+                pipeline_input_stream_names: List[str],
+                pipeline_output_stream_names: List[str],
+                pipeline_perceptor_names: List[str],
                 pipeline_has_parralel_perceptors: bool,
                 pipeline_api_call_count: int,):
         super().__init__(machine_id, pipeline_config_hash, pipeline_run_uuid)
@@ -260,9 +261,9 @@ class AnalyticsReporter():
                           pipeline_input_stream_count: int,
                           pipeline_output_stream_count: int,
                           pipeline_perceptor_count: int,
-                          pipeline_input_stream_names: list[str],
-                          pipeline_output_stream_names: list[str],
-                          pipeline_perceptor_names: list[str],
+                          pipeline_input_stream_names: List[str],
+                          pipeline_output_stream_names: List[str],
+                          pipeline_perceptor_names: List[str],
                           pipeline_has_parallel_perceptors: bool,
                           pipeline_api_call_count: int):
         """
