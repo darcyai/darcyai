@@ -12,7 +12,7 @@ from darcyai.input.input_stream import InputStream
 IN_DOCKER_ENV_NAME = 'DARCYAI_IN_DOCKER'
 REPORTING_DISABLED_ENV = 'DARCYAI_ANALYTICS_OPTOUT'
 WRITE_KEY_ENV = 'DARCYAI_ANALYTICS_WRITE_KEY'
-HEARTBEAT_INTERVAL = 10
+HEARTBEAT_INTERVAL = 60
 
 ## Events definition
 
@@ -175,10 +175,12 @@ class AnalyticsReporter():
     # Arguments
     darcyai_engine_version (str): the Major.Minor.Patch version of the darcyai engine
     disable_reporting (bool): disable reporting. Defaults to False
+    heartbeat_interval (int): the interval in seconds between two heartbeats. Defaults to 60
     """
     def __init__(self,
                  darcyai_engine_version: str,
-                 disable_reporting: bool = False):
+                 disable_reporting: bool = False,
+                 heartbeat_interval: int = HEARTBEAT_INTERVAL):
         """
         Checks if reporting is enabled and initialise all constant values.
         """
@@ -192,8 +194,10 @@ class AnalyticsReporter():
         if write_key is None or write_key == '':
             self.__reporting_enabled = False
             return
+
         self.__analytics = analytics
         self.__analytics.write_key = write_key
+
         self.__machine_id = uuid.getnode()
         self.__os_name = platform.system()
         self.__os_version = platform.version()
@@ -208,6 +212,7 @@ class AnalyticsReporter():
         self.__analytics.on_error = self.__on_analytics_error
         self.__analytics.identify(self.__machine_id)
         self.__pipeline_run_uuid = ''
+        self.__heartbeat_interval = heartbeat_interval
 
     def __get_etc_hostnames(self):
         """
@@ -302,7 +307,7 @@ class AnalyticsReporter():
     def __run_pipeline_heartbeat(self):
         while self.__heartbeat_running:
             self.on_pipeline_heartbeat(0)
-            time.sleep(HEARTBEAT_INTERVAL)
+            time.sleep(self.__heartbeat_interval)
 
     def on_pipeline_heartbeat(self, pipeline_api_call_count: int):
         """
@@ -334,6 +339,7 @@ class AnalyticsReporter():
                 pipeline_api_call_count)
             self.__analytics.track(self.__machine_id, PIPELINE_END_EVENT_NAME, vars(event))
             self.__cancel_heartbeat()
+            self.flush()
         except Exception:
             pass
 
@@ -352,6 +358,16 @@ class AnalyticsReporter():
             self.__analytics.track(self.__machine_id, 'pipeline_error', vars(event))
             if is_fatal:
                 self.__cancel_heartbeat()
+                self.flush()
+        except Exception:
+            pass
+
+    def flush(self):
+        """
+        Flushes the analytics queue.
+        """
+        try:
+            self.__analytics.flush()
         except Exception:
             pass
 
