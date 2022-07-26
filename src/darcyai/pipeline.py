@@ -792,12 +792,20 @@ class Pipeline():
                 1 if stream is not None else 0,
                 len(self.__output_streams),
                 len(self.__perceptors),
-                [str(type(self.__input_stream))] if stream is not None else [],
+                (
+                    [AnalyticsReporter.get_type_name(self.__input_stream)] if stream is not None
+                    else []
+                ),
                 list(
-                    map(lambda x: str(type(self.__output_streams[x].get("stream", None))),
+                    map(lambda x:
+                            AnalyticsReporter
+                            .get_type_name(self.__output_streams[x].get("stream", None)),
                     self.__output_streams)
                 ),
-                list(map(lambda x: str(type(self.__perceptors[x])), self.__perceptors)),
+                list(map(lambda x:
+                            AnalyticsReporter
+                            .get_type_name(self.__perceptors[x]), self.__perceptors)
+                ),
                 has_parallel_perceptors,
                 self.__api_call_count,
             )

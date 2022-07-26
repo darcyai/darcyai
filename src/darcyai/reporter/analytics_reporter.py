@@ -388,15 +388,27 @@ class AnalyticsReporter():
         #   parallel perceptors are joined with _
         # Output streams are ordered following the dict keys.
         try:
-            config = [str(type(input_stream))]
+            config = [AnalyticsReporter.get_type_name(input_stream)]
             for parralel_perpeptors in perceptor_orders:
                 parralel_perpeptors_types = []
                 for perceptor_name in parralel_perpeptors:
-                    parralel_perpeptors_types.append(str(type(perceptors[perceptor_name])))
+                    parralel_perpeptors_types.append(
+                        AnalyticsReporter.get_type_name(perceptors[perceptor_name])
+                    )
                 config.append('_'.join(parralel_perpeptors_types))
             for output_stream_name in output_streams:
-                config.append(str(type(output_streams[output_stream_name].get('stream', None))))
+                config.append(
+                    AnalyticsReporter.get_type_name(
+                        output_streams[output_stream_name].get('stream', None))
+                )
 
             return hashlib.sha256(''.join(config).encode('utf-8')).hexdigest()
         except Exception:
             return '<Error hashing pipeline config>'
+
+    @staticmethod
+    def get_type_name(obj):
+        """
+        Returns type name of object.
+        """
+        return str(type(obj))
