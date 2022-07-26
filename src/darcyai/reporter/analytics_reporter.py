@@ -1,9 +1,9 @@
+import analytics
+import hashlib
+import multiprocessing
 import os
 import platform
-import hashlib
 import uuid
-import analytics
-import multiprocessing
 import time
 import threading
 
@@ -136,7 +136,6 @@ def __is_using_iofog(self):
   """
   hosts = __get_etc_hostnames()
   for host in hosts:
-    print(host)
     if host.startswith('iofog'):
       return True
   return False
@@ -210,35 +209,38 @@ class AnalyticsReporter():
     """
     Sends PipelineBeginEvent and start heartbeat.
     """
-    if not self.__reporting_enabled:
-      return
-    self.__pipeline_config_hash = pipeline_config_hash
-    self.__pipeline_run_uuid = pipeline_run_uuid
-    event = PipelineBeginEvent(self.__machine_id,
-                              self.__pipeline_config_hash,
-                              self.__pipeline_run_uuid,
-                              self.__os_name,
-                              self.__os_version,
-                              self.__os_arch,
-                              self.__containerized,
-                              self.__using_iofog,
-                              self.__cpu_count,
-                              google_coral_count,
-                              self.__darcyai_engine_version,
-                              self.__python_version,
-                              pipeline_input_stream_count,
-                              pipeline_output_stream_count,
-                              pipeline_perceptor_count,
-                              pipeline_input_stream_names,
-                              pipeline_output_stream_names,
-                              pipeline_perceptor_names,
-                              pipeline_has_parallel_perceptors,
-                              pipeline_api_call_count)
-    self.__analytics.track(self.__machine_id, PIPELINE_BEGIN_EVENT_NAME, vars(event))
-    self.__cancel_heartbeat()
-    self.__heartbeat_running = True
-    self.__heartbeat_tread = threading.Thread(daemon=True, target=self.__run_pipeline_heartbeat)
-    self.__heartbeat_tread.start()
+    try:
+      if not self.__reporting_enabled:
+        return
+      self.__pipeline_config_hash = pipeline_config_hash
+      self.__pipeline_run_uuid = pipeline_run_uuid
+      event = PipelineBeginEvent(self.__machine_id,
+                                self.__pipeline_config_hash,
+                                self.__pipeline_run_uuid,
+                                self.__os_name,
+                                self.__os_version,
+                                self.__os_arch,
+                                self.__containerized,
+                                self.__using_iofog,
+                                self.__cpu_count,
+                                google_coral_count,
+                                self.__darcyai_engine_version,
+                                self.__python_version,
+                                pipeline_input_stream_count,
+                                pipeline_output_stream_count,
+                                pipeline_perceptor_count,
+                                pipeline_input_stream_names,
+                                pipeline_output_stream_names,
+                                pipeline_perceptor_names,
+                                pipeline_has_parallel_perceptors,
+                                pipeline_api_call_count)
+      self.__analytics.track(self.__machine_id, PIPELINE_BEGIN_EVENT_NAME, vars(event))
+      self.__cancel_heartbeat()
+      self.__heartbeat_running = True
+      self.__heartbeat_tread = threading.Thread(daemon=True, target=self.__run_pipeline_heartbeat)
+      self.__heartbeat_tread.start()
+    except:
+      pass
     return
 
   def __run_pipeline_heartbeat(self):
@@ -251,33 +253,42 @@ class AnalyticsReporter():
     """
     Sends PipelineHeartbeatEvent
     """
-    if not self.__reporting_enabled:
-      return
-    event = PipelineHeartbeatEvent(self.__machine_id, self.__pipeline_config_hash, self.__pipeline_run_uuid, pipeline_api_call_count)
-    self.__analytics.track(self.__machine_id, PIPELINE_HEARTBEAT_EVENT_NAME, vars(event))
+    try:
+      if not self.__reporting_enabled:
+        return
+      event = PipelineHeartbeatEvent(self.__machine_id, self.__pipeline_config_hash, self.__pipeline_run_uuid, pipeline_api_call_count)
+      self.__analytics.track(self.__machine_id, PIPELINE_HEARTBEAT_EVENT_NAME, vars(event))
+    except:
+      pass
     return
 
   def on_pipeline_end(self, pipeline_api_call_count: int):
     """
     Sends PipelineEndEvent and stops heartbeat.
     """
-    if not self.__reporting_enabled:
-      return
-    event = PipelineEndEvent(self.__machine_id, self.__pipeline_config_hash, self.__pipeline_run_uuid, pipeline_api_call_count)
-    self.__analytics.track(self.__machine_id, PIPELINE_END_EVENT_NAME, vars(event))
-    self.__cancel_heartbeat()
+    try:
+      if not self.__reporting_enabled:
+        return
+      event = PipelineEndEvent(self.__machine_id, self.__pipeline_config_hash, self.__pipeline_run_uuid, pipeline_api_call_count)
+      self.__analytics.track(self.__machine_id, PIPELINE_END_EVENT_NAME, vars(event))
+      self.__cancel_heartbeat()
+    except:
+      pass
     return
 
   def on_pipeline_error(self, error: Exception, is_fatal: bool = True):
     """
     Sends PipelineErrorEvent and stops heartbeat if error is fatal.
     """
-    if not self.__reporting_enabled:
-      return
-    event = PipelineErrorEvent(self.__machine_id, self.__pipeline_config_hash, self.__pipeline_run_uuid, error, is_fatal)
-    self.__analytics.track(self.__machine_id, 'pipeline_error', vars(event))
-    if is_fatal:
-      self.__cancel_heartbeat()
+    try:
+      if not self.__reporting_enabled:
+        return
+      event = PipelineErrorEvent(self.__machine_id, self.__pipeline_config_hash, self.__pipeline_run_uuid, error, is_fatal)
+      self.__analytics.track(self.__machine_id, 'pipeline_error', vars(event))
+      if is_fatal:
+        self.__cancel_heartbeat()
+    except:
+      pass
     return
 
   @staticmethod
@@ -291,13 +302,16 @@ class AnalyticsReporter():
     # [typeof(input_stream), typeof(perceptors), typeof(output_streams)].join('')
     # Perceptors are ordered to follow pipeline execution, parallel perceptors are joined with _
     # Output streams are ordered following the dict keys.
-    config = [str(type(input_stream))]
-    for parralel_perpeptors in perceptor_orders:
-      parralel_perpeptors_types = []
-      for perceptor_name in parralel_perpeptors:
-        parralel_perpeptors_types.append(str(type(perceptors[perceptor_name])))
-      config.append('_'.join(parralel_perpeptors_types))
-    for output_stream_name in output_streams:
-      config.append(str(type(output_streams[output_stream_name].get('stream', None))))
+    try:
+      config = [str(type(input_stream))]
+      for parralel_perpeptors in perceptor_orders:
+        parralel_perpeptors_types = []
+        for perceptor_name in parralel_perpeptors:
+          parralel_perpeptors_types.append(str(type(perceptors[perceptor_name])))
+        config.append('_'.join(parralel_perpeptors_types))
+      for output_stream_name in output_streams:
+        config.append(str(type(output_streams[output_stream_name].get('stream', None))))
 
-    return hashlib.sha256(''.join(config).encode('utf-8')).hexdigest()
+      return hashlib.sha256(''.join(config).encode('utf-8')).hexdigest()
+    except:
+      return '<Error hashing pipeline config>'

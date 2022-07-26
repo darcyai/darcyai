@@ -28,6 +28,7 @@ from signal import SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM, signal
 from typing import Callable, Any, Dict, Tuple, Union, List
 from unittest.mock import sentinel
 
+from darcyai import __version__ as darcyai_version
 from darcyai.config import Config, RGB
 from darcyai.config_registry import ConfigRegistry
 from darcyai.cyclic_toposort import acyclic_toposort
@@ -37,15 +38,13 @@ from darcyai.log import setup_custom_logger
 from darcyai.output.output_stream import OutputStream
 from darcyai.perceptor.perceptor import Perceptor
 from darcyai.perceptor.perceptor_node import PerceptorNode
-from darcyai.perception_object_model import PerceptionObjectModel
-from darcyai.processing_engine import ProcessingEngine
-from darcyai.stream_data import StreamData
-from darcyai.utils import validate_not_none, validate_type, validate
-from darcyai.reporter.analytics_reporter import AnalyticsReporter
-from darcyai import __version__ as darcyai_version
 from darcyai.perceptor.perceptor_utils import get_supported_processors
 from darcyai.perceptor.processor import Processor
-
+from darcyai.perception_object_model import PerceptionObjectModel
+from darcyai.processing_engine import ProcessingEngine
+from darcyai.reporter.analytics_reporter import AnalyticsReporter
+from darcyai.stream_data import StreamData
+from darcyai.utils import validate_not_none, validate_type, validate
 
 class Pipeline():
     """
@@ -145,6 +144,9 @@ class Pipeline():
         if input_stream_error_handler_callback is not None:
             validate(callable(input_stream_error_handler_callback),
                      "input_stream_error_handler_callback must be a function")
+
+        if disable_reporting is not None:
+            validate_type(disable_reporting, bool, "disable_reporting must be a boolean")
 
         self.__set_perception_completion_callback(perception_completion_callback)
 
@@ -761,35 +763,32 @@ class Pipeline():
         run_uuid = uuid.uuid4()
 
         try:
-            try:
-                # CPU or GPU or ...- No easy way to know where the perceptor is running. @Saeid
+            # CPU or GPU or ...- No easy way to know where the perceptor is running. @Saeid
 
-                # Get number of corals
-                supported_processors = get_supported_processors()
-                nb_corals = len(supported_processors.get(Processor.CORAL_EDGE_TPU, {}).get("coral_tpus", []))
+            # Get number of corals
+            supported_processors = get_supported_processors()
+            nb_corals = len(supported_processors.get(Processor.CORAL_EDGE_TPU, {}).get("coral_tpus", []))
 
-                # Check if there are some parallel perceptors
-                has_parallel_perceptors = False
-                for perceptors in perceptors_order:
-                    if len(perceptors) > 1:
-                        has_parallel_perceptors = True
-                        break
+            # Check if there are some parallel perceptors
+            has_parallel_perceptors = False
+            for perceptors in perceptors_order:
+                if len(perceptors) > 1:
+                    has_parallel_perceptors = True
+                    break
 
-                reporter.on_pipeline_begin(
-                    str(run_uuid),
-                    AnalyticsReporter.hash_pipeline_config(self.__input_stream, self.__perceptors, perceptors_order, self.__output_streams),
-                    nb_corals,
-                    1 if stream is not None else 0,
-                    len(self.__output_streams),
-                    len(self.__perceptors),
-                    [str(type(self.__input_stream))] if stream is not None else [],
-                    list(map(lambda x: str(type(self.__output_streams[x].get('stream', None))), self.__output_streams)),
-                    list(map(lambda x: str(type(self.__perceptors[x])), self.__perceptors)),
-                    has_parallel_perceptors,
-                    self.__api_call_count,
-                )
-            except Exception as e:
-                pass
+            reporter.on_pipeline_begin(
+                str(run_uuid),
+                AnalyticsReporter.hash_pipeline_config(self.__input_stream, self.__perceptors, perceptors_order, self.__output_streams),
+                nb_corals,
+                1 if stream is not None else 0,
+                len(self.__output_streams),
+                len(self.__perceptors),
+                [str(type(self.__input_stream))] if stream is not None else [],
+                list(map(lambda x: str(type(self.__output_streams[x].get('stream', None))), self.__output_streams)),
+                list(map(lambda x: str(type(self.__perceptors[x])), self.__perceptors)),
+                has_parallel_perceptors,
+                self.__api_call_count,
+            )
             while True:
                 start = time.perf_counter()
                 try:
@@ -801,15 +800,9 @@ class Pipeline():
                     self.__logger.exception("Error running Pipeline")
                     if self.__input_stream_error_handler_callback is not None:
                         self.__input_stream_error_handler_callback(e)
-                        try:
-                            reporter.on_pipeline_error(e, False)
-                        except:
-                            pass
+                        reporter.on_pipeline_error(e, False)
                     else:
-                        try:
-                            reporter.on_pipeline_error(e)
-                        except:
-                            pass
+                        reporter.on_pipeline_error(e)
                         raise e
 
                 self.__pulse_number += 1
@@ -883,17 +876,11 @@ class Pipeline():
                 if self.__pulse_completion_callback is not None:
                     self.__pulse_completion_callback(pom)
         except Exception as e:
-            try:
-                reporter.on_pipeline_error(e)
-            except:
-                pass
+            reporter.on_pipeline_error(e)
             raise e
         finally:
             self.__running = False
-            try:
-                reporter.on_pipeline_end(self.__api_call_count)
-            except:
-                pass
+            reporter.on_pipeline_end(self.__api_call_count)
 
     def get_pom(self) -> PerceptionObjectModel:
         """
