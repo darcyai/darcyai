@@ -778,13 +778,21 @@ class Pipeline():
 
             reporter.on_pipeline_begin(
                 str(run_uuid),
-                AnalyticsReporter.hash_pipeline_config(self.__input_stream, self.__perceptors, perceptors_order, self.__output_streams),
+                AnalyticsReporter.hash_pipeline_config(
+                    self.__input_stream,
+                    self.__perceptors,
+                    perceptors_order,
+                    self.__output_streams
+                ),
                 nb_corals,
                 1 if stream is not None else 0,
                 len(self.__output_streams),
                 len(self.__perceptors),
                 [str(type(self.__input_stream))] if stream is not None else [],
-                list(map(lambda x: str(type(self.__output_streams[x].get('stream', None))), self.__output_streams)),
+                list(
+                    map(lambda x: str(type(self.__output_streams[x].get("stream", None))),
+                    self.__output_streams)
+                ),
                 list(map(lambda x: str(type(self.__perceptors[x])), self.__perceptors)),
                 has_parallel_perceptors,
                 self.__api_call_count,
