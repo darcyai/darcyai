@@ -411,4 +411,6 @@ class AnalyticsReporter():
         """
         Returns type name of object.
         """
-        return str(type(obj))
+        t = type(obj)
+        name = '.'.join([t.__module__, t.__qualname__])
+        return name
