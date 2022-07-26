@@ -375,7 +375,7 @@ class AnalyticsReporter():
     @staticmethod
     def hash_pipeline_config(input_stream: InputStream,
                              perceptors: dict,
-                             perceptor_orders: list[dict],
+                             perceptor_orders: List[dict],
                              output_streams: dict):
         """
         Returns hash of pipeline config.
