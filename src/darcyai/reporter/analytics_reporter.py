@@ -186,9 +186,9 @@ class AnalyticsReporter():
         self.__heartbeat_running = False
         self.__heartbeat_thread.join()
         self.__heartbeat_tread = None
-      return
     except AttributeError as e:
-      return
+      pass
+    return
 
   def __on_analytics_error(self, error):
     print('Analytics error: ' + str(error))
