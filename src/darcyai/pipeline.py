@@ -79,6 +79,7 @@ class Pipeline():
         the REST API. Defaults to `None`.
     rest_api_port (int): The port of the REST API. Defaults to `5000`.
     rest_api_host (str): The host of the REST API. Defaults to `localhost`.
+    disable_reporting (bool): Disables anonymous usage collection. Defaults to `False`.
 
     # Examples
     ```python
@@ -100,7 +101,8 @@ class Pipeline():
     ...                     rest_api_base_path="/",
     ...                     rest_api_flask_app=None,
     ...                     rest_api_port=5000,
-    ...                     rest_api_host="localhost")
+    ...                     rest_api_host="localhost",
+    ...                     disable_reporting=False)
     ```
     """
     def __init__(self,
@@ -118,7 +120,8 @@ class Pipeline():
                  rest_api_base_path: str = None,
                  rest_api_flask_app: Flask = None,
                  rest_api_port: int = None,
-                 rest_api_host: str = None):
+                 rest_api_host: str = None,
+                 disable_reporting: bool = False,):
         validate_not_none(input_stream, "input_stream is required")
         validate_type(input_stream, (InputStream, InputMultiStream),
                       "input_stream must be an instance of InputStream")
@@ -220,6 +223,7 @@ class Pipeline():
         self.__running = False
 
         # For analytics purposes
+        self.__disable_reporting = disable_reporting
         self.__api_call_count = 0
 
         if universal_rest_api:
@@ -753,7 +757,7 @@ class Pipeline():
 
         perceptors_order = self.__get_perceptors_order()
 
-        reporter = AnalyticsReporter(darcyai_version)
+        reporter = AnalyticsReporter(darcyai_version, self.__disable_reporting)
         run_uuid = uuid.uuid4()
 
         try:

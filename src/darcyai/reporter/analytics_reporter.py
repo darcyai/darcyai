@@ -147,13 +147,15 @@ class AnalyticsReporter():
 
   # Arguments
   darcyai_engine_version (str): the Major.Minor.Patch version of the darcyai engine
+  disable_reporting (bool): disable reporting. Defaults to False
   """
   def __init__(self,
-               darcyai_engine_version: str):
+               darcyai_engine_version: str,
+               disable_reporting: bool = False):
     """
     Checks if reporting is enabled and initialise all constant values.
     """
-    self.__reporting_enabled = os.getenv(REPORTING_DISABLED_ENV) != 'True'
+    self.__reporting_enabled = os.getenv(REPORTING_DISABLED_ENV) != 'True' and not disable_reporting
     if not self.__reporting_enabled:
       return
 
