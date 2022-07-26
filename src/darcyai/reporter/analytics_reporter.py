@@ -131,7 +131,7 @@ class PipelineBeginEvent(PipelineBaseEvent):
                 machine_id: str,
                 pipeline_config_hash: str,
                 pipeline_run_uuid: str,
-                os: str,
+                os_name: str,
                 os_version: str,
                 arch: str,
                 containerized: bool,
@@ -149,7 +149,7 @@ class PipelineBeginEvent(PipelineBaseEvent):
                 pipeline_has_parralel_perceptors: bool,
                 pipeline_api_call_count: int,):
         super().__init__(machine_id, pipeline_config_hash, pipeline_run_uuid)
-        self.os = os
+        self.os = os_name
         self.os_version = os_version
         self.arch = arch
         self.containerized = containerized
@@ -182,7 +182,9 @@ class AnalyticsReporter():
         """
         Checks if reporting is enabled and initialise all constant values.
         """
-        self.__reporting_enabled = os.getenv(REPORTING_DISABLED_ENV) != 'True' and not disable_reporting
+        self.__reporting_enabled = (
+            os.getenv(REPORTING_DISABLED_ENV) != 'True' and not disable_reporting
+        )
         if not self.__reporting_enabled:
             return
 
@@ -207,14 +209,14 @@ class AnalyticsReporter():
         self.__analytics.identify(self.__machine_id)
         self.__pipeline_run_uuid = ''
 
-    def __get_etc_hostnames():
+    def __get_etc_hostnames(self):
         """
         Parses /etc/hosts file and returns all the hostnames in a list.
         """
         hosts = []
         if not os.path.exists('/etc/hosts'):
             return hosts
-        with open('/etc/hosts', 'r') as f:
+        with open('/etc/hosts', 'r', encoding='utf-8') as f:
             hostlines = f.readlines()
         hostlines = [line.strip() for line in hostlines
                     if not line.startswith('#') and line.strip() != '']
@@ -240,7 +242,7 @@ class AnalyticsReporter():
                 self.__heartbeat_running = False
                 self.__heartbeat_thread.join()
                 self.__heartbeat_tread = None
-        except AttributeError as e:
+        except AttributeError:
             pass
 
     def __on_analytics_error(self, error):
@@ -290,13 +292,15 @@ class AnalyticsReporter():
             self.__analytics.track(self.__machine_id, PIPELINE_BEGIN_EVENT_NAME, vars(event))
             self.__cancel_heartbeat()
             self.__heartbeat_running = True
-            self.__heartbeat_tread = threading.Thread(daemon=True, target=self.__run_pipeline_heartbeat)
+            self.__heartbeat_tread = threading.Thread(
+                daemon=True,
+                target=self.__run_pipeline_heartbeat)
             self.__heartbeat_tread.start()
-        except:
+        except Exception:
             pass
 
     def __run_pipeline_heartbeat(self):
-        while self.__heartbeat_running == True:
+        while self.__heartbeat_running:
             self.on_pipeline_heartbeat(0)
             time.sleep(HEARTBEAT_INTERVAL)
 
@@ -307,9 +311,13 @@ class AnalyticsReporter():
         try:
             if not self.__reporting_enabled:
                 return
-            event = PipelineHeartbeatEvent(self.__machine_id, self.__pipeline_config_hash, self.__pipeline_run_uuid, pipeline_api_call_count)
+            event = PipelineHeartbeatEvent(
+                self.__machine_id,
+                self.__pipeline_config_hash,
+                self.__pipeline_run_uuid,
+                pipeline_api_call_count)
             self.__analytics.track(self.__machine_id, PIPELINE_HEARTBEAT_EVENT_NAME, vars(event))
-        except:
+        except Exception:
             pass
 
     def on_pipeline_end(self, pipeline_api_call_count: int):
@@ -326,7 +334,7 @@ class AnalyticsReporter():
                 pipeline_api_call_count)
             self.__analytics.track(self.__machine_id, PIPELINE_END_EVENT_NAME, vars(event))
             self.__cancel_heartbeat()
-        except:
+        except Exception:
             pass
 
     def on_pipeline_error(self, error: Exception, is_fatal: bool = True):
@@ -344,7 +352,7 @@ class AnalyticsReporter():
             self.__analytics.track(self.__machine_id, 'pipeline_error', vars(event))
             if is_fatal:
                 self.__cancel_heartbeat()
-        except:
+        except Exception:
             pass
 
     @staticmethod
@@ -373,5 +381,5 @@ class AnalyticsReporter():
                 config.append(str(type(output_streams[output_stream_name].get('stream', None))))
 
             return hashlib.sha256(''.join(config).encode('utf-8')).hexdigest()
-        except:
+        except Exception:
             return '<Error hashing pipeline config>'
