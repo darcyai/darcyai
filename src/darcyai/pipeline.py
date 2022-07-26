@@ -18,6 +18,7 @@ import pathlib
 import platform
 import threading
 import time
+import uuid
 from collections import OrderedDict
 from collections.abc import Iterable
 from flask import Flask, request, Response, jsonify, render_template
@@ -40,6 +41,10 @@ from darcyai.perception_object_model import PerceptionObjectModel
 from darcyai.processing_engine import ProcessingEngine
 from darcyai.stream_data import StreamData
 from darcyai.utils import validate_not_none, validate_type, validate
+from darcyai.reporter.analytics_reporter import AnalyticsReporter
+from darcyai import __version__ as darcyai_version
+from darcyai.perceptor.perceptor_utils import get_supported_processors
+from darcyai.perceptor.processor import Processor
 
 
 class Pipeline():
@@ -213,6 +218,9 @@ class Pipeline():
         self.__logger = setup_custom_logger(__name__)
 
         self.__running = False
+
+        # For analytics purposes
+        self.__api_call_count = 0
 
         if universal_rest_api:
             threading.Thread(target=self.__start_api_server).start()
@@ -745,7 +753,39 @@ class Pipeline():
 
         perceptors_order = self.__get_perceptors_order()
 
+        reporter = AnalyticsReporter(darcyai_version)
+        run_uuid = uuid.uuid4()
+
         try:
+            try:
+                # CPU or GPU or ...- No easy way to know where the perceptor is running. @Saeid
+
+                # Get number of corals
+                supported_processors = get_supported_processors()
+                nb_corals = len(supported_processors.get(Processor.CORAL_EDGE_TPU, {}).get("coral_tpus", []))
+
+                # Check if there are some parallel perceptors
+                has_parallel_perceptors = False
+                for perceptors in perceptors_order:
+                    if len(perceptors) > 1:
+                        has_parallel_perceptors = True
+                        break
+
+                reporter.on_pipeline_begin(
+                    str(run_uuid),
+                    AnalyticsReporter.hash_pipeline_config(self.__input_stream, self.__perceptors, perceptors_order, self.__output_streams),
+                    nb_corals,
+                    1 if stream is not None else 0,
+                    len(self.__output_streams),
+                    len(self.__perceptors),
+                    [str(type(self.__input_stream))] if stream is not None else [],
+                    list(map(lambda x: str(type(self.__output_streams[x].get('stream', None))), self.__output_streams)),
+                    list(map(lambda x: str(type(self.__perceptors[x])), self.__perceptors)),
+                    has_parallel_perceptors,
+                    self.__api_call_count,
+                )
+            except Exception as e:
+                pass
             while True:
                 start = time.perf_counter()
                 try:
@@ -757,7 +797,15 @@ class Pipeline():
                     self.__logger.exception("Error running Pipeline")
                     if self.__input_stream_error_handler_callback is not None:
                         self.__input_stream_error_handler_callback(e)
+                        try:
+                            reporter.on_pipeline_error(e, False)
+                        except:
+                            pass
                     else:
+                        try:
+                            reporter.on_pipeline_error(e)
+                        except:
+                            pass
                         raise e
 
                 self.__pulse_number += 1
@@ -830,8 +878,18 @@ class Pipeline():
 
                 if self.__pulse_completion_callback is not None:
                     self.__pulse_completion_callback(pom)
+        except Exception as e:
+            try:
+                reporter.on_pipeline_error(e)
+            except:
+                pass
+            raise e
         finally:
             self.__running = False
+            try:
+                reporter.on_pipeline_end(self.__api_call_count)
+            except:
+                pass
 
     def get_pom(self) -> PerceptionObjectModel:
         """
@@ -1533,6 +1591,10 @@ class Pipeline():
         """
         Starts the API server.
         """
+
+        # For analytics purposes
+        self.__api_call_count = 0
+
         script_dir = pathlib.Path(__file__).parent.absolute()
         swagger_path = os.path.join(script_dir, "swagger")
         if self.__flask_app is None:
@@ -1615,6 +1677,7 @@ class Pipeline():
         # Returns
         Response: The response.
         """
+        self.__api_call_count += 1
         perceptors = self.__perceptors.keys()
         return jsonify(list(perceptors))
 
@@ -1625,6 +1688,7 @@ class Pipeline():
         # Returns
         Response: The response.
         """
+        self.__api_call_count += 1
         output_streams = self.__output_streams.keys()
         return jsonify(list(output_streams))
 
@@ -1635,6 +1699,7 @@ class Pipeline():
         # Returns
         Response: The response.
         """
+        self.__api_call_count += 1
         errors = []
         if request.method == "PATCH":
             body = self.__get_body()
@@ -1681,6 +1746,7 @@ class Pipeline():
         # Returns
         Response: The response.
         """
+        self.__api_call_count += 1
         perceptor_name = kwargs["perceptor"]
 
         if perceptor_name not in self.__perceptors:
@@ -1722,6 +1788,7 @@ class Pipeline():
         # Returns
         Response: The response.
         """
+        self.__api_call_count += 1
         errors = []
         if request.method == "PATCH":
             body = self.__get_body()
@@ -1767,6 +1834,7 @@ class Pipeline():
         # Returns
         Response: The response.
         """
+        self.__api_call_count += 1
         output_name = kwargs["output_stream"]
 
         if output_name not in self.__output_streams:

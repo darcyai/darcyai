@@ -60,5 +60,6 @@ setuptools.setup(
         "flask==2.0.2",
         "requests==2.26.0",
         "logging-json==0.2.1",
+        "segment-analytics-python==2.2.0",
     ]
 )
