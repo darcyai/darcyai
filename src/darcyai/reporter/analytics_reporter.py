@@ -205,8 +205,8 @@ class AnalyticsReporter():
         self.__os_arch = platform.machine()
         self.__cpu_count = multiprocessing.cpu_count()
         in_docker_env = os.getenv(IN_DOCKER_ENV_NAME)
-        self.__containerized = in_docker_env is not None and in_docker_env != ''
-        self.__using_iofog = self.__containerized and self.__is_using_iofog()
+        self.__using_iofog = self.__is_using_iofog()
+        self.__containerized = (in_docker_env is not None and in_docker_env != '') or self.__using_iofog
         self.__darcyai_engine_version = darcyai_engine_version
         self.__python_version = platform.python_version()
 
