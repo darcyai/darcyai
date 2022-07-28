@@ -78,7 +78,7 @@ class Pipeline():
         the REST API. Defaults to `None`.
     rest_api_port (int): The port of the REST API. Defaults to `5000`.
     rest_api_host (str): The host of the REST API. Defaults to `localhost`.
-    disable_reporting (bool): Disables anonymous usage collection. Defaults to `False`.
+    disable_telemetry (bool): Disables anonymous usage collection. Defaults to `False`.
 
     # Examples
     ```python
@@ -101,7 +101,7 @@ class Pipeline():
     ...                     rest_api_flask_app=None,
     ...                     rest_api_port=5000,
     ...                     rest_api_host="localhost",
-    ...                     disable_reporting=False)
+    ...                     disable_telemetry=False)
     ```
     """
     def __init__(self,
@@ -120,7 +120,7 @@ class Pipeline():
                  rest_api_flask_app: Flask = None,
                  rest_api_port: int = None,
                  rest_api_host: str = None,
-                 disable_reporting: bool = False,):
+                 disable_telemetry: bool = False,):
         validate_not_none(input_stream, "input_stream is required")
         validate_type(input_stream, (InputStream, InputMultiStream),
                       "input_stream must be an instance of InputStream")
@@ -145,8 +145,8 @@ class Pipeline():
             validate(callable(input_stream_error_handler_callback),
                      "input_stream_error_handler_callback must be a function")
 
-        if disable_reporting is not None:
-            validate_type(disable_reporting, bool, "disable_reporting must be a boolean")
+        if disable_telemetry is not None:
+            validate_type(disable_telemetry, bool, "disable_telemetry must be a boolean")
 
         self.__set_perception_completion_callback(perception_completion_callback)
 
@@ -225,7 +225,7 @@ class Pipeline():
         self.__running = False
 
         # For analytics purposes
-        self.__disable_reporting = disable_reporting
+        self.__disable_telemetry = disable_telemetry
         self.__api_call_count = 0
 
         if universal_rest_api:
@@ -759,7 +759,7 @@ class Pipeline():
 
         perceptors_order = self.__get_perceptors_order()
 
-        reporter = TelemetryReporter(darcyai_version, self.__disable_reporting)
+        telemetry = TelemetryReporter(darcyai_version, self.__disable_telemetry)
         run_uuid = uuid.uuid4()
 
         try:
@@ -780,7 +780,7 @@ class Pipeline():
                     has_parallel_perceptors = True
                     break
 
-            reporter.on_pipeline_begin(
+            telemetry.on_pipeline_begin(
                 str(run_uuid),
                 TelemetryReporter.hash_pipeline_config(
                     self.__input_stream,
@@ -820,9 +820,9 @@ class Pipeline():
                     self.__logger.exception("Error running Pipeline")
                     if self.__input_stream_error_handler_callback is not None:
                         self.__input_stream_error_handler_callback(e)
-                        reporter.on_pipeline_error(e, False)
+                        telemetry.on_pipeline_error(e, False)
                     else:
-                        reporter.on_pipeline_error(e)
+                        telemetry.on_pipeline_error(e)
                         raise e
 
                 self.__pulse_number += 1
@@ -896,11 +896,11 @@ class Pipeline():
                 if self.__pulse_completion_callback is not None:
                     self.__pulse_completion_callback(pom)
         except Exception as e:
-            reporter.on_pipeline_error(e)
+            telemetry.on_pipeline_error(e)
             raise e
         finally:
             self.__running = False
-            reporter.on_pipeline_end(self.__api_call_count)
+            telemetry.on_pipeline_end(self.__api_call_count)
 
     def get_pom(self) -> PerceptionObjectModel:
         """
