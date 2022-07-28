@@ -42,7 +42,7 @@ from darcyai.perceptor.perceptor_utils import get_supported_processors
 from darcyai.perceptor.processor import Processor
 from darcyai.perception_object_model import PerceptionObjectModel
 from darcyai.processing_engine import ProcessingEngine
-from darcyai.reporter.telemetry_reporter import TelemetryReporter
+from darcyai.telemetry.telemetry import Telemetry
 from darcyai.stream_data import StreamData
 from darcyai.utils import validate_not_none, validate_type, validate
 
@@ -224,7 +224,7 @@ class Pipeline():
 
         self.__running = False
 
-        # For analytics purposes
+        # For telemetry purposes
         self.__disable_telemetry = disable_telemetry
         self.__api_call_count = 0
 
@@ -759,7 +759,7 @@ class Pipeline():
 
         perceptors_order = self.__get_perceptors_order()
 
-        telemetry = TelemetryReporter(darcyai_version, self.__disable_telemetry)
+        telemetry = Telemetry(darcyai_version, self.__disable_telemetry)
         run_uuid = uuid.uuid4()
 
         try:
@@ -782,7 +782,7 @@ class Pipeline():
 
             telemetry.on_pipeline_begin(
                 str(run_uuid),
-                TelemetryReporter.hash_pipeline_config(
+                Telemetry.hash_pipeline_config(
                     self.__input_stream,
                     self.__perceptors,
                     perceptors_order,
@@ -793,17 +793,17 @@ class Pipeline():
                 len(self.__output_streams),
                 len(self.__perceptors),
                 (
-                    [TelemetryReporter.get_type_name(self.__input_stream)] if stream is not None
+                    [Telemetry.get_type_name(self.__input_stream)] if stream is not None
                     else []
                 ),
                 list(
                     map(lambda x:
-                            TelemetryReporter
+                            Telemetry
                             .get_type_name(self.__output_streams[x].get("stream", None)),
                     self.__output_streams)
                 ),
                 list(map(lambda x:
-                            TelemetryReporter
+                            Telemetry
                             .get_type_name(self.__perceptors[x]), self.__perceptors)
                 ),
                 has_parallel_perceptors,
@@ -1603,7 +1603,7 @@ class Pipeline():
         Starts the API server.
         """
 
-        # For analytics purposes
+        # For telemetry purposes
         self.__api_call_count = 0
 
         script_dir = pathlib.Path(__file__).parent.absolute()

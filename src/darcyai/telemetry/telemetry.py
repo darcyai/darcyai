@@ -169,9 +169,9 @@ class PipelineBeginEvent(PipelineBaseEvent):
         self.pipeline_api_call_count = pipeline_api_call_count
 
 ## Reporter definition
-class TelemetryReporter():
+class Telemetry():
     """
-    The TelemetryReporter class is Responsible for communicating with the telemetry service.
+    The Telemetry class is Responsible for communicating with the telemetry service.
 
     # Arguments
     darcyai_engine_version (str): the Major.Minor.Patch version of the darcyai engine
@@ -388,17 +388,17 @@ class TelemetryReporter():
         #   parallel perceptors are joined with _
         # Output streams are ordered following the dict keys.
         try:
-            config = [TelemetryReporter.get_type_name(input_stream)]
+            config = [Telemetry.get_type_name(input_stream)]
             for parralel_perpeptors in perceptor_orders:
                 parralel_perpeptors_types = []
                 for perceptor_name in parralel_perpeptors:
                     parralel_perpeptors_types.append(
-                        TelemetryReporter.get_type_name(perceptors[perceptor_name])
+                        Telemetry.get_type_name(perceptors[perceptor_name])
                     )
                 config.append('_'.join(parralel_perpeptors_types))
             for output_stream_name in output_streams:
                 config.append(
-                    TelemetryReporter.get_type_name(
+                    Telemetry.get_type_name(
                         output_streams[output_stream_name].get('stream', None))
                 )
 
