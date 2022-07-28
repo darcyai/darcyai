@@ -185,8 +185,16 @@ class Telemetry():
         """
         Checks if telemetry is enabled and initialise all constant values.
         """
+        telemetry_disabled_env_val = os.getenv(TELEMETRY_DISABLED_ENV)
+        if (telemetry_disabled_env_val is not None
+            and (telemetry_disabled_env_val.lower() == "false"
+                or telemetry_disabled_env_val == "0")):
+            telemetry_disabled_env_val = False
+        else:
+            telemetry_disabled_env_val = True
+
         self.__telemetry_enabled = (
-            os.getenv(TELEMETRY_DISABLED_ENV) != 'True' and not disable_telemetry
+            not telemetry_disabled_env_val and not disable_telemetry
         )
         if not self.__telemetry_enabled:
             return
