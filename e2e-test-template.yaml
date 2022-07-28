@@ -12,7 +12,8 @@ jobs:
         displayName: 'Download artifacts'
 
       - script: |
-          python3 -m pip install --upgrade pip --user
+          curl -L -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
+          python3 /tmp/get-pip.py --user
         displayName: 'Install dependencies'
 
       - bash: |
