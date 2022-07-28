@@ -11,7 +11,7 @@ from typing import List
 from darcyai.input.input_stream import InputStream
 
 IN_DOCKER_ENV_NAME = 'DARCYAI_IN_DOCKER'
-REPORTING_DISABLED_ENV = 'DARCYAI_ANALYTICS_OPTOUT'
+TELEMETRY_DISABLED_ENV = 'DARCYAI_DISABLE_TELEMETRY'
 WRITE_KEY_ENV = 'DARCYAI_ANALYTICS_WRITE_KEY'
 HEARTBEAT_INTERVAL = 60
 
@@ -24,7 +24,7 @@ PIPELINE_HEARTBEAT_EVENT_NAME = 'pipeline_heartbeat'
 
 class PipelineBaseEvent():
     """
-    The PipelineBaseEvent class is the base event for communicating with the analytics service.
+    The PipelineBaseEvent class is the base event for communicating with the telemetry service.
 
     # Arguments
     machine_id (str): machine id of the machine where the pipeline is running
@@ -169,35 +169,35 @@ class PipelineBeginEvent(PipelineBaseEvent):
         self.pipeline_api_call_count = pipeline_api_call_count
 
 ## Reporter definition
-class AnalyticsReporter():
+class TelemetryReporter():
     """
-    The AnalyticsReporter class is Responsible for communicating with the analytics service.
+    The TelemetryReporter class is Responsible for communicating with the telemetry service.
 
     # Arguments
     darcyai_engine_version (str): the Major.Minor.Patch version of the darcyai engine
-    disable_reporting (bool): disable reporting. Defaults to False
+    disable_telemetry (bool): disable telemetry. Defaults to False
     heartbeat_interval (int): the interval in seconds between two heartbeats. Defaults to 60
     """
     def __init__(self,
                  darcyai_engine_version: str,
-                 disable_reporting: bool = False,
+                 disable_telemetry: bool = False,
                  heartbeat_interval: int = HEARTBEAT_INTERVAL):
         """
-        Checks if reporting is enabled and initialise all constant values.
+        Checks if telemetry is enabled and initialise all constant values.
         """
-        self.__reporting_enabled = (
-            os.getenv(REPORTING_DISABLED_ENV) != 'True' and not disable_reporting
+        self.__telemetry_enabled = (
+            os.getenv(TELEMETRY_DISABLED_ENV) != 'True' and not disable_telemetry
         )
-        if not self.__reporting_enabled:
+        if not self.__telemetry_enabled:
             return
 
         write_key = os.getenv(WRITE_KEY_ENV, 'DARnwpKCCqEmYWkyBCGsf7FWWd1HJmHs')
         if write_key is None or write_key == '':
-            self.__reporting_enabled = False
+            self.__telemetry_enabled = False
             return
 
-        self.__analytics = analytics
-        self.__analytics.write_key = write_key
+        self.__telemetry = analytics
+        self.__telemetry.write_key = write_key
 
         self.__machine_id = uuid.getnode()
         self.__os_name = platform.system()
@@ -210,8 +210,8 @@ class AnalyticsReporter():
         self.__darcyai_engine_version = darcyai_engine_version
         self.__python_version = platform.python_version()
 
-        self.__analytics.on_error = self.__on_analytics_error
-        self.__analytics.identify(self.__machine_id)
+        self.__telemetry.on_error = self.__on_telemetry_error
+        self.__telemetry.identify(self.__machine_id)
         self.__pipeline_run_uuid = ''
         self.__heartbeat_interval = heartbeat_interval
 
@@ -251,8 +251,8 @@ class AnalyticsReporter():
         except AttributeError:
             pass
 
-    def __on_analytics_error(self, error):
-        print('Analytics error: ' + str(error))
+    def __on_telemetry_error(self, error):
+        print('Telemetry error: ' + str(error))
 
     def on_pipeline_begin(self,
                           pipeline_run_uuid: str,
@@ -270,7 +270,7 @@ class AnalyticsReporter():
         Sends PipelineBeginEvent and start heartbeat.
         """
         try:
-            if not self.__reporting_enabled:
+            if not self.__telemetry_enabled:
                 return
             self.__pipeline_config_hash = pipeline_config_hash
             self.__pipeline_run_uuid = pipeline_run_uuid
@@ -295,7 +295,7 @@ class AnalyticsReporter():
                 pipeline_perceptor_names,
                 pipeline_has_parallel_perceptors,
                 pipeline_api_call_count)
-            self.__analytics.track(self.__machine_id, PIPELINE_BEGIN_EVENT_NAME, vars(event))
+            self.__telemetry.track(self.__machine_id, PIPELINE_BEGIN_EVENT_NAME, vars(event))
             self.__cancel_heartbeat()
             self.__heartbeat_running = True
             self.__heartbeat_tread = threading.Thread(
@@ -315,14 +315,14 @@ class AnalyticsReporter():
         Sends PipelineHeartbeatEvent
         """
         try:
-            if not self.__reporting_enabled:
+            if not self.__telemetry_enabled:
                 return
             event = PipelineHeartbeatEvent(
                 self.__machine_id,
                 self.__pipeline_config_hash,
                 self.__pipeline_run_uuid,
                 pipeline_api_call_count)
-            self.__analytics.track(self.__machine_id, PIPELINE_HEARTBEAT_EVENT_NAME, vars(event))
+            self.__telemetry.track(self.__machine_id, PIPELINE_HEARTBEAT_EVENT_NAME, vars(event))
         except Exception:
             pass
 
@@ -331,14 +331,14 @@ class AnalyticsReporter():
         Sends PipelineEndEvent and stops heartbeat.
         """
         try:
-            if not self.__reporting_enabled:
+            if not self.__telemetry_enabled:
                 return
             event = PipelineEndEvent(
                 self.__machine_id,
                 self.__pipeline_config_hash,
                 self.__pipeline_run_uuid,
                 pipeline_api_call_count)
-            self.__analytics.track(self.__machine_id, PIPELINE_END_EVENT_NAME, vars(event))
+            self.__telemetry.track(self.__machine_id, PIPELINE_END_EVENT_NAME, vars(event))
             self.__cancel_heartbeat()
             self.flush()
         except Exception:
@@ -349,14 +349,14 @@ class AnalyticsReporter():
         Sends PipelineErrorEvent and stops heartbeat if error is fatal.
         """
         try:
-            if not self.__reporting_enabled:
+            if not self.__telemetry_enabled:
                 return
             event = PipelineErrorEvent(
                 self.__machine_id,
                 self.__pipeline_config_hash,
                 self.__pipeline_run_uuid,
                 error, is_fatal)
-            self.__analytics.track(self.__machine_id, 'pipeline_error', vars(event))
+            self.__telemetry.track(self.__machine_id, 'pipeline_error', vars(event))
             if is_fatal:
                 self.__cancel_heartbeat()
                 self.flush()
@@ -365,10 +365,10 @@ class AnalyticsReporter():
 
     def flush(self):
         """
-        Flushes the analytics queue.
+        Flushes the telemetry queue.
         """
         try:
-            self.__analytics.flush()
+            self.__telemetry.flush()
         except Exception:
             pass
 
@@ -388,17 +388,17 @@ class AnalyticsReporter():
         #   parallel perceptors are joined with _
         # Output streams are ordered following the dict keys.
         try:
-            config = [AnalyticsReporter.get_type_name(input_stream)]
+            config = [TelemetryReporter.get_type_name(input_stream)]
             for parralel_perpeptors in perceptor_orders:
                 parralel_perpeptors_types = []
                 for perceptor_name in parralel_perpeptors:
                     parralel_perpeptors_types.append(
-                        AnalyticsReporter.get_type_name(perceptors[perceptor_name])
+                        TelemetryReporter.get_type_name(perceptors[perceptor_name])
                     )
                 config.append('_'.join(parralel_perpeptors_types))
             for output_stream_name in output_streams:
                 config.append(
-                    AnalyticsReporter.get_type_name(
+                    TelemetryReporter.get_type_name(
                         output_streams[output_stream_name].get('stream', None))
                 )
 

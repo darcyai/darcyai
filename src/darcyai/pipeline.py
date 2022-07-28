@@ -42,7 +42,7 @@ from darcyai.perceptor.perceptor_utils import get_supported_processors
 from darcyai.perceptor.processor import Processor
 from darcyai.perception_object_model import PerceptionObjectModel
 from darcyai.processing_engine import ProcessingEngine
-from darcyai.reporter.analytics_reporter import AnalyticsReporter
+from darcyai.reporter.telemetry_reporter import TelemetryReporter
 from darcyai.stream_data import StreamData
 from darcyai.utils import validate_not_none, validate_type, validate
 
@@ -759,7 +759,7 @@ class Pipeline():
 
         perceptors_order = self.__get_perceptors_order()
 
-        reporter = AnalyticsReporter(darcyai_version, self.__disable_reporting)
+        reporter = TelemetryReporter(darcyai_version, self.__disable_reporting)
         run_uuid = uuid.uuid4()
 
         try:
@@ -782,7 +782,7 @@ class Pipeline():
 
             reporter.on_pipeline_begin(
                 str(run_uuid),
-                AnalyticsReporter.hash_pipeline_config(
+                TelemetryReporter.hash_pipeline_config(
                     self.__input_stream,
                     self.__perceptors,
                     perceptors_order,
@@ -793,17 +793,17 @@ class Pipeline():
                 len(self.__output_streams),
                 len(self.__perceptors),
                 (
-                    [AnalyticsReporter.get_type_name(self.__input_stream)] if stream is not None
+                    [TelemetryReporter.get_type_name(self.__input_stream)] if stream is not None
                     else []
                 ),
                 list(
                     map(lambda x:
-                            AnalyticsReporter
+                            TelemetryReporter
                             .get_type_name(self.__output_streams[x].get("stream", None)),
                     self.__output_streams)
                 ),
                 list(map(lambda x:
-                            AnalyticsReporter
+                            TelemetryReporter
                             .get_type_name(self.__perceptors[x]), self.__perceptors)
                 ),
                 has_parallel_perceptors,
