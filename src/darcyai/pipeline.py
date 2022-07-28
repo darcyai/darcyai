@@ -16,6 +16,7 @@ import json
 import os
 import pathlib
 import platform
+import sys
 import threading
 import time
 from collections import OrderedDict
@@ -226,7 +227,7 @@ class Pipeline():
             from signal import SIGQUIT
             signals.append(SIGQUIT)
         for sig in signals:
-            signal(sig, self.stop)
+            signal(sig, self.__kill)
 
     def num_of_edge_tpus(self) -> int:
         """
@@ -1899,6 +1900,10 @@ class Pipeline():
                      "perception_completion_callback must be a function")
 
         self.__perception_completion_callback = perception_completion_callback
+
+    def __kill(self, code, _) -> None:
+        sys.exit(code)
+
 
 class CustomJSONEncoder(JSONEncoder):
     """

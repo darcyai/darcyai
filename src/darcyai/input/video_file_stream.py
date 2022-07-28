@@ -74,11 +74,6 @@ class VideoFileStream(InputStream):
         if self.__vs is None:
             return
 
-        with self.__lock:
-            self.__vs.release()
-            self.__vs = None
-            self.__frame_number = 0
-
     def stream(self) -> Iterable[VideoStreamData]:
         """
         Streams the video frames.
@@ -122,6 +117,10 @@ class VideoFileStream(InputStream):
                     break
 
                 yield(VideoStreamData(frame, timestamp()))
+
+        self.__vs.release()
+        self.__vs = None
+        self.__frame_number = 0
 
     def __initialize_video_file_stream(self) -> cv2.VideoCapture:
         cap = cv2.VideoCapture(self.__file_name)

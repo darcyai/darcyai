@@ -13,3 +13,4 @@ pyvenv.cfg
 .DS_Store
 /.pytest_cache
 darcyai.iml
+/src/*.py
