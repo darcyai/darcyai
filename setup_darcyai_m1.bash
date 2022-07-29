@@ -51,19 +51,18 @@ fi
 
 # Create a new conda environment for DarcyAI
 echoInfo "Creating new environment for darcyai"
-conda create --yes --name darcyai "python=3.8" "Pillow>=8.3.2" "numpy>=1.21.4"
+conda create --yes --name darcyai "python=3.8"
 
 # Activate our new env
 echoInfo "Activating darcyai env"
 conda activate darcyai
 
 # Install all our deps
-echoInfo "Installing all "
+echoInfo "Installing all dependencies"
 pip install --upgrade pip
 
 # Install all our deps
 pip install -q "opencv-python>=4.5.5.64"
-pip install -q "imutils>=0.5.4"
 pip install -q darcyai
 
 # Install tensorflow for MA
