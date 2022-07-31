@@ -191,7 +191,7 @@ class Telemetry():
                 or telemetry_disabled_env_val == "0")):
             telemetry_disabled_env_val = False
         else:
-            telemetry_disabled_env_val = True
+            telemetry_disabled_env_val = bool(telemetry_disabled_env_val)
 
         self.__telemetry_enabled = (
             not telemetry_disabled_env_val and not disable_telemetry
@@ -222,6 +222,12 @@ class Telemetry():
         self.__telemetry.identify(self.__machine_id)
         self.__pipeline_run_uuid = ''
         self.__heartbeat_interval = heartbeat_interval
+
+    def is_enabled(self):
+        """
+        Returns whether telemetry is enabled or not.
+        """
+        return self.__telemetry_enabled
 
     def __get_etc_hostnames(self):
         """
@@ -278,7 +284,7 @@ class Telemetry():
         Sends PipelineBeginEvent and start heartbeat.
         """
         try:
-            if not self.__telemetry_enabled:
+            if not self.is_enabled():
                 return
             self.__pipeline_config_hash = pipeline_config_hash
             self.__pipeline_run_uuid = pipeline_run_uuid
@@ -323,7 +329,7 @@ class Telemetry():
         Sends PipelineHeartbeatEvent
         """
         try:
-            if not self.__telemetry_enabled:
+            if not self.is_enabled():
                 return
             event = PipelineHeartbeatEvent(
                 self.__machine_id,
@@ -339,7 +345,7 @@ class Telemetry():
         Sends PipelineEndEvent and stops heartbeat.
         """
         try:
-            if not self.__telemetry_enabled:
+            if not self.is_enabled():
                 return
             event = PipelineEndEvent(
                 self.__machine_id,
@@ -357,7 +363,7 @@ class Telemetry():
         Sends PipelineErrorEvent and stops heartbeat if error is fatal.
         """
         try:
-            if not self.__telemetry_enabled:
+            if not self.is_enabled():
                 return
             event = PipelineErrorEvent(
                 self.__machine_id,
