@@ -27,6 +27,7 @@ class TestTelemetry:
         telemetry = Telemetry(darcyai_engine_version="1.0.0", disable_telemetry=False)
         assert telemetry is not None
         assert telemetry.is_enabled() is True
+        assert telemetry._Telemetry__telemetry.send is False
 
     def test_init_disable_telemetry(self):
         telemetry = Telemetry(darcyai_engine_version="1.0.0", disable_telemetry=True)
@@ -68,3 +69,6 @@ class TestTelemetry:
         telemetry = Telemetry(darcyai_engine_version="1.0.0", disable_telemetry=False)
         assert telemetry is not None
         assert telemetry.is_enabled() is False
+
+
+

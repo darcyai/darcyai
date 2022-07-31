@@ -13,6 +13,7 @@ from darcyai.input.input_stream import InputStream
 IN_DOCKER_ENV_NAME = 'DARCYAI_IN_DOCKER'
 TELEMETRY_DISABLED_ENV = 'DARCYAI_DISABLE_TELEMETRY'
 WRITE_KEY_ENV = 'DARCYAI_ANALYTICS_WRITE_KEY'
+PYTEST_ENV = 'PYTEST_CURRENT_TEST'
 HEARTBEAT_INTERVAL = 60
 
 ## Events definition
@@ -206,6 +207,7 @@ class Telemetry():
 
         self.__telemetry = analytics
         self.__telemetry.write_key = write_key
+        self.__telemetry.send = False if os.getenv(PYTEST_ENV) is not None else True
 
         self.__machine_id = uuid.getnode()
         self.__os_name = platform.system()
