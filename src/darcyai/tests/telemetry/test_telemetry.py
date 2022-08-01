@@ -18,8 +18,8 @@ import time
 
 from darcyai.telemetry.telemetry import Telemetry, PIPELINE_BEGIN_EVENT_NAME, PIPELINE_END_EVENT_NAME, PIPELINE_ERROR_EVENT_NAME, PIPELINE_HEARTBEAT_EVENT_NAME
 from darcyai.tests.perceptor_mock import PerceptorMock
-from sample_input_stream import SampleInputStream
-from sample_output_stream import SampleOutputStream
+from darcyai.integration_tests.pipeline_basic.sample_input_stream import SampleInputStream
+from darcyai.integration_tests.pipeline_basic.sample_output_stream import SampleOutputStream
 from unittest import mock
 
 
