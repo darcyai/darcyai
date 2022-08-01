@@ -17,6 +17,9 @@ import os
 from unittest import mock
 
 from darcyai.telemetry.telemetry import Telemetry
+from darcyai.tests.perceptor_mock import PerceptorMock
+from sample_input_stream import SampleInputStream
+from sample_output_stream import SampleOutputStream
 
 
 class TestTelemetry:
@@ -70,5 +73,17 @@ class TestTelemetry:
         assert telemetry is not None
         assert telemetry.is_enabled() is False
 
+    def test_get_type_name(self):
+        telemetry = Telemetry(darcyai_engine_version="1.0.0", disable_telemetry=False)
+        assert telemetry.get_type_name(telemetry) == "darcyai.telemetry.telemetry.Telemetry"
 
+    def test_hash_pipeline_config(self):
+        telemetry = Telemetry(darcyai_engine_version="1.0.0", disable_telemetry=False)
+        hash_1 = telemetry.hash_pipeline_config(SampleInputStream(), {"a": PerceptorMock(), "b": PerceptorMock() }, [{"a"}, {"b"}], {"o": { "stream": SampleOutputStream() }})
+        hash_2 = telemetry.hash_pipeline_config(SampleInputStream(), {"a": PerceptorMock(), "b": PerceptorMock() }, [{"a"}, {"b"}], {"o": { "stream": SampleOutputStream() }})
+        hash_3 = telemetry.hash_pipeline_config(SampleInputStream(), {"a": PerceptorMock(), "b": PerceptorMock(), "c": PerceptorMock() }, [{"a"}, {"b", "c"}], {"o": { "stream": SampleOutputStream() }})
+        hash_4 = telemetry.hash_pipeline_config(SampleInputStream(), {"a": PerceptorMock(), "b": PerceptorMock(), "c": Telemetry("1.0.0") }, [{"c"}, {"a", "b"}], {"o": { "stream": SampleOutputStream() }})
 
+        assert hash_1 == hash_2
+        assert hash_1 != hash_3
+        assert hash_3 != hash_4

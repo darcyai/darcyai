@@ -419,7 +419,8 @@ class Telemetry():
                 )
 
             return hashlib.sha256(''.join(config).encode('utf-8')).hexdigest()
-        except Exception:
+        except Exception as e:
+            return str(e)
             return '<Error hashing pipeline config>'
 
     @staticmethod
