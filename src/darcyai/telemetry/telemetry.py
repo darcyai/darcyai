@@ -188,8 +188,8 @@ class Telemetry():
         """
         telemetry_disabled_env_val = os.getenv(TELEMETRY_DISABLED_ENV)
         if (telemetry_disabled_env_val is not None
-            and (telemetry_disabled_env_val.lower() == "false"
-                or telemetry_disabled_env_val == "0")):
+            and (telemetry_disabled_env_val.lower() == 'false'
+                or telemetry_disabled_env_val == '0')):
             telemetry_disabled_env_val = False
         else:
             telemetry_disabled_env_val = bool(telemetry_disabled_env_val)
@@ -207,7 +207,8 @@ class Telemetry():
 
         self.__telemetry = analytics
         self.__telemetry.write_key = write_key
-        self.__telemetry.send = False if os.getenv(PYTEST_ENV) is not None else True
+        # Disable during in pytest
+        self.__telemetry.send = os.getenv(PYTEST_ENV) is None
 
         self.__machine_id = uuid.getnode()
         self.__os_name = platform.system()
@@ -216,7 +217,10 @@ class Telemetry():
         self.__cpu_count = multiprocessing.cpu_count()
         in_docker_env = os.getenv(IN_DOCKER_ENV_NAME)
         self.__using_iofog = self.__is_using_iofog()
-        self.__containerized = (in_docker_env is not None and in_docker_env != '') or self.__using_iofog
+        self.__containerized = (
+            (in_docker_env is not None and in_docker_env != '')
+            or self.__using_iofog
+        )
         self.__darcyai_engine_version = darcyai_engine_version
         self.__python_version = platform.python_version()
 
@@ -420,7 +424,6 @@ class Telemetry():
 
             return hashlib.sha256(''.join(config).encode('utf-8')).hexdigest()
         except Exception as e:
-            return str(e)
             return '<Error hashing pipeline config>'
 
     @staticmethod
