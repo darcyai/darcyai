@@ -1,4 +1,5 @@
 import analytics
+import datetime
 import hashlib
 import multiprocessing
 import os
@@ -139,6 +140,7 @@ class PipelineBeginEvent(PipelineBaseEvent):
                 containerized: bool,
                 using_iofog: bool,
                 cpu_count: int,
+                timezone: str,
                 google_coral_count: int,
                 darcy_ai_engine_version: str,
                 python_version: str,
@@ -157,6 +159,7 @@ class PipelineBeginEvent(PipelineBaseEvent):
         self.containerized = containerized
         self.using_iofog = using_iofog
         self.cpu_count = cpu_count
+        self.timezone = timezone
         self.google_coral_count = google_coral_count
         self.darcy_ai_engine_version = darcy_ai_engine_version
         self.python_version = python_version
@@ -215,6 +218,7 @@ class Telemetry():
         self.__os_version = platform.version()
         self.__os_arch = platform.machine()
         self.__cpu_count = multiprocessing.cpu_count()
+        self.__timezone = datetime.datetime.now(datetime.timezone.utc).astimezone().tzname()
         in_docker_env = os.getenv(IN_DOCKER_ENV_NAME)
         self.__using_iofog = self.__is_using_iofog()
         self.__containerized = (
@@ -303,6 +307,7 @@ class Telemetry():
                 self.__containerized,
                 self.__using_iofog,
                 self.__cpu_count,
+                self.__timezone,
                 google_coral_count,
                 self.__darcyai_engine_version,
                 self.__python_version,
