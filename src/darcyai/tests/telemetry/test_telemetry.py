@@ -12,17 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from platform import machine
-import pytest
+import analytics
 import os
-from unittest import mock
+import time
 
 from darcyai.telemetry.telemetry import Telemetry, PIPELINE_BEGIN_EVENT_NAME, PIPELINE_END_EVENT_NAME, PIPELINE_ERROR_EVENT_NAME, PIPELINE_HEARTBEAT_EVENT_NAME
 from darcyai.tests.perceptor_mock import PerceptorMock
 from sample_input_stream import SampleInputStream
 from sample_output_stream import SampleOutputStream
-import analytics
-import time
+from unittest import mock
 
 
 class TestTelemetry:
@@ -98,7 +96,7 @@ class TestTelemetry:
         assert identify_mock.called_with(telemetry._Telemetry__machine_id)
 
     @mock.patch.object(analytics, "track")
-    def test_identify(self, track_mock):
+    def test_track_no_error(self, track_mock):
         telemetry = Telemetry(darcyai_engine_version="1.0.0", disable_telemetry=False, heartbeat_interval=1)
         telemetry.on_pipeline_begin("abc", "def", 0, 0, 0, 0, [], [], [], False, 0)
         time.sleep(3)
@@ -110,3 +108,35 @@ class TestTelemetry:
         assert len(list(filter(lambda x: x == mock.call(machine_id, PIPELINE_BEGIN_EVENT_NAME, mock.ANY), track_mock.call_args_list))) == 1
         assert len(list(filter(lambda x: x == mock.call(machine_id, PIPELINE_END_EVENT_NAME, mock.ANY), track_mock.call_args_list))) == 1
         assert len(list(filter(lambda x: x == mock.call(machine_id, PIPELINE_HEARTBEAT_EVENT_NAME, mock.ANY), track_mock.call_args_list))) > 1
+        assert telemetry._Telemetry__heartbeat_running is False
+
+    @mock.patch.object(analytics, "track")
+    def test_track_fatal_error(self, track_mock):
+        telemetry = Telemetry(darcyai_engine_version="1.0.0", disable_telemetry=False, heartbeat_interval=1)
+        telemetry.on_pipeline_begin("abc", "def", 0, 0, 0, 0, [], [], [], False, 0)
+        time.sleep(2)
+        telemetry.on_pipeline_error(Exception("test"), True)
+        machine_id = telemetry._Telemetry__machine_id
+        assert track_mock.called_with(machine_id, PIPELINE_BEGIN_EVENT_NAME, mock.ANY)
+        assert track_mock.called_with(machine_id, PIPELINE_HEARTBEAT_EVENT_NAME, mock.ANY)
+        assert track_mock.called_with(machine_id, PIPELINE_ERROR_EVENT_NAME, mock.ANY)
+        assert len(list(filter(lambda x: x == mock.call(machine_id, PIPELINE_BEGIN_EVENT_NAME, mock.ANY), track_mock.call_args_list))) == 1
+        assert len(list(filter(lambda x: x == mock.call(machine_id, PIPELINE_END_EVENT_NAME, mock.ANY), track_mock.call_args_list))) == 0
+        assert len(list(filter(lambda x: x == mock.call(machine_id, PIPELINE_ERROR_EVENT_NAME, mock.ANY), track_mock.call_args_list))) == 1
+        assert len(list(filter(lambda x: x == mock.call(machine_id, PIPELINE_HEARTBEAT_EVENT_NAME, mock.ANY), track_mock.call_args_list))) > 1
+        assert telemetry._Telemetry__heartbeat_running is False
+
+    @mock.patch.object(analytics, "track")
+    def test_track_non_fatal_error(self, track_mock):
+        telemetry = Telemetry(darcyai_engine_version="1.0.0", disable_telemetry=False, heartbeat_interval=1)
+        telemetry.on_pipeline_begin("abc", "def", 0, 0, 0, 0, [], [], [], False, 0)
+        telemetry.on_pipeline_error(Exception("test"), False)
+        machine_id = telemetry._Telemetry__machine_id
+        assert track_mock.called_with(machine_id, PIPELINE_BEGIN_EVENT_NAME, mock.ANY)
+        assert track_mock.called_with(machine_id, PIPELINE_ERROR_EVENT_NAME, mock.ANY)
+        assert len(list(filter(lambda x: x == mock.call(machine_id, PIPELINE_BEGIN_EVENT_NAME, mock.ANY), track_mock.call_args_list))) == 1
+        assert len(list(filter(lambda x: x == mock.call(machine_id, PIPELINE_END_EVENT_NAME, mock.ANY), track_mock.call_args_list))) == 0
+        assert len(list(filter(lambda x: x == mock.call(machine_id, PIPELINE_ERROR_EVENT_NAME, mock.ANY), track_mock.call_args_list))) == 1
+        assert telemetry._Telemetry__heartbeat_running is True
+        telemetry.on_pipeline_end(0)
+        assert telemetry._Telemetry__heartbeat_running is False
