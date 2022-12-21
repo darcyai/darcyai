@@ -27,7 +27,7 @@ stages:
         workspace:
           clean: all
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-20.04'
         strategy:
           matrix:
             Build:
@@ -158,7 +158,7 @@ stages:
         workspace:
           clean: all
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-20.04'
         strategy:
           matrix:
             Build:
