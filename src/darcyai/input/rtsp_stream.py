@@ -12,10 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Iterable
-
 from darcyai.input.video_file_stream import VideoFileStream
-from darcyai.input.video_stream_data import VideoStreamData
 from darcyai.utils import validate_not_none, validate_type
 
 
@@ -38,32 +35,3 @@ class RTSPStream(VideoFileStream):
         validate_not_none(url, "url is required")
         validate_type(url, str, "url must be a string.")
         super().__init__(file_name=url, loop=False, process_all_frames=True)
-
-    def stop(self) -> None:
-        """
-        Stops the video stream.
-
-        # Examples
-        ```python
-        >>> from darcyai.input.rtsp_stream import RTSPStream
-        >>> rtsp = RTSPStream(url="rtsp://some.domain.com/stream")
-        >>> rtsp.stop()
-        ```
-        """
-        super().stop()
-
-    def stream(self) -> Iterable[VideoStreamData]:
-        """
-        Streams the video frames.
-
-        # Returns
-        An iterable of VideoStreamData objects.
-
-        # Examples
-        ```python
-        >>> from darcyai.input.rtsp_stream import RTSPStream
-        >>> rtsp = RTSPStream(url="rtsp://some.domain.com/stream")
-        >>> rtsp.stream()
-        ```
-        """
-        return super().stream()
