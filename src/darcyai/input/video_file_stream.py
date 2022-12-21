@@ -28,7 +28,6 @@ class VideoFileStream(InputStream):
 
     # Arguments
     file_name (str): The name of the video file to stream.
-    use_pi_camera (bool): Whether or not to use the Raspberry Pi camera.
     loop (bool): Whether or not to loop the video. Defaults to `True`.
     process_all_frames (bool): Whether or not to process all frames. Defaults to `True`.
 
