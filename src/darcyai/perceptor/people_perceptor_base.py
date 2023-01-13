@@ -408,6 +408,9 @@ class PeoplePerceptorBase(Perceptor):
         self.__frame_height = 0
 
     def run(self, input_data, config, primary_pose_engine):
+        if input_data is None:
+            return None
+
         #Start with basic frame operations
         frame = input_data
         self.__frame_number += 1
