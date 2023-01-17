@@ -38,6 +38,8 @@ class RTSPStream(InputStream):
 
     def __init__(self,
                  url: str):
+        super().__init__()
+
         validate_not_none(url, "url is required")
         validate_type(url, str, "url must be a string.")
         self.__url = url
@@ -92,6 +94,7 @@ class RTSPStream(InputStream):
         self.__vs = None
 
     def __initialize_rtsp_stream(self) -> cv2.VideoCapture:
+        """Initializes the rtsp stream"""
         cap = cv2.VideoCapture(self.__url)
 
         if not cap.isOpened():
@@ -100,6 +103,7 @@ class RTSPStream(InputStream):
         return cap
 
     def __get_frame(self):
+        """Gets the latest frame from rtsp stream"""
         if self.__vs is None:
             self.__vs = self.__initialize_rtsp_stream()
 
