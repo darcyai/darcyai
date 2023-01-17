@@ -6,7 +6,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends apt-utils libssl-dev \
     && apt-get install -y --no-install-recommends cmake \
     && apt-get install -y --no-install-recommends curl gnupg ca-certificates zlib1g-dev libjpeg-dev \
-    && apt-get install -y --no-install-recommends ffmpeg libsm6 libxext6 libxrender1 libglib2.0-bin \
+    && apt-get install -y --no-install-recommends ffmpeg libsm6 libxext6 libxrender1 libglib2.0-bin libx265-192 \
     && apt-get install -y --no-install-recommends build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
