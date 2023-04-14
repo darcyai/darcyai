@@ -42,7 +42,7 @@ camera = CameraStream(video_device="/dev/video0", fps=20)
 
 pipeline = Pipeline(input_stream=camera)
 
-live_feed = LiveFeedStream(path="/", port=3456, host="0.0.0.0")
+live_feed = LiveFeedStream(path="/", port=3456)
 pipeline.add_output_stream("output", live_feed_callback, live_feed)
 
 script_dir = pathlib.Path(__file__).parent.absolute()

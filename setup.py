@@ -61,5 +61,6 @@ setuptools.setup(
         "flask==2.0.2",
         "requests==2.26.0",
         "logging-json==0.2.1",
+        "waitress==2.1.2",
     ]
 )

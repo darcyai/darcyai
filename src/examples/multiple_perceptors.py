@@ -27,7 +27,6 @@ class MultiPerceptorDemo():
                                    num_of_edge_tpus=2,
                                    universal_rest_api=True,
                                    rest_api_base_path="/test",
-                                   rest_api_host="0.0.0.0",
                                    rest_api_port=8080)
 
         self.__pipeline.add_output_stream("output", self.__output_stream_callback, output_stream)
