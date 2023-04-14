@@ -20,3 +20,5 @@ include src/darcyai/perceptor/posenet_lib/armv7l/linux/*
 include src/darcyai/perceptor/posenet_lib/x86_64/darwin/*
 include src/darcyai/perceptor/posenet_lib/x86_64/linux/*
 include src/darcyai/perceptor/posenet_lib/x86_64/windows/*
+
+include src/darcyai/input/bars.png

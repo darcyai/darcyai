@@ -39,6 +39,7 @@ setuptools.setup(
             "src/darcyai/perceptor/coral/models/*",
             "src/darcyai/perceptor/cpu/models/*",
             "src/darcyai/perceptor/posenet_lib/*",
+            "src/darcyai/input/bars.png",
         ]
     },
     exclude_package_data={

@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import cv2
+import os
 import threading
 from collections import deque
 from typing import Iterable
@@ -38,11 +39,13 @@ class RTSPStream(InputStream):
 
     def __init__(self,
                  url: str):
-        super().__init__()
-
         validate_not_none(url, "url is required")
         validate_type(url, str, "url must be a string.")
         self.__url = url
+
+        script_dir = os.path.dirname(os.path.realpath(__file__))
+        bars_path = os.path.join(script_dir, "bars.png")
+        self.__bars = cv2.imread(bars_path)
 
         self.__vs = None
         self.__stopped = True
@@ -86,7 +89,7 @@ class RTSPStream(InputStream):
         while not self.__stopped:
             try:
                 frame = self.__frame.pop()
-                yield(VideoStreamData(frame, timestamp()))
+                yield (VideoStreamData(frame, timestamp()))
             except IndexError:
                 pass
 
@@ -94,7 +97,6 @@ class RTSPStream(InputStream):
         self.__vs = None
 
     def __initialize_rtsp_stream(self) -> cv2.VideoCapture:
-        """Initializes the rtsp stream"""
         cap = cv2.VideoCapture(self.__url)
 
         if not cap.isOpened():
@@ -103,7 +105,6 @@ class RTSPStream(InputStream):
         return cap
 
     def __get_frame(self):
-        """Gets the latest frame from rtsp stream"""
         if self.__vs is None:
             self.__vs = self.__initialize_rtsp_stream()
 
@@ -113,5 +114,11 @@ class RTSPStream(InputStream):
         while not self.__stopped and self.__vs.isOpened():
             success, frame = self.__vs.read()
             if not success:
-                continue
+                frame = self.__overlay(
+                    self.__bars, "Unable to read from the RTSP stream")
             self.__frame.append(frame)
+
+    def __overlay(self, frame, text, font_scale=0.5, color=(255, 255, 255), thinkness=2):
+        cv2.putText(frame.copy(), text, (20, 20), cv2.FONT_HERSHEY_SIMPLEX,
+                    font_scale, color, thinkness, cv2.LINE_AA)
+        return frame
