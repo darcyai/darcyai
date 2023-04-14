@@ -39,6 +39,8 @@ class RTSPStream(InputStream):
 
     def __init__(self,
                  url: str):
+        super().__init__()
+
         validate_not_none(url, "url is required")
         validate_type(url, str, "url must be a string.")
         self.__url = url
@@ -105,6 +107,9 @@ class RTSPStream(InputStream):
         return cap
 
     def __get_frame(self):
+        """
+        Gets a frame from the RTSP stream.
+        """
         if self.__vs is None:
             self.__vs = self.__initialize_rtsp_stream()
 

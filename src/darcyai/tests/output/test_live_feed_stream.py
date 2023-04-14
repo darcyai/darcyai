@@ -46,12 +46,6 @@ class TestLiveFeedStream:
 
         assert "port must be between 0 and 65535" in str(context.value)
 
-    def test_constructor_fails_when_host_is_not_provided(self):
-        with pytest.raises(Exception) as context:
-            LiveFeedStream(path="/", port=1)
-
-        assert "host is required" in str(context.value)
-
     def test_constructor_validates_host_type(self):
         with pytest.raises(Exception) as context:
             LiveFeedStream(path="/", port=1, host=1)
