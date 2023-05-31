@@ -14,12 +14,13 @@ jobs:
       - script: |
           curl -L -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
           python3 /tmp/get-pip.py --user
-
-          sudo apt-get install -y libcblas-dev libhdf5-dev libhdf5-serial-dev
-          sudo apt-get install -y libatlas-base-dev libjasper-dev libqtgui4 libqt4-test
         displayName: 'Install dependencies'
 
       - bash: |
+          sudo apt-get update
+          sudo apt-get install -y libcblas-dev libhdf5-dev libhdf5-serial-dev
+          sudo apt-get install -y libatlas-base-dev libjasper-dev libqtgui4 libqt4-test
+
           cd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
           python3 -m pip install -r requirements.txt --user
           python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl --user
