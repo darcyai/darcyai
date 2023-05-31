@@ -2,7 +2,7 @@ jobs:
   - job: ${{ parameters.name }}
     workspace:
       clean: all
-    pool: ${{ parameters.poolImageName }}
+    pool: ${{ parameters.pool }}
     steps:
       - task: DownloadPipelineArtifact@2
         inputs:
@@ -17,9 +17,13 @@ jobs:
         displayName: 'Install dependencies'
 
       - bash: |
+          sudo apt-get update
+          sudo apt-get install -y libatlas-base-dev
+
           cd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
           python3 -m pip install -r requirements.txt --user
           python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl --user
+          python3 -m pip install -U numpy --user
 
           python3 -u tests.py
         displayName: 'E2E test on macOS and Linux'
