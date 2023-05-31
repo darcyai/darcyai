@@ -2,7 +2,7 @@ jobs:
   - job: ${{ parameters.name }}
     workspace:
       clean: all
-    pool: ${{ parameters.poolImageName }}
+    pool: ${{ parameters.pool }}
     steps:
       - task: DownloadPipelineArtifact@2
         inputs:

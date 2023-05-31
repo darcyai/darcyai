@@ -121,25 +121,33 @@ stages:
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_x86'
-          poolImageName: 'Azure Pipelines'
+          pool: 'Azure Pipelines'
           imageTag: 'dev'
 
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_arm32'
-          poolImageName: 'build-farm-rpi4'
+          pool:
+            name: 'Build Farm'
+            demands:
+              - Agent.OS -equals Linux
+              - Agent.OSArchitecture -equals ARM
           imageTag: 'dev'
 
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_arm64'
-          poolImageName: 'build-farm-coral'
+          pool:
+            name: 'Build Farm'
+            demands:
+              - Agent.OS -equals Linux
+              - Agent.OSArchitecture -equals ARM64
           imageTag: 'dev'
 
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_macOS'
-          poolImageName:
+          pool:
             vmImage: 'macOS-latest'
           imageTag: 'dev'
 
