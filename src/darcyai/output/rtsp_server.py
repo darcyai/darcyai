@@ -1,4 +1,3 @@
-from gi.repository import Gst, GstRtspServer, GLib
 import gi
 import time
 from threading import Thread
@@ -11,6 +10,7 @@ from darcyai.utils import validate_not_none, validate_type, validate
 gi.require_version("Gst", "1.0")
 gi.require_version("GstRtspServer", "1.0")
 # pylint: disable=wrong-import-position
+from gi.repository import Gst, GstRtspServer, GLib
 
 
 class RtspServer(OutputStream):
