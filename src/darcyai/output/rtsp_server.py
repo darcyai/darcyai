@@ -88,12 +88,9 @@ class RtspServer(OutputStream):
 
         # Examples
         ```python
-        >>> from darcyai.output.live_feed_stream import LiveFeedStream
-        >>> live_feed_stream = LiveFeedStream(path="/live-feed",
-        >>>                                   port=8080,
-        >>>                                   fps=20,
-        >>>                                   quality=100)
-        >>> live_feed_stream.write(frame)
+        >>> from darcyai.output.rtsp_server import RtspServer
+        >>> rtsp_server = RtspServer()
+        >>> rtsp_server.write(frame)
         ```
         """
         if data is None:
