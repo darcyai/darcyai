@@ -23,6 +23,7 @@ jobs:
           cd $(System.DefaultWorkingDirectory)/src/darcyai/integration_tests
           python3 -m pip install -r requirements.txt --user
           python3 -m pip install $(System.DefaultWorkingDirectory)/dist/darcyai*.whl --user
+          python3 -m pip install -U numpy --user
 
           python3 -u tests.py
         displayName: 'E2E test on macOS and Linux'
