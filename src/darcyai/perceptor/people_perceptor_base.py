@@ -167,22 +167,18 @@ class PoseEngine():
         """
         if self.__is_windows:
             return self.DetectPosesInImageWindows(input_image)
+        
+        input_image_shape = input_image.shape
+        resized_image = cv2.resize(input_image, (self._input_width, self._input_height))
+        assert (resized_image.shape == tuple(self._input_tensor_shape[1:]))
 
-        # Extend or crop the input to match the input shape of the network.
-        if input_image.shape[0] < self._input_height or input_image.shape[1] < self._input_width:
-            input_image = np.pad(input_image, [[0, max(0, self._input_height - input_image.shape[0])],
-                               [0, max(0, self._input_width - input_image.shape[1])], [0, 0]],
-                         mode='constant')
-        input_image = input_image[0:self._input_height, 0:self._input_width]
-        assert (input_image.shape == tuple(self._input_tensor_shape[1:]))
-
-        input_data = np.expand_dims(input_image, axis=0)
+        input_data = np.expand_dims(resized_image, axis=0)
         if self._input_type is np.float32:
             # Floating point versions of posenet take image data in [-1,1] range.
-            input_data = np.float32(input_image) / 128.0 - 1.0
+            input_data = np.float32(resized_image) / 128.0 - 1.0
         else:
             # Assuming to be uint8
-            input_data = np.asarray(input_image)
+            input_data = np.asarray(resized_image)
 
         if not self.__tpu:
             input_data = np.expand_dims(input_data, axis=0)
@@ -191,7 +187,7 @@ class PoseEngine():
     
         self.run_inference(input_data)
     
-        return self.ParseOutput()
+        return self.ParseOutput(input_image_shape)
 
     def DetectPosesInImageWindows(self, input_image):
         """
@@ -243,7 +239,7 @@ class PoseEngine():
         return np.squeeze(self._interpreter.tensor(
             self._interpreter.get_output_details()[idx]['index'])())
 
-    def ParseOutput(self):
+    def ParseOutput(self, input_image_shape):
         """Parses interpreter output tensors and returns decoded poses."""
         keypoints = self.get_output_tensor(0)
         keypoint_scores = self.get_output_tensor(1)
@@ -254,9 +250,10 @@ class PoseEngine():
             pose_score = pose_scores[i]
             pose_keypoints = {}
             for j, point in enumerate(keypoints[i]):
-                y, x = point
+                y = point[0] * (input_image_shape[0] / self._input_height)
+                x = point[1] * (input_image_shape[1] / self._input_width)
                 if self._mirror:
-                    y = self._input_width - y
+                    y = input_image_shape[0] - y
                 pose_keypoints[KeypointType(j)] = Keypoint(
                     Point(x, y), keypoint_scores[i, j])
             poses.append(Pose(pose_keypoints, pose_score))
