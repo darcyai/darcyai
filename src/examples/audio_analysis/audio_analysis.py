@@ -15,7 +15,6 @@
 # Add libraries we need
 import librosa
 import numpy as np
-from flask import Flask
 
 # Add the Darcy AI Pipeline object
 from darcyai.pipeline import Pipeline

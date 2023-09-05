@@ -16,6 +16,7 @@ import json
 import os
 import pathlib
 import platform
+import sys
 import threading
 import time
 from collections import OrderedDict
@@ -26,6 +27,7 @@ from multiprocessing.pool import ThreadPool
 from signal import SIGABRT, SIGILL, SIGINT, SIGSEGV, SIGTERM, signal
 from typing import Callable, Any, Dict, Tuple, Union, List
 from unittest.mock import sentinel
+from waitress import serve
 
 from darcyai.config import Config, RGB
 from darcyai.config_registry import ConfigRegistry
@@ -161,11 +163,14 @@ class Pipeline():
                     0 <= rest_api_port <= 65535,
                     "rest_api_port must be between 0 and 65535")
 
-                validate_not_none(rest_api_host, "rest_api_host is required")
-                validate_type(
-                    rest_api_host,
-                    str,
-                    "rest_api_host must be a string")
+                if rest_api_host is None:
+                    self.__host = "*"
+                else:
+                    validate_type(
+                        rest_api_host,
+                        str,
+                        "rest_api_host must be a string")
+                    self.__host = rest_api_host
 
             validate_not_none(
                 rest_api_base_path,
@@ -177,7 +182,6 @@ class Pipeline():
 
             self.__flask_app = rest_api_flask_app
             self.__port = rest_api_port
-            self.__host = rest_api_host
             self.__path = rest_api_base_path
 
         self.__input_stream = input_stream
@@ -226,7 +230,7 @@ class Pipeline():
             from signal import SIGQUIT
             signals.append(SIGQUIT)
         for sig in signals:
-            signal(sig, self.stop)
+            signal(sig, self.__kill)
 
     def num_of_edge_tpus(self) -> int:
         """
@@ -1539,14 +1543,9 @@ class Pipeline():
             self.__flask_app = Flask(__name__,
                 static_folder=os.path.join(swagger_path, "static"),
                 template_folder=os.path.join(swagger_path, "templates"))
-            ssl_context = None
             self.__setup_paths()
             self.__flask_app.json_encoder = CustomJSONEncoder
-            self.__flask_app.run(
-                host=self.__host,
-                port=self.__port,
-                ssl_context=ssl_context,
-                debug=False)
+            serve(self.__flask_app, listen=f"{self.__host}:{self.__port}")
         else:
             self.__setup_paths()
             self.__flask_app.json_encoder = CustomJSONEncoder
@@ -1899,6 +1898,10 @@ class Pipeline():
                      "perception_completion_callback must be a function")
 
         self.__perception_completion_callback = perception_completion_callback
+
+    def __kill(self, code, _) -> None:
+        sys.exit(code)
+
 
 class CustomJSONEncoder(JSONEncoder):
     """

@@ -27,7 +27,7 @@ from .sample_perceptor import SamplePerceptor
 
 class Test():
     def __init__(self):
-        self.__port_number = random.randint(40000, 49999)
+        self.__port_number = random.randint(50000, 59999)
 
         ping = SampleInputStream(max_runs=1)
         output_stream = RestApiStream(url=f"http://0.0.0.0:{self.__port_number}/post")

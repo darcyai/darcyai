@@ -29,13 +29,12 @@ def output_callback(pom, input_data):
 
 
 camera = CameraStream(video_device=0 if platform.system() == "Darwin" else "/dev/video0", fps=20)
-output_stream = LiveFeedStream(port=3456, host="0.0.0.0", path="/live-stream")
+output_stream = LiveFeedStream(port=3456, path="/live-stream")
 
 pipeline = Pipeline(input_stream=camera,
                     num_of_edge_tpus=2,
                     universal_rest_api=True,
                     rest_api_base_path="/test",
-                    rest_api_host="0.0.0.0",
                     rest_api_port=8080)
 
 pipeline.add_output_stream("live_stream", output_callback, output_stream)

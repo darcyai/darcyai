@@ -5,6 +5,7 @@ trigger:
   branches:
     include:
     - main
+    - develop
   paths:
     exclude:
     - docker
@@ -26,7 +27,7 @@ stages:
         workspace:
           clean: all
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-20.04'
         strategy:
           matrix:
             Build:
@@ -42,6 +43,7 @@ stages:
           displayName: 'Use Python $(python.version)'
 
         - script: |
+            set -e
             sudo echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
             sudo echo "deb https://packages.cloud.google.com/apt coral-cloud-stable main" | sudo tee /etc/apt/sources.list.d/coral-cloud.list
             sudo curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -56,10 +58,12 @@ stages:
           displayName: 'Install dependencies'
 
         - script: |
+            set -e
             pylint --rcfile=.pylintrc --output-format=colorized --reports=n --score=n src/darcyai/
           displayName: 'Run pylint'
 
         - script: |
+            set -e
             pytest src/darcyai/tests -v --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml
           displayName: 'Run unit tests'
 
@@ -77,12 +81,14 @@ stages:
           displayName: 'Publish code coverage'
 
         - script: |
+            set -e
+
             NEXT_VERSION=$(cat next_version)
             MAJOR=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|(.)\..\..|\1|g")
             MINOR=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\.(.)\..|\1|g")
             PATCH=$(echo "$NEXT_VERSION" | tr -d "v" | sed "s|-.*||" | sed -E "s|.\..\.(.)|\1|g")
-            SUFFIX="-dev$(Build.BuildNumber)"
-            VERSION="$MAJOR.$MINOR.$PATCH$SUFFIX"
+            SUFFIX="dev$(Build.BuildNumber)"
+            VERSION="$NEXT_VERSION-$SUFFIX"
             echo "VERSION: $VERSION"
 
             git config --global user.email "info@edgeworx.io"
@@ -91,9 +97,9 @@ stages:
             git config --global user.email ""
             git config --global user.name ""
           displayName: 'Change version'
-          condition: eq(variables['releaseDev'], true)
 
         - script: |
+            set -e
             python3 -m build
           displayName: 'Artifact creation'
 
@@ -115,25 +121,33 @@ stages:
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_x86'
-          poolImageName: 'Azure Pipelines'
+          pool: 'Azure Pipelines'
           imageTag: 'dev'
 
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_arm32'
-          poolImageName: 'build-farm-rpi4'
+          pool:
+            name: 'Build Farm'
+            demands:
+              - Agent.OS -equals Linux
+              - Agent.OSArchitecture -equals ARM
           imageTag: 'dev'
 
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_arm64'
-          poolImageName: 'build-farm-coral'
+          pool:
+            name: 'Build Farm'
+            demands:
+              - Agent.OS -equals Linux
+              - Agent.OSArchitecture -equals ARM64
           imageTag: 'dev'
 
       - template: e2e-test-template.yaml
         parameters:
           name: 'E2E_macOS'
-          poolImageName:
+          pool:
             vmImage: 'macOS-latest'
           imageTag: 'dev'
 
@@ -152,7 +166,7 @@ stages:
         workspace:
           clean: all
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'ubuntu-20.04'
         strategy:
           matrix:
             Build:
@@ -166,6 +180,7 @@ stages:
             displayName: 'Download artifacts'
 
           - script: |
+              set -e
               python3 -m pip install --upgrade pip --user
               python3 -m pip install --upgrade twine --user
             displayName: 'Install dependencies'
@@ -176,5 +191,6 @@ stages:
             displayName: 'Authenticate to PyPI'
 
           - script: |
+              set -e
               python3 -m twine upload -r pypi --config-file $(PYPIRC_PATH) ./dist/*.whl --verbose
             displayName: 'Publish to PyPI'

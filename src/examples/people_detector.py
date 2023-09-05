@@ -70,13 +70,13 @@ def new_person_callback(person_id):
 
 
 # Instantiate an Camera Stream input stream object
-camera = CameraStream(video_device="/dev/video0", fps=20)
+camera = CameraStream(video_device=0, fps=20)
 
 # Instantiate the Pipeline object and pass it the Camera Stream object as its input stream source
 pipeline = Pipeline(input_stream=camera)
 
 # Create a Live Feed output stream object and specify some URL parameters
-live_feed = LiveFeedStream(path="/", port=3456, host="0.0.0.0")
+live_feed = LiveFeedStream(path="/", port=3456)
 
 # Add the Live Feed output stream to the Pipeline and use the callback from above as the handler
 pipeline.add_output_stream("output", live_feed_callback, live_feed)

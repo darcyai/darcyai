@@ -28,7 +28,6 @@ class VideoFileStream(InputStream):
 
     # Arguments
     file_name (str): The name of the video file to stream.
-    use_pi_camera (bool): Whether or not to use the Raspberry Pi camera.
     loop (bool): Whether or not to loop the video. Defaults to `True`.
     process_all_frames (bool): Whether or not to process all frames. Defaults to `True`.
 
@@ -74,11 +73,6 @@ class VideoFileStream(InputStream):
         if self.__vs is None:
             return
 
-        with self.__lock:
-            self.__vs.release()
-            self.__vs = None
-            self.__frame_number = 0
-
     def stream(self) -> Iterable[VideoStreamData]:
         """
         Streams the video frames.
@@ -122,6 +116,10 @@ class VideoFileStream(InputStream):
                     break
 
                 yield(VideoStreamData(frame, timestamp()))
+
+        self.__vs.release()
+        self.__vs = None
+        self.__frame_number = 0
 
     def __initialize_video_file_stream(self) -> cv2.VideoCapture:
         cap = cv2.VideoCapture(self.__file_name)

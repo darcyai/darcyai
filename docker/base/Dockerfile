@@ -6,12 +6,20 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends apt-utils libssl-dev \
     && apt-get install -y --no-install-recommends cmake \
     && apt-get install -y --no-install-recommends curl gnupg ca-certificates zlib1g-dev libjpeg-dev \
-    && apt-get install -y --no-install-recommends ffmpeg libsm6 libxext6 libxrender1 libglib2.0-bin \
+    && apt-get install -y --no-install-recommends ffmpeg libsm6 libxext6 libxrender1 libglib2.0-bin libx265-192 \
     && apt-get install -y --no-install-recommends build-essential \
+    && apt-get install -y --no-install-recommends libgstreamer1.0-0 gstreamer1.0-dev gstreamer1.0-tools \
+    && apt-get install -y --no-install-recommends gstreamer1.0-plugins-base gstreamer1.0-plugins-good  \
+    && apt-get install -y --no-install-recommends gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly  \
+    && apt-get install -y --no-install-recommends gstreamer1.0-libav \
+    && apt-get install -y --no-install-recommends gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-pulseaudio \
+    && apt-get install -y --no-install-recommends libcairo2-dev libxt-dev libgirepository1.0-dev libgstrtspserver-1.0 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip
+RUN pip install pycairo PyGObject
+
 RUN if [ "$TARGETPLATFORM" = "linux/arm/v7" ]; then \
         apt-get update && \
         apt-get install -y --no-install-recommends liblcms2-2 libwebpdemux2 libaom0 libatk-bridge2.0-0 libatk1.0-0 libatlas3-base libatspi2.0-0 \

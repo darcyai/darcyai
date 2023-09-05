@@ -257,8 +257,12 @@ class PeoplePerceptor(CpuPerceptorBase, PeoplePerceptorBase):
         script_dir = pathlib.Path(__file__).parent.absolute()
         # posenet_mobilenet_v1_075_353_481_quant_decoder
         model_file = os.path.join(script_dir, "models/posenet.tflite")
+
+        minimum_body_threshold = self.get_config_value("minimum_body_threshold")
         
-        self.__primary_pose_engine = \
-            PoseEngine(model_file, tpu=False, num_cpu_threads=self.__num_cpu_threads)
+        self.__primary_pose_engine = PoseEngine(model_file,
+                                                tpu=False,
+                                                num_cpu_threads=self.__num_cpu_threads,
+                                                minimum_pose_threshold=minimum_body_threshold)
         
         super().set_loaded(True)        

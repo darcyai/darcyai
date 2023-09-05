@@ -19,6 +19,7 @@ import time
 from datetime import datetime
 from flask import Flask, Response
 from typing import Any
+from waitress import serve
 
 from darcyai.log import setup_custom_logger
 from darcyai.output.output_stream import OutputStream
@@ -43,7 +44,6 @@ class LiveFeedStream(OutputStream):
     >>> from darcyai.output.live_feed_stream import LiveFeedStream
     >>> live_feed_stream = LiveFeedStream(path="/live-feed",
     >>>                                   port=8080,
-    >>>                                   host="0.0.0.0",
     >>>                                   fps=20,
     >>>                                   quality=100)
     ```
@@ -67,9 +67,11 @@ class LiveFeedStream(OutputStream):
             validate(
                 0 <= port <= 65535,
                 "port must be between 0 and 65535")
-
-            validate_not_none(host, "host is required")
-            validate_type(host, str, "host must be a string")
+            if host is None:
+                self.__host = "*"
+            else:
+                validate_type(host, str, "host must be a string")
+                self.__host = host
 
         validate_not_none(path, "path is required")
         validate_type(path, str, "path must be a string")
@@ -80,7 +82,6 @@ class LiveFeedStream(OutputStream):
 
         self.__flask_app = flask_app
         self.__port = port
-        self.__host = host
         self.__path = path
 
         self.__fps = fps
@@ -122,7 +123,6 @@ class LiveFeedStream(OutputStream):
         >>> from darcyai.output.live_feed_stream import LiveFeedStream
         >>> live_feed_stream = LiveFeedStream(path="/live-feed",
         >>>                                   port=8080,
-        >>>                                   host="0.0.0.0",
         >>>                                   fps=20,
         >>>                                   quality=100)
         >>> live_feed_stream.write(frame)
@@ -167,7 +167,6 @@ class LiveFeedStream(OutputStream):
         >>> from darcyai.output.live_feed_stream import LiveFeedStream
         >>> live_feed_stream = LiveFeedStream(path="/live-feed",
         >>>                                   port=8080,
-        >>>                                   host="0.0.0.0",
         >>>                                   fps=20,
         >>>                                   quality=100)
         >>> live_feed_stream.get_fps()
@@ -187,7 +186,6 @@ class LiveFeedStream(OutputStream):
         >>> from darcyai.output.live_feed_stream import LiveFeedStream
         >>> live_feed_stream = LiveFeedStream(path="/live-feed",
         >>>                                   port=8080,
-        >>>                                   host="0.0.0.0",
         >>>                                   fps=20,
         >>>                                   quality=100)
         >>> live_feed_stream.set_fps(30)
@@ -211,7 +209,6 @@ class LiveFeedStream(OutputStream):
         >>> from darcyai.output.live_feed_stream import LiveFeedStream
         >>> live_feed_stream = LiveFeedStream(path="/live-feed",
         >>>                                   port=8080,
-        >>>                                   host="0.0.0.0",
         >>>                                   fps=20,
         >>>                                   quality=100)
         >>> live_feed_stream.get_quality()
@@ -231,7 +228,6 @@ class LiveFeedStream(OutputStream):
         >>> from darcyai.output.live_feed_stream import LiveFeedStream
         >>> live_feed_stream = LiveFeedStream(path="/live-feed",
         >>>                                   port=8080,
-        >>>                                   host="0.0.0.0",
         >>>                                   fps=20,
         >>>                                   quality=100)
         >>> live_feed_stream.set_quality(50)
@@ -250,7 +246,6 @@ class LiveFeedStream(OutputStream):
         >>> from darcyai.output.live_feed_stream import LiveFeedStream
         >>> live_feed_stream = LiveFeedStream(path="/live-feed",
         >>>                                   port=8080,
-        >>>                                   host="0.0.0.0",
         >>>                                   fps=20,
         >>>                                   quality=100)
         >>> live_feed_stream.close()
@@ -270,7 +265,6 @@ class LiveFeedStream(OutputStream):
         >>> from darcyai.output.live_feed_stream import LiveFeedStream
         >>> live_feed_stream = LiveFeedStream(path="/live-feed",
         >>>                                   port=8080,
-        >>>                                   host="0.0.0.0",
         >>>                                   fps=20,
         >>>                                   quality=100)
         >>> live_feed_stream.get_latest_frame()
@@ -296,14 +290,9 @@ class LiveFeedStream(OutputStream):
         """
         if self.__flask_app is None:
             self.__flask_app = Flask(__name__)
-            ssl_context = None
             self.__flask_app.add_url_rule(
                 self.__path, self.__path, self.__live_feed)
-            self.__flask_app.run(
-                host=self.__host,
-                port=self.__port,
-                ssl_context=ssl_context,
-                debug=False)
+            serve(self.__flask_app, listen=f"{self.__host}:{self.__port}")
         else:
             for rule in self.__flask_app.url_map.iter_rules():
                 if rule.rule == self.__path:

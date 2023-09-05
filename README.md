@@ -36,7 +36,6 @@ class SingleStreamDemo():
                                    input_stream_error_handler_callback=self.__input_stream_error_handler_callback,
                                    universal_rest_api=True,
                                    rest_api_base_path="/pipeline",
-                                   rest_api_host="0.0.0.0",
                                    rest_api_port=8080)
 
         #Add our output stream to the pipeline
